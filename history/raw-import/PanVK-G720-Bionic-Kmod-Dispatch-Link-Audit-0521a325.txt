@@ -1,0 +1,162 @@
+============================================================
+ PanVK G720 - kbase-only CSF dispatch link fix
+============================================================
+date=2026-08-25T21:55:03-03:00
+
+===== 1. BASELINE =====
+branch=ci
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+tracked_dirty=NO
+worktree_head=0521a3257628e811cfead6b5a9753e9f705e2f31
+worktree_changed_before=src/util/u_gralloc/meson.build
+BASELINE_RESULT=PASS
+
+===== 2. ROOT CAUSE PROOF =====
+149: * Always use this instead of calling panthor_kmod_get_csif_props()
+162:   return panthor_kmod_get_csif_props(dev->kmod.dev);
+178:   return panthor_kmod_get_flush_id(dev->kmod.dev);
+474:kbase_kmod_get_csif_props(const struct pan_kmod_dev *dev)
+486:kbase_kmod_get_flush_id(const struct pan_kmod_dev *dev)
+1259:       * non-fatal: kbase_kmod_get_flush_id() then returns 0, which just
+# Copyright © 2023 Collabora
+# SPDX-License-Identifier: MIT
+
+libpankmod_lib_files = files(
+  'pan_kmod.c',
+)
+
+if panfrost_kmds.contains('panfrost')
+  libpankmod_lib_files += files('panfrost_kmod.c')
+endif
+
+if panfrost_kmds.contains('panthor')
+  libpankmod_lib_files += files('panthor_kmod.c')
+endif
+
+if panfrost_kmds.contains('kbase')
+  libpankmod_lib_files += files('kbase_kmod.c')
+endif
+
+libpankmod_lib = static_library(
+  'pankmod_lib',
+  [libpankmod_lib_files],
+  include_directories : [inc_include, inc_src, inc_panfrost],
+  c_args : [no_override_init_args],
+  gnu_symbol_visibility : 'hidden',
+  dependencies: [dep_libdrm, idep_mesautil, idep_pan_packers, libpanfrost_model_dep],
+  build_by_default : false,
+)
+ROOT_CAUSE=panvk_device_helpers_reference_panthor_in_kbase_only_build
+PATCH_SCOPE=DETACHED_WORKTREE_ONLY
+
+===== 3. PATCH COMPILE-TIME BACKEND DISPATCH =====
+patch_rc=0
+worktree_changed_after=src/panfrost/vulkan/panvk_device.h
+src/util/u_gralloc/meson.build
+ src/panfrost/vulkan/panvk_device.h | 16 ++++++++---
+ src/util/u_gralloc/meson.build     | 58 ++++++++++----------------------------
+ 2 files changed, 27 insertions(+), 47 deletions(-)
+PATCH_RESULT=PASS
+
+===== 4. TARGETED NINJA =====
+NINJA_RC=0
+NINJA_RESULT=PASS
+[140/199] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_xfb.c.o
+[141/199] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_precomp.c.o
+[142/199] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/panvk_vX_nir_lower_descriptors.c.o
+[143/199] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_gpu_queue.c.o
+[144/199] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_draw.c.o
+[145/199] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_exception_handler.c.o
+[146/199] Compiling C object src/panfrost/vulkan/libpanvk_v12.a.p/csf_panvk_vX_cmd_draw.c.o
+[147/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_dispatch.c.o
+[148/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_draw.c.o
+[149/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_desc_state.c.o
+[150/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_frame_shaders.c.o
+[151/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_buffer_view.c.o
+[152/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_descriptor_set_layout.c.o
+[153/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_device.c.o
+[154/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_descriptor_set.c.o
+[155/199] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_query.c.o
+[156/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_precomp_cache.c.o
+[157/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_push_constant.c.o
+[158/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_query_pool.c.o
+[159/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_blend.c.o
+[160/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_meta.c.o
+[161/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_cond_render.c.o
+[162/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_sampler.c.o
+[163/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_dispatch.c.o
+[164/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_image_view.c.o
+[165/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_nir_lower_descriptors.c.o
+[166/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_nir_lower_input_attachment_loads.c.o
+[167/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_buffer.c.o
+[168/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_shader.c.o
+[169/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_event.c.o
+[170/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_gpu_queue.c.o
+[171/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_precomp.c.o
+[172/199] Linking static target src/panfrost/vulkan/libpanvk_v6.a
+[173/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_instr.c.o
+[174/199] Linking static target src/panfrost/vulkan/libpanvk_v7.a
+[175/199] Linking static target src/panfrost/vulkan/libpanvk_v10.a
+[176/199] Linking static target src/panfrost/vulkan/libpanvk_v12.a
+[177/199] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_utrace.c.o
+[178/199] Linking static target src/panfrost/vulkan/libpanvk_v13.a
+[179/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_draw.c.o
+[180/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_xfb.c.o
+[181/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_exception_handler.c.o
+[182/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_query.c.o
+[183/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_buffer.c.o
+[184/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_cmd_pool.c.o
+[185/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_device_memory.c.o
+[186/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_host_copy.c.o
+[187/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_bind_queue.c.o
+[188/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_priv_bo.c.o
+[189/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_mempool.c.o
+[190/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_utrace.c.o
+[191/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_android.c.o
+[192/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_nir_lower_tile_image.c.o
+[193/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_image.c.o
+[194/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_async_bind.c.o
+[195/199] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_physical_device.c.o
+[196/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_utrace.c.o
+[197/199] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_event.c.o
+[198/199] Linking static target src/panfrost/vulkan/libpanvk_v14.a
+[199/199] Linking target src/panfrost/vulkan/libvulkan_panfrost.so
+
+===== 5. ELF AUDIT =====
+  Class:                             ELF64
+  Type:                              DYN (Shared object file)
+  Machine:                           AArch64
+--- NEEDED/RPATH ---
+ 0x000000000000001d (RUNPATH)            Library runpath: [$ORIGIN/../../../subprojects/libdrm-2.4.133:$ORIGIN/../../android_stub]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdrm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libhardware.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblog.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libnativewindow.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsync.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so]
+--- GLIBC ---
+BIONIC_ELF_RESULT=PASS
+LIBDRM_RUNTIME_DEP=YES
+PACKAGE_READY=NO_NEEDS_RUNTIME_DEP_REVIEW
+
+===== 6. HASH + EXPORT =====
+020833c468fa75760a7e1d961fe76c375a6de9bd388f7436b1b37ead99f48bbe  /root/build-bionic-libdrm-20260825-214209/src/panfrost/vulkan/libvulkan_panfrost.so
+export_rc=0
+TERMUX_EXPORT=/data/data/com.termux/files/home/PanVK-G720-Bionic-0521a325.so
+020833c468fa75760a7e1d961fe76c375a6de9bd388f7436b1b37ead99f48bbe  /data/data/com.termux/files/home/PanVK-G720-Bionic-0521a325.so
+
+===== 7. FINAL SOURCE STATE =====
+main_head=0521a3257628e811cfead6b5a9753e9f705e2f31
+main_tracked_dirty=NO
+MAIN_SOURCE_INTEGRITY=PASS
+WORKTREE_PATCH_ONLY=YES
+BIONIC_DRIVER_LINK_RESULT=PASS
+
+============================================================
+REAL_RC=0
+OVERALL_RESULT=PASS
+MAIN_SOURCE_PATCHED=NO
+GPU_EXECUTED=NO
+============================================================

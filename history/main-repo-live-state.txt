@@ -1,0 +1,18 @@
+time=2026-08-26T15:51:04-03:00
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+branch=ci
+ M src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
+ src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c | 19 -------------------
+ 1 file changed, 19 deletions(-)
+0521a325762 panvk: validate direct libpoly tessellation path on G720
+b2f8cfa0d75 docs: sync G720 tessellation runtime status
+0a742fa22ec panvk/csf: stage direct tessellation VS and TCS
+85b972dd387 panvk/csf: add per-command-buffer poly heap
+cfba9cef269 panvk: add TCS and TES shader plumbing
+65aeaf80726 panfrost/libpan: scope tessellation kernels to CSF architectures
+78880712caa docs: restore upstream README after G720 project status
+3b6014d1348 docs: update G720 kbase project status and tessellation roadmap
+2aef87163bf panfrost/libpan: add poly tessellation precompiled kernels
+8edb5d94746 nir/panfrost: preserve pointer size for precompiled compute variants
+c095a8c6532 panvk/g720: checkpoint current kbase and poly tessellation work
+a6799dbeb02 panvk/kbase: use CSF-reported register count for G720

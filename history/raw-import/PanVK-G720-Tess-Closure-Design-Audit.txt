@@ -1,0 +1,1371 @@
+PANVK_G720_TESS_CLOSURE_DESIGN_AUDIT
+date=2026-08-26T14:57:55-03:00
+proot_rc=0
+=== SOURCE ===
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+branch=ci
+tracked_dirty=0
+
+=== CURRENT HARD BLOCKERS ===
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:509:#define PANVK_POLY_HEAP_SIZE (128ull * 1024 * 1024)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:520:      dev, PANVK_POLY_HEAP_SIZE,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:538:      .size = PANVK_POLY_HEAP_SIZE,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:548:    * Simultaneous execution of the same tessellation command buffer still
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:567: * Indirect tessellation needs a GPU setup kernel because the vertex and
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3210:         .buffer_size = PANVK_POLY_HEAP_SIZE,
+src/panfrost/vulkan/panvk_vX_physical_device.c:309:      .tessellationShader = false,
+
+=== PANVK HEAP + DIRECT/INDIRECT SETUP ===
+         /* On v12+, the hardware-controlled buffer is at index 1 for varyings */
+         cfg.buffer_index = PAN_ARCH >= 12 ? 1 : 0;
+         cfg.attribute_stride = vs_layout->generic_size_B;
+         cfg.packet_stride = vs_layout->generic_size_B + 16;
+      }
+   }
+}
+
+
+#define PANVK_POLY_HEAP_SIZE (128ull * 1024 * 1024)
+
+static VkResult
+prepare_poly_heap(struct panvk_cmd_buffer *cmdbuf)
+{
+   if (cmdbuf->poly_heap.bo)
+      return VK_SUCCESS;
+
+   struct panvk_device *dev = to_panvk_device(cmdbuf->vk.base.device);
+
+   VkResult result = panvk_priv_bo_create(
+      dev, PANVK_POLY_HEAP_SIZE,
+      panvk_device_adjust_bo_flags(
+         dev, PAN_KMOD_BO_FLAG_NO_MMAP | PAN_KMOD_BO_FLAG_ALLOC_ON_FAULT),
+      VK_SYSTEM_ALLOCATION_SCOPE_OBJECT, &cmdbuf->poly_heap.bo);
+   if (result != VK_SUCCESS)
+      return result;
+
+   struct pan_ptr header =
+      panvk_cmd_alloc_dev_mem(cmdbuf, desc, sizeof(struct poly_heap), 16);
+   if (!header.gpu) {
+      panvk_priv_bo_unref(cmdbuf->poly_heap.bo);
+      cmdbuf->poly_heap.bo = NULL;
+      return VK_ERROR_OUT_OF_DEVICE_MEMORY;
+   }
+
+   *(struct poly_heap *)header.cpu = (struct poly_heap){
+      .base = cmdbuf->poly_heap.bo->addr.dev,
+      .bottom = 0,
+      .size = PANVK_POLY_HEAP_SIZE,
+   };
+
+   cmdbuf->poly_heap.header = header;
+
+   /*
+    * The command buffer may be submitted again without being re-recorded.
+    * Reset the bump allocator on the GPU before its first tessellation use
+    * in each execution.
+    *
+    * Simultaneous execution of the same tessellation command buffer still
+    * needs separate heap handling before tessellationShader can be exposed.
+    */
+   struct cs_builder *b =
+      panvk_get_cs_builder(cmdbuf, PANVK_SUBQUEUE_COMPUTE);
+   struct cs_index heap_addr = cs_scratch_reg64(b, 0);
+   struct cs_index zero = cs_scratch_reg32(b, 2);
+
+   cs_move64_to(b, heap_addr, header.gpu);
+   cs_move32_to(b, zero, 0);
+   cs_store32(b, zero, heap_addr, offsetof(struct poly_heap, bottom));
+   cs_flush_stores(b);
+
+   return VK_SUCCESS;
+}
+
+/*
+ * Allocate and initialize the libpoly ABI for a direct tessellation draw.
+ *
+ * Indirect tessellation needs a GPU setup kernel because the vertex and
+ * instance counts are not known while recording the command buffer.
+ */
+static VkResult
+prepare_direct_tess_params(struct panvk_cmd_buffer *cmdbuf,
+                           const struct panvk_draw_info *draw)
+{
+   if (draw->indirect.buffer_dev_addr)
+      return VK_SUCCESS;
+
+   const struct panvk_shader *vs = cmdbuf->state.gfx.vs.shader;
+   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+   const struct vk_dynamic_graphics_state *dyn =
+      &cmdbuf->vk.dynamic_graphics_state;
+
+   assert(vs && tcs && tes);
+
+   if (!vs || !tcs || !tes)
+      return VK_ERROR_UNKNOWN;
+
+   const uint32_t input_patch_size = dyn->ts.patch_control_points;
+
+   assert(input_patch_size > 0);
+   assert((tcs->tess.tcs_output_stride & 3) == 0);
+
+   if (!input_patch_size || (tcs->tess.tcs_output_stride & 3))
+      return VK_ERROR_UNKNOWN;
+
+   const uint64_t vs_outputs = vs->tess.vs_outputs;
+   const uint64_t invocations =
+      (uint64_t)draw->vertex.count * draw->instance.count;
+
+   const uint32_t patches_per_instance =
+      draw->vertex.count / input_patch_size;
+
+   const uint64_t nr_patches64 =
+      (uint64_t)patches_per_instance * draw->instance.count;
+
+   /*
+    * These fields are 32-bit in the libpoly ABI. Large draws will need
+    * splitting if we ever need to support counts beyond this limit.
+    */
+   if (invocations > UINT32_MAX || nr_patches64 > UINT32_MAX)
+      return VK_ERROR_OUT_OF_DEVICE_MEMORY;
+
+   const uint32_t nr_patches = nr_patches64;
+   const uint32_t tcs_stride_el =
+      tcs->tess.tcs_output_stride / sizeof(uint32_t);
+
+   /*
+    * Per-draw blob:
+    *
+    *   VS output
+    *   TCS output
+    *   coord_allocs[nr_patches]
+    *   counts[nr_patches]
+    *   one VkDrawIndexedIndirectCommand
+    */
+   const uint64_t vs_output_size =
+      invocations * util_bitcount64(vs_outputs) * 16ull;
+
+   const uint64_t tcs_output_size =
+      nr_patches64 * tcs->tess.tcs_output_stride;
+
+   const uint64_t coord_size =
+      nr_patches64 * sizeof(uint32_t);
+
+   const uint64_t count_size =
+      nr_patches64 * sizeof(uint32_t);
+
+   const uint64_t draw_size = 5 * sizeof(uint32_t);
+
+   uint64_t blob_size = 0;
+
+   if (__builtin_add_overflow(blob_size, vs_output_size, &blob_size) ||
+       __builtin_add_overflow(blob_size, tcs_output_size, &blob_size) ||
+       __builtin_add_overflow(blob_size, coord_size, &blob_size) ||
+       __builtin_add_overflow(blob_size, count_size, &blob_size) ||
+       __builtin_add_overflow(blob_size, draw_size, &blob_size) ||
+       blob_size > SIZE_MAX)
+      return VK_ERROR_OUT_OF_DEVICE_MEMORY;
+
+   size_t offs = 0;
+
+   const size_t vs_output_offs = offs;
+   offs += vs_output_size;
+
+   const size_t tcs_output_offs = offs;
+   offs += tcs_output_size;
+
+   const size_t coord_offs = offs;
+   offs += coord_size;
+
+   const size_t count_offs = offs;
+   offs += count_size;
+
+   const size_t draw_offs = offs;
+   offs += draw_size;
+
+   assert(offs == blob_size);
+
+   struct pan_ptr blob =
+      panvk_cmd_alloc_dev_mem(cmdbuf, desc, offs, 16);
+
+   struct pan_ptr vertex_params =
+      panvk_cmd_alloc_dev_mem(cmdbuf, desc,
+                              sizeof(struct poly_vertex_params), 8);
+
+   struct pan_ptr tess_params =
+      panvk_cmd_alloc_dev_mem(cmdbuf, desc,
+                              sizeof(struct poly_tess_params), 8);
+
+   if (!blob.gpu || !vertex_params.gpu || !tess_params.gpu)
+      return VK_ERROR_OUT_OF_DEVICE_MEMORY;
+
+   /* -------------------------------------------------------------
+    * Software VS parameters
+    * ------------------------------------------------------------- */
+   const uint32_t vs_wg_size[3] = {64, 1, 1};
+   struct poly_vertex_params *vp = vertex_params.cpu;
+
+   poly_vertex_params_init(vp, vs_outputs, vs_wg_size);
+   poly_vertex_params_set_draw(vp, draw->vertex.count,
+                               draw->instance.count);
+
+   vp->output_buffer = blob.gpu + vs_output_offs;
+
+   if (draw->index.index_size) {
+      const uint32_t index_size_B = draw->index.index_size;
+      const uint64_t size_el64 =
+         draw->index.buffer_size / index_size_B;
+      const uint32_t size_el =
+         MIN2(size_el64, (uint64_t)UINT32_MAX);
+
+      vp->index_size_B = index_size_B;
+      vp->index_buffer =
+         draw->index.buffer_dev_addr +
+         ((uint64_t)draw->index.offset * index_size_B);
+      vp->index_buffer_range_el =
+         poly_index_buffer_range_el(size_el, draw->index.offset);
+   }
+
+   /* -------------------------------------------------------------
+    * TCS / tessellator / TES parameters
+    * ------------------------------------------------------------- */
+   enum poly_tess_partitioning partitioning =
+      tes->tess.spacing == TESS_SPACING_EQUAL
+         ? POLY_TESS_PARTITIONING_INTEGER
+      : tes->tess.spacing == TESS_SPACING_FRACTIONAL_ODD
+         ? POLY_TESS_PARTITIONING_FRACTIONAL_ODD
+         : POLY_TESS_PARTITIONING_FRACTIONAL_EVEN;
+
+   struct poly_tess_params *tp = tess_params.cpu;
+
+   *tp = (struct poly_tess_params) {
+      .heap = cmdbuf->poly_heap.header.gpu,
+
+      /*
+       * The heap header and backing storage are separate in PanVK.
+       * Tess coordinates live in the backing BO, not after the header.
+       */
+      .patch_coord_buffer = cmdbuf->poly_heap.bo->addr.dev,
+
+      .coord_allocs = blob.gpu + coord_offs,
+      .out_draws = blob.gpu + draw_offs,
+      .tcs_buffer = blob.gpu + tcs_output_offs,
+      .counts = blob.gpu + count_offs,
+
+      /* Filled later by panlib_prefix_sum_tess(). */
+      .index_buffer = 0,
+
+      /* Pipeline statistics are not wired yet. */
+      .statistic = 0,
+
+      .tcs_per_vertex_outputs = tcs->tess.tcs_per_vertex_outputs,
+      .input_patch_size = input_patch_size,
+      .output_patch_size = tcs->tess.tcs_output_patch_size,
+      .tcs_patch_constants = tcs->tess.tcs_nr_patch_outputs,
+      .patches_per_instance = patches_per_instance,
+      .tcs_stride_el = tcs_stride_el,
+      .nr_patches = nr_patches,
+
+      .partitioning = partitioning,
+      .points_mode = tes->tess.points,
+      .isolines = tes->tess.mode == TESS_PRIMITIVE_ISOLINES,
+   };
+
+   if (!tp->points_mode && !tp->isolines) {
+      tp->ccw = tes->tess.ccw;
+      tp->ccw ^=
+         dyn->ts.domain_origin ==
+         VK_TESSELLATION_DOMAIN_ORIGIN_LOWER_LEFT;
+   }
+
+   /*
+    * poly_nir_lower_sysvals() resolves these addresses through the poly
+    * block shared at the same FAU offset by graphics and compute sysvals.
+    */
+   cmdbuf->state.gfx.sysvals.poly.vertex_param_buffer =
+      vertex_params.gpu;
+   cmdbuf->state.gfx.sysvals.poly.tess_param_buffer =
+      tess_params.gpu;
+
+   cmdbuf->state.gfx.tess.out_draws = tp->out_draws;
+
+   mesa_logi("TESSDBG PARAMS: vs_outputs=0x%016llx slots=%u "
+             "vs_size=%llu tcs_vtx_outputs=0x%016llx "
+             "tcs_stride=%u tcs_size=%llu blob_size=%llu "
+             "blob=0x%016llx vp=0x%016llx tp=0x%016llx "
+             "vs_out=0x%016llx tcs_buf=0x%016llx "
+             "in_patch=%u out_patch=%u patches=%u ppi=%u stride_el=%u",
+             (unsigned long long)vs_outputs,
+             util_bitcount64(vs_outputs),
+             (unsigned long long)vs_output_size,
+             (unsigned long long)tcs->tess.tcs_per_vertex_outputs,
+             tcs->tess.tcs_output_stride,
+             (unsigned long long)tcs_output_size,
+             (unsigned long long)blob_size,
+             (unsigned long long)blob.gpu,
+             (unsigned long long)vertex_params.gpu,
+             (unsigned long long)tess_params.gpu,
+             (unsigned long long)vp->output_buffer,
+             (unsigned long long)tp->tcs_buffer,
+
+=== PANVK DRAW ENTRY + INDIRECT ===
+   const struct panvk_shader_variant *vs =
+      panvk_shader_hw_variant(cmdbuf->state.gfx.vs.shader);
+
+   launch_indirect_draw_vertex(cmdbuf, draw, vs,
+                               &cmdbuf->state.gfx.vs.desc,
+                               cmdbuf->state.gfx.vs.push_uniforms,
+                               cmdbuf->state.gfx.vs.desc_repeat_count);
+}
+
+static void
+panvk_cmd_draw(struct panvk_cmd_buffer *cmdbuf, struct panvk_draw_info draw)
+{
+   const struct panvk_shader_variant *vs =
+      panvk_shader_hw_variant(cmdbuf->state.gfx.vs.shader);
+   VkResult result;
+
+   /* If there's no vertex shader, we can skip the draw. */
+   if (!panvk_priv_mem_check_alloc(vs->spd))
+      return;
+
+   if (draw.indirect.buffer_dev_addr)
+      account_tiler_work(cmdbuf, (uint64_t)draw.indirect.draw_count * 256);
+   else
+      account_tiler_work(cmdbuf,
+                         (uint64_t)draw.vertex.count * draw.instance.count);
+
+   /* Needs to be done before get_fs() is called because it depends on
+    * fs.required being initialized. */
+   cmdbuf->state.gfx.fs.required =
+      fs_required(&cmdbuf->state.gfx, &cmdbuf->vk.dynamic_graphics_state);
+
+   if (cmdbuf->state.gfx.vi.base_instance != draw.instance.base) {
+      cmdbuf->state.gfx.vi.base_instance = draw.instance.base;
+      gfx_state_set_dirty(cmdbuf, BASE_INSTANCE);
+   }
+
+   /* Force new descriptors and push uniform blocks to be allocated because
+    * we're going to patch the descriptors and copy from the indirect buffer
+    * into the uniform block.
+    */
+   if (draw.indirect.buffer_dev_addr) {
+      gfx_state_set_dirty(cmdbuf, BASE_INSTANCE);
+      gfx_state_set_dirty(cmdbuf, VS_PUSH_UNIFORMS);
+   }
+
+   if (cmdbuf->state.gfx.tess.tes.shader) {
+      result = prepare_poly_heap(cmdbuf);
+      if (result != VK_SUCCESS)
+         return;
+
+      result = prepare_direct_tess_params(cmdbuf, &draw);
+      if (result != VK_SUCCESS)
+         return;
+   }
+
+   result = prepare_descs(cmdbuf, &draw);
+   if (result != VK_SUCCESS)
+      return;
+
+   /*
+    * Tessellation starts with two physical compute stages.  Do not enter
+    * prepare_draw()/IDVS with the software VS, since that shader is no longer
+    * a hardware vertex shader after libpoly lowering.
+    */
+   if (cmdbuf->state.gfx.tess.tes.shader) {
+      /*
+       * SW VS and TCS consume graphics FAUs even though they physically run
+       * on the compute subqueue.  Seed the ordinary draw sysvals before
+       * allocating their FAU blocks.
+       *
+       * The final TES/FS path will prepare these sysvals again after blend
+       * state has been emitted, before allocating the final graphics FAUs.
+       */
+      const struct panvk_shader_variant *fs =
+         panvk_shader_only_variant(get_fs(cmdbuf));
+
+      panvk_per_arch(cmd_prepare_draw_sysvals)(cmdbuf, &draw, fs);
+
+      result = update_tls(cmdbuf);
+      if (result != VK_SUCCESS)
+         return;
+
+      result = launch_tess_stages(cmdbuf, &draw);
+      if (result != VK_SUCCESS)
+         return;
+
+      /*
+       * TEMPORARY RUNTIME ISOLATION:
+       * launch_tess_stages() currently dispatched only SW VS.
+       * Stop before libpoly tessellator and TES/IDVS.
+       */
+      return;
+
+      launch_tessellator(cmdbuf, &draw);
+
+      struct panvk_draw_info tess_draw;
+      result = prepare_tess_draw(cmdbuf, &tess_draw);
+      if (result != VK_SUCCESS)
+         return;
+
+      const struct panvk_shader_variant *tes =
+         panvk_shader_only_variant(cmdbuf->state.gfx.tess.tes.shader);
+
+      launch_indirect_draw_vertex(
+         cmdbuf, &tess_draw, tes,
+         &cmdbuf->state.gfx.tess.tes.desc,
+         cmdbuf->state.gfx.tess.tes.push_uniforms, 0);
+
+      return;
+   }
+
+   /* For indirect draws, we need to patch the descriptors we just emitted */
+   if (draw.indirect.buffer_dev_addr)
+      patch_vs_attribs(cmdbuf, &draw);
+
+   result = prepare_draw(cmdbuf, &draw);
+   if (result != VK_SUCCESS)
+      return;
+
+   result = launch_xfb(cmdbuf, &draw);
+   if (result != VK_SUCCESS)
+      return;
+
+   update_prims_generated_query(cmdbuf, &draw);
+
+   if (draw.indirect.buffer_dev_addr)
+      launch_indirect_draw(cmdbuf, &draw);
+   else
+      launch_draw(cmdbuf, &draw);
+}
+
+VkResult
+panvk_per_arch(cmd_prepare_exec_cmd_for_draws)(
+   struct panvk_cmd_buffer *primary,
+   struct panvk_cmd_buffer *secondary)
+{
+   if (!(secondary->flags & VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT))
+      return VK_SUCCESS;
+
+   if (!inherits_render_ctx(primary)) {
+      enum u_tristate first_provoking_vertex =
+         secondary->state.gfx.render.first_provoking_vertex;
+      set_provoking_vertex_mode(primary, first_provoking_vertex);
+      VkResult result  = get_render_ctx(primary);
+      if (result != VK_SUCCESS)
+         return result;
+   }
+
+   return prepare_oq(primary);
+}
+
+VKAPI_ATTR void VKAPI_CALL
+panvk_per_arch(CmdDraw)(VkCommandBuffer commandBuffer, uint32_t vertexCount,
+                        uint32_t instanceCount, uint32_t firstVertex,
+                        uint32_t firstInstance)
+{
+   VK_FROM_HANDLE(panvk_cmd_buffer, cmdbuf, commandBuffer);
+
+   if (instanceCount == 0 || vertexCount == 0)
+      return;
+
+   /* gl_BaseVertexARB is a signed integer, and it should expose the value of
+    * firstVertex in a non-indexed draw. */
+   assert(firstVertex < INT32_MAX);
+
+   /* gl_BaseInstance is a signed integer, and it should expose the value of
+    * firstInstnace. */
+   assert(firstInstance < INT32_MAX);
+
+   struct panvk_draw_info draw = {
+      .vertex.base = firstVertex,
+      .vertex.count = vertexCount,
+      .instance.base = firstInstance,
+      .instance.count = instanceCount,
+      .prim = panvk_get_client_prim(cmdbuf),
+   };
+
+   panvk_cmd_draw(cmdbuf, draw);
+}
+
+VKAPI_ATTR void VKAPI_CALL
+panvk_per_arch(CmdDrawIndexed)(VkCommandBuffer commandBuffer,
+                               uint32_t indexCount, uint32_t instanceCount,
+                               uint32_t firstIndex, int32_t vertexOffset,
+                               uint32_t firstInstance)
+{
+   VK_FROM_HANDLE(panvk_cmd_buffer, cmdbuf, commandBuffer);
+
+   if (instanceCount == 0 || indexCount == 0)
+      return;
+
+   /* gl_BaseInstance is a signed integer, and it should expose the value of
+    * firstInstnace. */
+   assert(firstInstance < INT32_MAX);
+
+   struct panvk_draw_info draw = {
+      .index = panvk_draw_info_index(cmdbuf, firstIndex),
+      .vertex.base = vertexOffset,
+      .vertex.count = indexCount,
+      .instance.count = instanceCount,
+      .instance.base = firstInstance,
+      .prim = panvk_get_client_prim(cmdbuf),
+   };
+
+   panvk_cmd_draw(cmdbuf, draw);
+}
+
+VKAPI_ATTR void VKAPI_CALL
+panvk_per_arch(CmdDrawIndirect)(VkCommandBuffer commandBuffer, VkBuffer _buffer,
+                                VkDeviceSize offset, uint32_t drawCount,
+                                uint32_t stride)
+{
+   VK_FROM_HANDLE(panvk_cmd_buffer, cmdbuf, commandBuffer);
+   VK_FROM_HANDLE(panvk_buffer, buffer, _buffer);
+
+   if (drawCount == 0)
+      return;
+
+   struct panvk_draw_info draw = {
+      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+      .indirect.draw_count = drawCount,
+      .indirect.stride = stride,
+      .prim = panvk_get_client_prim(cmdbuf),
+   };
+
+   panvk_cmd_draw(cmdbuf, draw);
+}
+
+VKAPI_ATTR void VKAPI_CALL
+panvk_per_arch(CmdDrawIndexedIndirect)(VkCommandBuffer commandBuffer,
+                                       VkBuffer _buffer, VkDeviceSize offset,
+                                       uint32_t drawCount, uint32_t stride)
+{
+   VK_FROM_HANDLE(panvk_cmd_buffer, cmdbuf, commandBuffer);
+   VK_FROM_HANDLE(panvk_buffer, buffer, _buffer);
+
+   if (drawCount == 0)
+      return;
+
+   struct panvk_draw_info draw = {
+      .index = panvk_draw_info_index(cmdbuf, 0),
+      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+      .indirect.draw_count = drawCount,
+      .indirect.stride = stride,
+      .prim = panvk_get_client_prim(cmdbuf),
+   };
+
+   panvk_cmd_draw(cmdbuf, draw);
+}
+
+VKAPI_ATTR void VKAPI_CALL
+panvk_per_arch(CmdDrawIndirectCount)(VkCommandBuffer commandBuffer,
+                                     VkBuffer _buffer,
+                                     VkDeviceSize offset,
+                                     VkBuffer countBuffer,
+                                     VkDeviceSize countBufferOffset,
+                                     uint32_t maxDrawCount,
+                                     uint32_t stride)
+{
+   VK_FROM_HANDLE(panvk_cmd_buffer, cmdbuf, commandBuffer);
+   VK_FROM_HANDLE(panvk_buffer, buffer, _buffer);
+   VK_FROM_HANDLE(panvk_buffer, count_buffer, countBuffer);
+
+   if (maxDrawCount == 0)
+      return;
+
+   struct panvk_draw_info draw = {
+      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+      .indirect.count_buffer_dev_addr =
+         panvk_buffer_gpu_ptr(count_buffer, countBufferOffset),
+      .indirect.draw_count = maxDrawCount,
+      .indirect.stride = stride,
+      .prim = panvk_get_client_prim(cmdbuf),
+   };
+
+   panvk_cmd_draw(cmdbuf, draw);
+}
+
+VKAPI_ATTR void VKAPI_CALL
+panvk_per_arch(CmdDrawIndexedIndirectCount)(VkCommandBuffer commandBuffer,
+                                            VkBuffer _buffer,
+                                            VkDeviceSize offset,
+                                            VkBuffer countBuffer,
+                                            VkDeviceSize countBufferOffset,
+                                            uint32_t maxDrawCount,
+                                            uint32_t stride)
+{
+   VK_FROM_HANDLE(panvk_cmd_buffer, cmdbuf, commandBuffer);
+   VK_FROM_HANDLE(panvk_buffer, buffer, _buffer);
+   VK_FROM_HANDLE(panvk_buffer, count_buffer, countBuffer);
+
+   if (maxDrawCount == 0)
+      return;
+
+   struct panvk_draw_info draw = {
+      .index = panvk_draw_info_index(cmdbuf, 0),
+
+=== CMBUF HEAP LIFETIME ===
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:152: * VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT is set on the command buffer. */
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:550:   } poly_heap;
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:286:panvk_per_arch(EndCommandBuffer)(VkCommandBuffer commandBuffer)
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:297:      (cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT) &&
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:834:   panvk_priv_bo_unref(cmdbuf->poly_heap.bo);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:835:   memset(&cmdbuf->poly_heap, 0, sizeof(cmdbuf->poly_heap));
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:871:   panvk_priv_bo_unref(cmdbuf->poly_heap.bo);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:975:      cmdbuf->flags |= VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+
+=== CS SYNC PRIMITIVES/PATTERNS ===
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:816:   cs_wait_slot(b, SB_ITER(ctx->next_sb));
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:1000:void panvk_per_arch(emit_barrier)(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:80:   cs_sync32_add(b, true, MALI_CS_SYNC_SCOPE_CSG, value, addr, cs_now());
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:150:   cs_wait_slots(b, dev->csf.sb.all_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:185:   cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:266:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:274:      cs_sync32_set(b, true, cmdbuf->sync_scope, signal_val, syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:611:emit_barrier_insert_waits(struct cs_builder *b, struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:634:panvk_per_arch(emit_barrier)(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:661:         cs_wait_slots(b, deps.src[i].wait_sb_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:672:         cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:710:            emit_barrier_insert_waits(b, cmdbuf, &deps, i, tmp_regs);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:712:         emit_barrier_insert_waits(b, cmdbuf, &deps, i, tmp_regs);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:739:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_dispatch.c:92:         cs_wait_slot(b, SB_ITER(x));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1621:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1625:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2167:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3538:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3904:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3913:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5237:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5359:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5400:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_event.c:53:            cs_sync32_set(b, false, MALI_CS_SYNC_SCOPE_CSG, seqno, sync_addr,
+src/panfrost/vulkan/csf/panvk_vX_cmd_event.c:100:            cs_sync32_set(b, false, MALI_CS_SYNC_SCOPE_CSG, seqno, sync_addr,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:122:   cs_wait_slot(b, SB_ID(DEFERRED_SYNC));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:131:    * cs_sync32_set() because no-one is waiting on this syncobj with
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:132:    * cs_sync32_wait(). The only reason we use a syncobj is so we can
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:150:   cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:207:      cs_wait_slot(b, SB_ID(DEFERRED_SYNC));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:336:   cs_sync32_set(b, true, MALI_CS_SYNC_SCOPE_CSG, val, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:362:      cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:543:         cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:611:      cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:640:   panvk_per_arch(emit_barrier)(cmd, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:716:   cs_sync32_set(b, true, MALI_CS_SYNC_SCOPE_CSG, val, query_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_exception_handler.c:198:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_exception_handler.c:221:         cs_wait_slots(&b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_exception_handler.c:277:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_exception_handler.c:285:      cs_wait_slot(&b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:578:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:581:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:593:      cs_wait_slot(&b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:604:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:620:   cs_wait_slots(&b, dev->csf.sb.all_mask);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:624:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:628:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:631:   cs_sync64_add(&b, true, MALI_CS_SYNC_SCOPE_SYSTEM, val64, addr64,
+src/panfrost/vulkan/csf/panvk_vX_utrace.c:47:      cs_wait_slot(b, SB_ID(DEFERRED_SYNC));
+src/panfrost/vulkan/csf/panvk_vX_utrace.c:69:         cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_utrace.c:92:      cs_wait_slot(b, SB_ID(DEFERRED_SYNC));
+src/panfrost/vulkan/csf/panvk_vX_utrace.c:260:   cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:576:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:579:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:591:      cs_wait_slot(&b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:602:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:618:   cs_wait_slots(&b, dev->csf.sb.all_mask);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:622:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:626:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:629:   cs_sync64_add(&b, true, MALI_CS_SYNC_SCOPE_SYSTEM, val64, addr64,
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:578:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:581:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:593:      cs_wait_slot(&b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:604:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:620:   cs_wait_slots(&b, dev->csf.sb.all_mask);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:624:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:628:      cs_wait_slot(&b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:631:   cs_sync64_add(&b, true, MALI_CS_SYNC_SCOPE_SYSTEM, val64, addr64,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1109:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1113:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1655:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2840:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4152:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4274:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4315:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1588:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1592:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2134:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3319:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4761:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4883:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4924:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1588:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1592:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2134:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3319:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3586:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3595:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4872:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4994:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:5035:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:1597:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:1601:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:2143:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:3328:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:3595:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:3604:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:4894:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:5016:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:5057:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:1597:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:1601:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:2143:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:3328:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:3595:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:3604:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:4909:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:5031:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:5072:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:1596:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:1600:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:2142:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:3331:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:3598:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:3607:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:4912:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:5034:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:5075:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:1596:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:1600:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:2142:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:3513:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:3780:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:3789:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:5106:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:5228:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:5269:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:1596:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:1600:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:2142:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:3513:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:3786:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:3795:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:5119:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:5241:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:5282:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:1596:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:1600:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:2142:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:3513:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:3786:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:3795:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:5125:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:5247:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:5288:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:1610:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:1614:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:2156:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:3527:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:3822:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:3831:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:5155:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:5277:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:5318:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:1611:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:1615:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:2157:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:3528:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:3823:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:3832:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:5156:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:5278:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:5319:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:1611:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:1615:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:2157:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:3528:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:3823:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:3832:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:5156:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:5278:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:5319:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:1621:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:1625:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:2167:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:3538:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:3879:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:3888:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:5212:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:5334:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:5375:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:1621:   cs_sync32_wait(b, false, MALI_CS_CONDITION_GREATER, sz_reg, ringbuf_sync);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:1625:   cs_sync32_add(b, false, MALI_CS_SYNC_SCOPE_CSG, sz_reg, ringbuf_sync,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:2167:   cs_wait_slot(b, SB_ID(LS));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:3538:   cs_wait_slots(b, dev->csf.sb.all_iters_mask);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:3904:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:3913:   panvk_per_arch(emit_barrier)(cmdbuf, deps);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:5237:      cs_wait_slot(b, SB_ID(IMM_FLUSH));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:5359:         cs_sync32_add(b, true, cmdbuf->sync_scope, release_sz,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:5400:            cs_sync32_set(b, true, cmdbuf->sync_scope, add_val_lo, oq_syncobj,
+
+=== QUEUE SUBMIT CMBUF PATH ===
+114:kbase_subqueue_wait_seqno(struct panvk_gpu_queue *queue, uint32_t subqueue,
+115:                          uint64_t target_seqno, uint32_t rekick_mask,
+245:kbase_log_queue_syncobjs(struct panvk_gpu_queue *queue)
+247:   struct panvk_cs_sync64 *syncobjs = panvk_priv_mem_host_addr(queue->syncobjs);
+249:   if (!syncobjs)
+252:   kbase_cache_invalidate_range(syncobjs,
+253:                                sizeof(*syncobjs) * PANVK_SUBQUEUE_COUNT);
+256:      struct panvk_cs_sync64 *syncobj = &syncobjs[i];
+449:   VkResult result = kbase_subqueue_wait_seqno(
+558:   uint64_t target_seqno = subq->kbase.emitted_jobs + 1;
+576:      cs_move64_to(&b, val64, KBASE_SEQNO_MARK_PRE_CALL | target_seqno);
+602:      cs_move64_to(&b, val64, KBASE_SEQNO_MARK_POST_CALL | target_seqno);
+622:      cs_move64_to(&b, val64, KBASE_SEQNO_MARK_POST_WAIT | target_seqno);
+626:      cs_move64_to(&b, val64, target_seqno);
+730:kbase_subqueue_wait_seqno(struct panvk_gpu_queue *queue, uint32_t subqueue,
+731:                          uint64_t target_seqno, uint32_t rekick_mask,
+766:   //           subqueue, target_seqno, (uint64_t)cell->seqno, *ls_copy,
+789:      if (cell->seqno >= target_seqno ||
+790:          (PANVK_DEBUG(KBASE_DIAG) && *ls_copy >= target_seqno) ||
+834:                   target_seqno, *mark_pre_call, *mark_post_call,
+877:         kbase_log_queue_syncobjs(queue);
+889:               subqueue, cell->seqno, target_seqno, insert, subq->kbase.ringbuf_dev + insert,
+914:      int cqs_ret = target_seqno
+916:                            dev->kmod.dev, seqno_addr, target_seqno - 1,
+930:               error_type, subqueue, cell->seqno, target_seqno, insert, subq->kbase.ringbuf_dev + insert,
+945:      cell->seqno >= target_seqno ||
+946:      (PANVK_DEBUG(KBASE_DIAG) && *ls_copy >= target_seqno);
+951:             subqueue, target_seqno, (uint64_t)cell->seqno, *ls_copy,
+971:      VkResult result = kbase_subqueue_wait_seqno(
+1391:      VkResult res = kbase_subqueue_wait_seqno(
+1623:         .syncobjs = panvk_priv_mem_dev_addr(queue->syncobjs),
+1732:    * registers are all zero at init time, we need to initialize all syncobjs
+1734:   panvk_priv_mem_write(queue->syncobjs,
+1741:      kbase_clean_priv_mem(queue->syncobjs,
+1839:   panvk_pool_free_mem(&queue->syncobjs);
+1868:      queue->syncobjs = (struct panvk_priv_mem){
+1875:      queue->syncobjs = panvk_pool_alloc_mem(&dev->mempools.rw, alloc_info);
+1877:   if (!panvk_priv_mem_check_alloc(queue->syncobjs))
+2238:   uint64_t kbase_target_seqnos[PANVK_SUBQUEUE_COUNT];
+2286:   for (uint32_t i = 0; i < vk_submit->command_buffer_count; i++) {
+2288:         vk_submit->command_buffers[i], struct panvk_cmd_buffer, vk);
+2479:   /* No DRM syncobjs on kbase: semaphore waits are resolved on the CPU
+2517:   for (uint32_t i = 0; i < vk_submit->command_buffer_count; i++) {
+2519:         vk_submit->command_buffers[i], struct panvk_cmd_buffer, vk);
+2614:   /* No DRM syncobjs on kbase: semaphore signals are resolved on the CPU
+2655:      VkResult result = kbase_subqueue_wait_seqno(
+2678:      VkResult result = kbase_subqueue_wait_seqno(
+2752:      submit->kbase_target_seqnos[i] = queue->subqueues[i].kbase.emitted_jobs;
+2755:      result = kbase_wait_sync_targets(queue, submit->kbase_target_seqnos,
+2786:         queue, submit->kbase_target_seqnos, UINT64_MAX);
+2811:                                   submit->kbase_target_seqnos);
+2916:      for (uint32_t i = 0; i < vk_submit->command_buffer_count; i++) {
+2918:            vk_submit->command_buffers[i], struct panvk_cmd_buffer, vk);
+
+=== HONEYKRISP PRIOR ART ===
+35:#include "asahi/libagx/tessellator.h"
+72:/* CTS coverage of indirect draws is pretty bad, so it's helpful to be able to
+80:   if (agx_is_indirect(d.b))
+81:      fprintf(fp, "indirect (buffer %" PRIx64 "):", d.b.ptr);
+1003:   struct poly_heap *map = agx_bo_map(dev->rodata.bo) + off;
+1005:   *map = (struct poly_heap){
+1019:   if (!cmd->uses_heap) {
+1024:      hk_queue_write(cmd, addr + offsetof(struct poly_heap, bottom), 0,
+1027:      cmd->uses_heap = true;
+1055:   bool indirect = agx_is_indirect(draw.b) || draw.restart;
+1057:   if (!indirect)
+1076:      if (!indirect) {
+1105:      return gfx->tess.prim;
+1144:   bool indirect = agx_is_indirect(draw.b) ||
+1192:    * & count buffers. GPU calculates and allocates for indirect draws.
+1204:   if (indirect) {
+1245:hk_upload_tess_params(struct hk_cmd_buffer *cmd, struct poly_tess_params *out,
+1253:   enum poly_tess_partitioning partitioning =
+1254:      gfx->tess.info.spacing == TESS_SPACING_EQUAL
+1256:      : gfx->tess.info.spacing == TESS_SPACING_FRACTIONAL_ODD
+1260:   struct poly_tess_params args = {
+1262:      .tcs_stride_el = tcs->info.tess.tcs_output_stride / 4,
+1268:      .output_patch_size = tcs->info.tess.tcs_output_patch_size,
+1269:      .tcs_patch_constants = tcs->info.tess.tcs_nr_patch_outputs,
+1270:      .tcs_per_vertex_outputs = tcs->info.tess.tcs_per_vertex_outputs,
+1272:      .points_mode = gfx->tess.info.points,
+1273:      .isolines = gfx->tess.info.mode == TESS_PRIMITIVE_ISOLINES,
+1276:   if (!args.points_mode && gfx->tess.info.mode != TESS_PRIMITIVE_ISOLINES) {
+1277:      args.ccw = gfx->tess.info.ccw;
+1288:   if (!agx_is_indirect(draw.b)) {
+1314:      /* Allocate 3x indirect global+local grids for VS/TCS/tess */
+1316:      gfx->tess.grids = hk_pool_alloc(cmd, grid_stride * 3, 4).gpu;
+1321:   gfx->tess.out_draws = args.out_draws;
+1389:hk_draw_as_indexed_indirect(struct hk_cmd_buffer *cmd, struct agx_draw draw)
+1393:   if (agx_is_indirect(draw.b))
+1404:   return agx_draw_indexed_indirect(
+1419:   /* The unroll kernel assumes an indirect draw. Synthesize one if needed */
+1420:   draw = hk_draw_as_indexed_indirect(cmd, draw);
+1422:   /* Next, we unroll the index buffer used by the indirect draw */
+1444:   return agx_draw_indexed_indirect(ia.out_draw, dev->heap->va->addr,
+1484:   if (agx_is_indirect(draw.b)) {
+1485:      struct libagx_gs_setup_indirect_args gsi = {
+1503:      libagx_gs_setup_indirect_struct(cmd, agx_1d(1),
+1506:      grid_vs = agx_grid_indirect_local(
+1509:      grid_gs = agx_grid_indirect_local(
+1564:      if (agx_is_indirect(draw.b)) {
+1565:         return agx_draw_indexed_indirect(
+1575:      if (agx_is_indirect(draw.b)) {
+1576:         return agx_draw_indirect(geometry_params +
+1587:hk_launch_tess(struct hk_cmd_buffer *cmd, struct hk_cs *cs,
+1592:   struct agx_grid grid_vs, grid_tcs, grid_tess;
+1599:   uint64_t state = gfx->descriptors.root.draw.tess_params;
+1600:   struct hk_tess_info info = gfx->tess.info;
+1608:   if (agx_is_indirect(draw.b)) {
+1609:      perf_debug(cmd, "Indirect tessellation");
+1611:      struct libagx_tess_setup_indirect_args args = {
+1613:         .grids = gfx->tess.grids,
+1614:         .indirect = draw.b.ptr,
+1628:      libagx_tess_setup_indirect_struct(cmd, agx_1d(1),
+1632:      grid_vs = agx_grid_indirect_local(gfx->tess.grids + 0 * grid_stride);
+1633:      grid_tcs = agx_grid_indirect_local(gfx->tess.grids + 1 * grid_stride);
+1634:      grid_tess = agx_grid_indirect_local(gfx->tess.grids + 2 * grid_stride);
+1639:      grid_tcs.count[0] = patches * tcs->info.tess.tcs_output_patch_size;
+1640:      grid_tess = agx_1d(patches * draw.b.count[1]);
+1661:      grid_tcs, agx_workgroup(tcs->info.tess.tcs_output_patch_size, 1, 1));
+1663:   /* First generate counts, then prefix sum them, and then tessellate. */
+1664:   libagx_tessellate(cmd, grid_tess, AGX_BARRIER_ALL | AGX_PREGFX, info.mode,
+1667:   libagx_prefix_sum_tess(cmd, agx_1d(1024), AGX_BARRIER_ALL | AGX_PREGFX,
+1670:   libagx_tessellate(cmd, grid_tess, AGX_BARRIER_ALL | AGX_PREGFX, info.mode,
+1673:   return agx_draw_indexed_indirect(gfx->tess.out_draws, dev->heap->va->addr,
+2486:            cfg.front_face_ccw ^= gfx->tess.info.ccw;
+2930:    * For a direct draw, we upload the draw parameters as-if indirect to
+2931:    * avoid keying to indirectness.
+2934:      if (agx_is_indirect(draw.b)) {
+3030:   /* Link varyings before uploading tessellation state, becuase the
+3066:   struct agx_ptr tess_args = {0};
+3068:      tess_args = hk_pool_alloc(cmd, sizeof(struct poly_tess_params), 4);
+3069:      gfx->descriptors.root.draw.tess_params = tess_args.gpu;
+3086:       * until after uploading root. But the root depends on the tess address,
+3087:       * so we allocate tess parameters before uploading root.
+3090:       * planning to do a massive rework of indirect geom/tess so I'm trying not
+3093:      if (tess_args.cpu) {
+3094:         hk_upload_tess_params(cmd, tess_args.cpu, draw);
+3184:   /* Geometry or tessellation use robust software index buffer fetch anyway */
+3204:   if (agx_is_indirect(draw->b))
+3339:   /* Merge tess info before GS construction since that depends on
+3340:    * gfx->tess.prim
+3349:      gfx->tess.info =
+3350:         hk_tess_info_merge(tese->info.tess.info, tesc->info.tess.info);
+3353:      if (gfx->tess.info.points) {
+3354:         gfx->tess.prim = MESA_PRIM_POINTS;
+3355:      } else if (gfx->tess.info.mode == TESS_PRIMITIVE_ISOLINES) {
+3356:         gfx->tess.prim = MESA_PRIM_LINES;
+3358:         gfx->tess.prim = MESA_PRIM_TRIANGLES;
+3458:   if (agx_is_indirect(draw.b)) {
+3469:   bool tess = cmd->state.gfx.shaders[MESA_SHADER_TESS_EVAL];
+3471:   /* Clipper counters depend on geom/tess outputs and must be written with the
+3472:    * geom/tess output. They are updated as IA counters only when geom/tess is
+3475:   if (geom || tess) {
+3504:   if (!agx_is_indirect(draw_.b) &&
+3543:      bool tess = cmd->state.gfx.shaders[MESA_SHADER_TESS_EVAL];
+3554:      if (tess && HK_PERF(dev, NOTESS))
+3559:      if (geom || tess) {
+3571:      if (tess) {
+3572:         draw = hk_launch_tess(cmd, ccs, draw, geom ? 0 : stat_c_prims,
+3589:         if (agx_is_indirect(draw.b)) {
+3604:            draw = agx_draw_indirect(out_draw);
+3616:         assert(!geom && !tess && !adj);
+3621:         draw = hk_draw_as_indexed_indirect(cmd, draw);
+3624:         uint64_t target = hk_cs_alloc_for_indirect(cs, size_B);
+3654:      draw = agx_draw_indirect(hk_pool_upload(cmd, data, sizeof(data), 4));
+3702:      draw = agx_draw_indexed_indirect(addr, buf.addr, buf.range, 0, 0);
+3739:hk_draw_indirect_inner(VkCommandBuffer commandBuffer, uint64_t base,
+3762:      hk_draw(cmd, draw_id, agx_draw_indirect(addr));
+3772:   hk_draw_indirect_inner(commandBuffer, hk_buffer_address_ro(buffer, offset),
+3777:hk_draw_indexed_indirect_inner(VkCommandBuffer commandBuffer, uint64_t buffer,
+3804:              agx_draw_indexed_indirect(addr, buf.addr, buf.range, 0, 0));
+3815:   hk_draw_indexed_indirect_inner(
+3821: * patch the indirect buffer and then we dispatch the predicated maxDrawCount
+3822: * indirect draws.
+3825:hk_draw_indirect_count(VkCommandBuffer commandBuffer, VkBuffer _buffer,
+3834:   perf_debug(cmd, "Draw indirect count");
+3843:   libagx_predicate_indirect(cmd, agx_1d(maxDrawCount),
+3848:      hk_draw_indexed_indirect_inner(commandBuffer, patched, maxDrawCount,
+3851:      hk_draw_indirect_inner(commandBuffer, patched, maxDrawCount, out_stride);
+3861:   hk_draw_indirect_count(commandBuffer, _buffer, offset, countBuffer,
+3871:   hk_draw_indirect_count(commandBuffer, _buffer, offset, countBuffer,
+
+=== KOSMICKRISP PRIOR ART ===
+src/kosmickrisp/bridge/mtl_encoder.h:63:void mtl_dispatch_threadgroups_with_indirect_buffer(
+src/kosmickrisp/bridge/mtl_encoder.h:119:void mtl_draw_primitives_indirect(mtl_render_encoder *encoder,
+src/kosmickrisp/bridge/mtl_encoder.h:123:void mtl_draw_indexed_primitives_indirect(mtl_render_encoder *encoder,
+src/kosmickrisp/bridge/mtl_encoder.m:217:mtl_dispatch_threadgroups_with_indirect_buffer(mtl_compute_encoder *encoder,
+src/kosmickrisp/bridge/mtl_encoder.m:414:mtl_draw_primitives_indirect(mtl_render_encoder *encoder,
+src/kosmickrisp/bridge/mtl_encoder.m:420:      [enc drawPrimitives:(MTLPrimitiveType)primitve_type indirectBuffer:addr];
+src/kosmickrisp/bridge/mtl_encoder.m:425:mtl_draw_indexed_primitives_indirect(mtl_render_encoder *encoder,
+src/kosmickrisp/bridge/mtl_encoder.m:440:                  indirectBuffer:addr];
+src/kosmickrisp/bridge/stubs/mtl_encoder.c:101:mtl_dispatch_threadgroups_with_indirect_buffer(mtl_compute_encoder *encoder,
+src/kosmickrisp/bridge/stubs/mtl_encoder.c:208:mtl_draw_primitives_indirect(mtl_render_encoder *encoder,
+src/kosmickrisp/bridge/stubs/mtl_encoder.c:215:mtl_draw_indexed_primitives_indirect(mtl_render_encoder *encoder,
+src/kosmickrisp/compiler/nir_to_msl.c:2255:   NIR_PASS(_, nir, nir_lower_indirect_derefs_to_if_else_trees,
+src/kosmickrisp/libkk/kk_draws.cl:13: * clone-and-patch the indirect buffer, predicating out draws as appropriate.
+src/kosmickrisp/libkk/kk_draws.cl:33:libkk_predicate_indirect_gt_draw_id(global uint32_t *out,
+src/kosmickrisp/libkk/kk_draws.cl:49:libkk_predicate_indirect_eq_zero(global uint32_t *out, constant uint32_t *in,
+src/kosmickrisp/libkk/kk_draws.cl:63:libkk_predicate_indirect_neq_zero(global uint32_t *out, constant uint32_t *in,
+src/kosmickrisp/libkk/kk_draws.cl:76:   uint64_t index_buffer, global struct poly_heap *heap,
+src/kosmickrisp/libkk/kk_geometry.cl:11:#include "poly/tessellator.h"
+src/kosmickrisp/libkk/kk_geometry.cl:14:libkk_prefix_sum_tess(global struct poly_tess_params *p)
+src/kosmickrisp/libkk/kk_geometry.cl:33:   uint alloc_B = poly_heap_alloc_offs(p->heap, size_B);
+src/kosmickrisp/libkk/kk_tessellation.cl:9:#include "poly/tessellator.h"
+src/kosmickrisp/libkk/kk_tessellation.cl:12:libkk_tess_setup_indirect(
+src/kosmickrisp/libkk/kk_tessellation.cl:13:   global struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellation.cl:14:   global uint32_t *grids /* output: VS then TCS then tess */,
+src/kosmickrisp/libkk/kk_tessellation.cl:15:   global struct poly_vertex_params *vp /* output */, global uint32_t *indirect,
+src/kosmickrisp/libkk/kk_tessellation.cl:22:   uint count = indirect[0], instance_count = indirect[1];
+src/kosmickrisp/libkk/kk_tessellation.cl:48:   global uchar *blob = poly_heap_alloc(p->heap, alloc);
+src/kosmickrisp/libkk/kk_tessellation.cl:65:    * indirect draw, the hardware would do this for us, but for software input
+src/kosmickrisp/libkk/kk_tessellation.cl:73:      vp->index_buffer = in_index_buffer + (indirect[2] * in_index_size_B);
+src/kosmickrisp/libkk/kk_tessellation.cl:76:         poly_index_buffer_range_el(in_index_buffer_range_el, indirect[2]);
+src/kosmickrisp/libkk/kk_tessellator.cl:7:#include "poly/cl/tessellator.h"
+src/kosmickrisp/libkk/kk_tessellator.cl:10:libkk_tess_isoline(constant struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellator.cl:11:                   enum poly_tess_mode tess_mode)
+src/kosmickrisp/libkk/kk_tessellator.cl:14:   poly_tess_isoline_process(p, patch, tess_mode);
+src/kosmickrisp/libkk/kk_tessellator.cl:18:libkk_tess_tri(constant struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellator.cl:19:               enum poly_tess_mode tess_mode)
+src/kosmickrisp/libkk/kk_tessellator.cl:22:   poly_tess_tri_process(p, patch, tess_mode);
+src/kosmickrisp/libkk/kk_tessellator.cl:26:libkk_tess_quad(constant struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellator.cl:27:                enum poly_tess_mode tess_mode)
+src/kosmickrisp/libkk/kk_tessellator.cl:30:   poly_tess_quad_process(p, patch, tess_mode);
+src/kosmickrisp/libkk/kk_tessellator.h:10:#include "poly/tessellator.h"
+src/kosmickrisp/libkk/kk_tessellator.h:12:#define libkk_tessellate(context, grid, barrier, prim, mode, state)            \
+src/kosmickrisp/libkk/kk_tessellator.h:14:      libkk_tess_quad(context, grid, barrier, state, mode);                    \
+src/kosmickrisp/libkk/kk_tessellator.h:16:      libkk_tess_tri(context, grid, barrier, state, mode);                     \
+src/kosmickrisp/libkk/kk_tessellator.h:19:      libkk_tess_isoline(context, grid, barrier, state, mode);                 \
+src/kosmickrisp/libkk/meson.build:9:  'kk_tessellation.cl',
+src/kosmickrisp/libkk/meson.build:10:  'kk_tessellator.cl',
+src/kosmickrisp/util/vk_extensions.py:297:    "VK_KHR_draw_indirect_count": 27,
+src/kosmickrisp/vulkan/kk_cmd_buffer.c:758:      mtl_dispatch_threadgroups_with_indirect_buffer(encoder, grid.addr,
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:78:   /* Address of vertex param buffer if geom/tess is used, else 0 */
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:81:   /* Address of tessellation param buffer if tessellation used, else 0 */
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:82:   uint64_t tess_params;
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:168:      /* Grid buffer for when the draw is indirect */
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:169:      struct kk_ptr indirect_ptr;
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:171:      struct kk_tess_info info;
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:173:   } tess;
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:371:kk_grid_indirect(uint64_t addr)
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:380:kk_grid_is_indirect(struct kk_grid grid)
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:41:kk_predicate_compute(struct kk_cmd_buffer *cmd, uint64_t indirect_addr_out,
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:42:                     uint64_t indirect_addr_in)
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:47:    * generated commands, constructing an indirect command buffer on the GPU
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:49:    * time being, we apply predicates by zeroing out disabled indirect data */
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:52:      libkk_predicate_indirect_eq_zero(cmd, grid, false, indirect_addr_out,
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:53:                                       indirect_addr_in, cond_addr, 3u, 3u);
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:55:      libkk_predicate_indirect_neq_zero(cmd, grid, false, indirect_addr_out,
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:56:                                        indirect_addr_in, cond_addr, 3u, 3u);
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:85:      /* Convert to indirect for predication */
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:86:      VkDispatchIndirectCommand indirect = {
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:92:         kk_pool_upload(cmd, &indirect, sizeof(indirect), 4u);
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:101:      mtl_dispatch_threadgroups_with_indirect_buffer(encoder, patched.gpu,
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:144:      mtl_dispatch_threadgroups_with_indirect_buffer(encoder, patched.gpu,
+src/kosmickrisp/vulkan/kk_cmd_dispatch.c:148:      mtl_dispatch_threadgroups_with_indirect_buffer(
+src/kosmickrisp/vulkan/kk_cmd_draw.c:22:#include "kosmickrisp/libkk/kk_tessellator.h"
+src/kosmickrisp/vulkan/kk_cmd_draw.c:25:#include "poly/tessellator.h"
+src/kosmickrisp/vulkan/kk_cmd_draw.c:929:   /* Merge tess info before GS construction since that depends on
+src/kosmickrisp/vulkan/kk_cmd_draw.c:930:    * gfx->tess.prim
+src/kosmickrisp/vulkan/kk_cmd_draw.c:937:      gfx->tess.info =
+src/kosmickrisp/vulkan/kk_cmd_draw.c:938:         kk_tess_info_merge(tese->info.tess.info, tesc->info.tess.info);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:941:      if (gfx->tess.info.points) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:942:         gfx->tess.prim = MESA_PRIM_POINTS;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:943:      } else if (gfx->tess.info.mode == TESS_PRIMITIVE_ISOLINES) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:944:         gfx->tess.prim = MESA_PRIM_LINES;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:946:         gfx->tess.prim = MESA_PRIM_TRIANGLES;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:960:   struct poly_heap *map = (struct poly_heap *)dev->heap->cpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:963:   *map = (struct poly_heap){
+src/kosmickrisp/vulkan/kk_cmd_draw.c:964:      .base = dev->heap->gpu + sizeof(struct poly_heap),
+src/kosmickrisp/vulkan/kk_cmd_draw.c:965:      .size = size - sizeof(struct poly_heap),
+src/kosmickrisp/vulkan/kk_cmd_draw.c:982:                           addr + offsetof(struct poly_heap, bottom), 0});
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1006:   bool indirect;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1019:      } indirect_command;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1029:   /* For non-indirect, 0 is vertex/index count, 1 instance count and 2 first
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1050:   bool indirect = kk_grid_is_indirect(data->grid);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1052:   if (!indirect)
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1065:   if (!indirect) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1088:kk_upload_tess_params(struct kk_cmd_buffer *cmd, struct poly_tess_params *out,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1096:   enum poly_tess_partitioning partitioning =
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1097:      gfx->tess.info.spacing == TESS_SPACING_EQUAL
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1099:      : gfx->tess.info.spacing == TESS_SPACING_FRACTIONAL_ODD
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1103:   struct poly_tess_params args = {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1105:      .tcs_stride_el = tcs->info.tess.tcs_output_stride / 4,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1108:      .output_patch_size = tcs->info.tess.tcs_output_patch_size,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1109:      .tcs_patch_constants = tcs->info.tess.tcs_nr_patch_outputs,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1110:      .tcs_per_vertex_outputs = tcs->info.tess.tcs_per_vertex_outputs,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1112:      .points_mode = gfx->tess.info.points,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1113:      .isolines = gfx->tess.info.mode == TESS_PRIMITIVE_ISOLINES,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1116:   if (!args.points_mode && gfx->tess.info.mode != TESS_PRIMITIVE_ISOLINES) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1117:      args.ccw = gfx->tess.info.ccw;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1127:   args.patch_coord_buffer = dev->heap->gpu + sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1129:   if (!kk_grid_is_indirect(draw->grid)) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1148:      gfx->tess.out_draws_addr = ptr.gpu + draw_offs;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1157:      /* Allocate 3x indirect global+local grids for VS/TCS/tess */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1159:      gfx->tess.indirect_ptr = kk_pool_alloc(cmd, grid_stride * 3, 4);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1162:      gfx->tess.out_draws_addr = ptr.gpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1224:         front_face_ccw ^= gfx->tess.info.ccw;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1321:kk_convert_to_indirect_draw(struct kk_cmd_buffer *cmd,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1324:   if (data->indirect)
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1329:   struct kk_ptr indirect_draw =
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1332:   if (unlikely(!indirect_draw.gpu))
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1335:   data->indirect_command.addr = indirect_draw.gpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1336:   data->indirect_command.stride = draw_stride;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1337:   data->indirect = true;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1348:   if (unlikely(!kk_convert_to_indirect_draw(cmd, data)))
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1351:   assert((data->indirect_command.stride % sizeof(uint32_t)) == 0 &&
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1361:   uint64_t in_addr = data->indirect_command.addr;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1363:   uint32_t in_stride_el = data->indirect_command.stride / sizeof(uint32_t);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1366:    * generated commands, constructing an indirect command buffer on the GPU
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1368:    * time being, we apply predicates by zeroing out disabled indirect data */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1374:         libkk_predicate_indirect_gt_draw_id(cmd, grid, true, patched.gpu,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1379:         libkk_predicate_indirect_eq_zero(cmd, grid, true, patched.gpu, in_addr,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1383:         libkk_predicate_indirect_neq_zero(cmd, grid, true, patched.gpu,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1388:         UNREACHABLE("Unsupported indirect draw predicate");
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1398:   data->indirect_command.addr = patched.gpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1399:   data->indirect_command.stride = out_stride;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1405:/* Unrolling will always be done through indirect rendering, so if this is
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1406: * called from non-indirect calls, we will fake it. */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1412:   if (unlikely(!kk_convert_to_indirect_draw(cmd, data)))
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1415:   assert((data->indirect_command.stride % sizeof(uint32_t)) == 0 &&
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1426:      .in_draw = data->indirect_command.addr,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1428:      .in_draw_stride_el = data->indirect_command.stride / sizeof(uint32_t),
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1445:   data->index_buffer.addr = dev->heap->gpu + sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1446:   data->index_buffer.range = dev->heap->size_B - sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1449:   data->indirect = true;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1452:   data->indirect_command.addr = out_draws.gpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1453:   data->indirect_command.stride = sizeof(VkDrawIndexedIndirectCommand);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1509:    * for unrolling, tessellation, etc. will properly handle these cases. */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1533:   if (kk_grid_is_indirect(data.grid)) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1537:         mtl_draw_indexed_primitives_indirect(
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1542:         mtl_draw_primitives_indirect(enc, data.primitive_type, data.grid.addr);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1554:         /* Avoid Metal validation error. Empty draws from tessellation will
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1627:   /* We can't tell if the draw over-reads up-front with indirect draws, so we
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1629:   if (data->indirect)
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1677:   if (kk_grid_is_indirect(data->grid)) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1693:   if (kk_grid_is_indirect(data->grid)) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1706:/* Prepares emulation data for stages like tessellation. It also upload system
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1715:   /* Prepare emulation data for tessellation. */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1716:   bool tess = upload_mask & BITFIELD_BIT(MESA_SHADER_TESS_EVAL);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1717:   if (tess) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1722:      struct kk_ptr tess_args =
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1723:         kk_pool_alloc(cmd, sizeof(struct poly_tess_params), 4);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1724:      gfx->per_draw_data.tess_params = tess_args.gpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1725:      if (tess_args.gpu) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1726:         kk_upload_tess_params(cmd, tess_args.cpu, draw);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1745:      mtl_dispatch_threadgroups_with_indirect_buffer(enc, grid.addr,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1750:kk_launch_tess(struct kk_cmd_buffer *cmd, struct kk_draw_data draw)
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1754:   struct kk_grid grid_vs, grid_tcs, grid_tess;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1761:   uint64_t state = gfx->per_draw_data.tess_params;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1762:   struct kk_tess_info info = gfx->tess.info;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1765:   if (kk_grid_is_indirect(draw.grid)) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1766:      struct libkk_tess_setup_indirect_args args = {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1768:         .grids = gfx->tess.indirect_ptr.gpu,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1769:         .indirect = draw.grid.addr,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1782:      libkk_tess_setup_indirect_struct(cmd, kk_grid_1d(1), true, args);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1785:      grid_vs = kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 0u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1787:         kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 1u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1788:      grid_tess =
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1789:         kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 2u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1794:      grid_tcs.size.x = patches * tcs->info.tess.tcs_output_patch_size;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1795:      grid_tess = kk_grid_1d(patches * draw.grid.size.y);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1811:      struct mtl_size local_size = {tcs->info.tess.tcs_output_patch_size, 1, 1};
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1822:   /* First generate counts, then prefix sum them, and then tessellate. */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1823:   libkk_tessellate(cmd, grid_tess, true, info.mode, POLY_TESS_MODE_COUNT,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1826:   libkk_prefix_sum_tess(cmd, kk_grid_1d(1024u), true, state);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1828:   libkk_tessellate(cmd, grid_tess, true, info.mode, POLY_TESS_MODE_WITH_COUNTS,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1831:   draw.grid = kk_grid_indirect(gfx->tess.out_draws_addr);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1833:   draw.index.gpu.addr = dev->heap->gpu + sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1834:   draw.index.gpu.range = dev->heap->size_B - sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1836:   draw.primitive_type = mesa_prim_to_mtl_primitive_type(gfx->tess.prim);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1845:   bool tess = cmd->state.shaders[MESA_SHADER_TESS_EVAL];
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1849:      .primitive_type = tess ? 0u : mesa_prim_to_mtl_primitive_type(data->prim),
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1852:   if (data->indirect) {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1854:         data->indirect_command.addr + draw_id * data->indirect_command.stride;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1855:      draw.grid = kk_grid_indirect(addr);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1887:   /* Convert to indirect and process predicates. Skip draw if we fail. */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1891:   bool tess = cmd->state.shaders[MESA_SHADER_TESS_EVAL];
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1893:   /* Unroll geometry. Skip draw if we fail. No need to unroll if tessellation
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1895:   bool requires_unroll = !tess && (data->prim == MESA_PRIM_TRIANGLE_FAN ||
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1908:      if (tess)
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1909:         draw_data = kk_launch_tess(cmd, draw_data);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2115:      .indirect = true,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2122:      .indirect_command.addr = pInfo->addressRange.address,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2123:      .indirect_command.stride = pInfo->addressRange.stride,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2146:      .indirect = true,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2154:      .indirect_command.addr = pInfo->addressRange.address,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2155:      .indirect_command.stride = pInfo->addressRange.stride,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2176:      .indirect = true,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2185:      .indirect_command.addr = pInfo->addressRange.address,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2186:      .indirect_command.stride = pInfo->addressRange.stride,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2209:      .indirect = true,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2219:      .indirect_command.addr = pInfo->addressRange.address,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:2220:      .indirect_command.stride = pInfo->addressRange.stride,
+src/kosmickrisp/vulkan/kk_nir_lower_descriptors.c:820:   case nir_intrinsic_load_tess_param_buffer_poly:
+src/kosmickrisp/vulkan/kk_nir_lower_descriptors.c:821:      return lower_sysval_to_per_draw(b, intrin, tess_params);
+src/kosmickrisp/vulkan/kk_nir_lower_vbo.c:123:   assert(nir_src_is_const(*offset_src) && "no attribute indirects");
+src/kosmickrisp/vulkan/kk_physical_device.c:71:      .KHR_draw_indirect_count = true,
+src/kosmickrisp/vulkan/kk_physical_device.c:249:      .tessellationShader = true,
+src/kosmickrisp/vulkan/kk_shader.c:309:   /* the shader_out portion of this is load-bearing even for tess eval */
+src/kosmickrisp/vulkan/kk_shader.c:344:         ? nir->info.tess.point_mode
+src/kosmickrisp/vulkan/kk_shader.c:817:   /* When using poly to emulate tessellation, vertex and tess control shaders
+src/kosmickrisp/vulkan/kk_shader.c:839:      shader->info.tess.info.ccw = nir->info.tess.ccw;
+src/kosmickrisp/vulkan/kk_shader.c:840:      shader->info.tess.info.points = nir->info.tess.point_mode;
+src/kosmickrisp/vulkan/kk_shader.c:841:      shader->info.tess.info.spacing = nir->info.tess.spacing;
+src/kosmickrisp/vulkan/kk_shader.c:842:      shader->info.tess.info.mode = nir->info.tess._primitive_mode;
+src/kosmickrisp/vulkan/kk_shader.c:844:      shader->info.tess.tcs_output_patch_size = nir->info.tess.tcs_vertices_out;
+src/kosmickrisp/vulkan/kk_shader.c:845:      shader->info.tess.tcs_per_vertex_outputs =
+src/kosmickrisp/vulkan/kk_shader.c:847:      shader->info.tess.tcs_nr_patch_outputs =
+src/kosmickrisp/vulkan/kk_shader.c:849:      shader->info.tess.tcs_output_stride = poly_tcs_output_stride(nir);
+src/kosmickrisp/vulkan/kk_shader.c:851:      shader->info.tess.info.ccw = nir->info.tess.ccw;
+src/kosmickrisp/vulkan/kk_shader.c:852:      shader->info.tess.info.points = nir->info.tess.point_mode;
+src/kosmickrisp/vulkan/kk_shader.c:853:      shader->info.tess.info.spacing = nir->info.tess.spacing;
+src/kosmickrisp/vulkan/kk_shader.c:854:      shader->info.tess.info.mode = nir->info.tess._primitive_mode;
+src/kosmickrisp/vulkan/kk_shader.c:1199:         info->vs.tess_local_thread_size = s->info.tess.tcs_output_patch_size;
+src/kosmickrisp/vulkan/kk_shader.c:1208:      struct kk_tess_info info =
+src/kosmickrisp/vulkan/kk_shader.c:1209:         kk_tess_info_merge(tese->info.tess.info, tesc->info.tess.info);
+src/kosmickrisp/vulkan/kk_shader.c:1232:   /* When tessellation or geometry shaders are present, the pair that will be
+src/kosmickrisp/vulkan/kk_shader.c:1240:         (i == 0u) ? 64u : vs->info.vs.tess_local_thread_size;
+src/kosmickrisp/vulkan/kk_shader.c:1346:   /* Determine if the pipeline contains tessellation stages */
+src/kosmickrisp/vulkan/kk_shader.c:1347:   bool tess = false;
+src/kosmickrisp/vulkan/kk_shader.c:1352:         tess = true;
+src/kosmickrisp/vulkan/kk_shader.c:1364:      /* For tessellation pipelines, some stages may be emulated in compute */
+src/kosmickrisp/vulkan/kk_shader.c:1365:      bool emulated_stage = tess && (nir->info.stage == MESA_SHADER_VERTEX ||
+src/kosmickrisp/vulkan/kk_shader.h:22:struct kk_tess_info {
+src/kosmickrisp/vulkan/kk_shader.h:23:   enum tess_primitive_mode mode : 8;
+src/kosmickrisp/vulkan/kk_shader.h:24:   enum gl_tess_spacing spacing  : 8;
+src/kosmickrisp/vulkan/kk_shader.h:28:static_assert(sizeof(struct kk_tess_info) == 4, "packed");
+src/kosmickrisp/vulkan/kk_shader.h:30:static struct kk_tess_info
+src/kosmickrisp/vulkan/kk_shader.h:31:kk_tess_info_merge(struct kk_tess_info a, struct kk_tess_info b)
+src/kosmickrisp/vulkan/kk_shader.h:43:   struct kk_tess_info out;
+src/kosmickrisp/vulkan/kk_shader.h:62:         uint32_t tess_local_thread_size;
+src/kosmickrisp/vulkan/kk_shader.h:99:         struct kk_tess_info info;
+src/kosmickrisp/vulkan/kk_shader.h:100:      } tess;
+src/kosmickrisp/vulkan/kk_shader.h:113:         /* Vertex, tess ctrl and tess eval at most needed before pre-render. */
+
+=== LIBPOLY INDIRECT/HEAP ABI ===
+src/poly/cl/restart.h:135:poly_setup_unroll_for_draw(global struct poly_heap *heap,
+src/poly/cl/restart.h:153:   uint old_heap_bottom_B = poly_heap_alloc_offs(heap, alloc_size);
+src/poly/cl/restart.h:168:                     global struct poly_heap *heap,
+src/poly/cl/restart.h:250:                    global struct poly_heap *heap,
+src/poly/cl/tessellation.cl:10:poly_tcs_patch_vertices_in(constant struct poly_tess_params *p)
+src/poly/cl/tessellation.cl:16:poly_tes_patch_vertices_in(constant struct poly_tess_params *p)
+src/poly/cl/tessellation.cl:22:poly_tcs_unrolled_id(constant struct poly_tess_params *p, uint3 wg_id)
+src/poly/cl/tessellation.cl:38:poly_load_tes_index(constant struct poly_tess_params *p, uint32_t index)
+src/poly/cl/tessellation.cl:56:poly_tcs_out_address(constant struct poly_tess_params *p, uint patch_id,
+src/poly/cl/tessellation.cl:79:poly_tes_patch_id(constant struct poly_tess_params *p, uint raw_id)
+src/poly/cl/tessellation.cl:91:poly_load_tess_coord(constant struct poly_tess_params *p, uint raw_id)
+src/poly/cl/tessellation.cl:107:poly_tes_in_address(constant struct poly_tess_params *p, uint raw_id, uint vtx_id,
+src/poly/cl/tessellation.cl:118:poly_tess_level_outer_default(constant struct poly_tess_params *p)
+src/poly/cl/tessellation.cl:124:poly_tess_level_inner_default(constant struct poly_tess_params *p)
+src/poly/cl/tessellator.h:121:tess_factors(constant struct poly_tess_params *p, uint patch)
+src/poly/cl/tessellator.h:132:poly_draw(constant struct poly_tess_params *p, enum poly_tess_mode mode,
+src/poly/cl/tessellator.h:155:                 constant struct poly_tess_params *p, uint patch, uint count)
+src/poly/cl/tessellator.h:171:poly_draw_empty(constant struct poly_tess_params *p, enum poly_tess_mode mode,
+src/poly/cl/tessellator.h:184:poly_heap_alloc_points(constant struct poly_tess_params *p, uint patch,
+src/poly/cl/tessellator.h:196:   uint32_t alloc_B = poly_heap_alloc_offs(p->heap, elsize_B * count);
+src/poly/cl/tessellator.h:723:poly_tess_isoline_process(constant struct poly_tess_params *p, uint32_t patch,
+src/poly/cl/tessellator.h:779:         poly_heap_alloc_points(p, patch, num_points);
+src/poly/cl/tessellator.h:823:poly_tess_tri_process(constant struct poly_tess_params *p, uint32_t patch,
+src/poly/cl/tessellator.h:907:            poly_heap_alloc_points(p, patch, 3);
+src/poly/cl/tessellator.h:968:      ctx.Point = poly_heap_alloc_points(p, patch, NumPoints);
+src/poly/cl/tessellator.h:1149:poly_tess_quad_process(constant struct poly_tess_params *p, uint32_t patch,
+src/poly/cl/tessellator.h:1256:            poly_heap_alloc_points(p, patch, 4);
+src/poly/cl/tessellator.h:1305:      ctx.Point = poly_heap_alloc_points(p, patch, NumPoints);
+src/poly/geometry.h:111:struct poly_heap {
+src/poly/geometry.h:115:static_assert(sizeof(struct poly_heap) == 4 * 4,
+src/poly/geometry.h:116:              "struct poly_heap must be 4 words");
+src/poly/geometry.h:120:poly_heap_alloc_offs(global struct poly_heap *heap, uint size_B)
+src/poly/geometry.h:140:poly_heap_alloc(global struct poly_heap *heap, uint size_B)
+src/poly/geometry.h:142:   return heap->base + poly_heap_alloc_offs(heap, size_B);
+src/poly/geometry.h:606:                       global struct poly_heap *heap,
+src/poly/geometry.h:640:      p->count_buffer = poly_heap_alloc(
+src/poly/geometry.h:644:   vp->output_buffer = (uintptr_t)poly_heap_alloc(heap, vertex_buffer_size);
+src/poly/geometry.h:650:         poly_heap_alloc_offs(heap, p->draw.index_count * 4);
+src/poly/tessellator.h:31:struct poly_tess_params {
+src/poly/tessellator.h:33:   DEVICE(struct poly_heap) heap;
+src/poly/tessellator.h:104:static_assert(sizeof(struct poly_tess_params) == 34 * 4,
+src/poly/tessellator.h:105:              "struct poly_tess_params must be 34 words");
+src/asahi/libagx/draws.cl:125:libagx_draw_robust_index(global uint32_t *vdm, global struct poly_heap *heap,
+src/asahi/libagx/draws.cl:165:         padded = poly_heap_alloc(heap, out_size_B);
+src/asahi/libagx/draws.cl:174:       * of poly_heap_alloc_nonatomic.
+src/asahi/libagx/geometry.cl:89:libagx_unroll_restart(global struct poly_heap *heap, uint64_t index_buffer,
+src/asahi/libagx/geometry.cl:109:   global struct poly_heap *heap,
+src/asahi/libagx/geometry.cl:130:libagx_prefix_sum_tess(global struct poly_tess_params *p, global uint *c_prims,
+src/asahi/libagx/geometry.cl:150:   uint alloc_B = poly_heap_alloc_offs(p->heap, size_B);
+src/asahi/libagx/tessellation.cl:10:libagx_tess_setup_indirect(
+src/asahi/libagx/tessellation.cl:11:   global struct poly_tess_params *p,
+src/asahi/libagx/tessellation.cl:47:   global uchar *blob = poly_heap_alloc(p->heap, alloc);
+src/asahi/libagx/tessellator.cl:25:libagx_tess_isoline(constant struct poly_tess_params *p,
+src/asahi/libagx/tessellator.cl:33:libagx_tess_tri(constant struct poly_tess_params *p, enum poly_tess_mode mode__2)
+src/asahi/libagx/tessellator.cl:40:libagx_tess_quad(constant struct poly_tess_params *p, enum poly_tess_mode mode__2)
+src/kosmickrisp/libkk/kk_draws.cl:76:   uint64_t index_buffer, global struct poly_heap *heap,
+src/kosmickrisp/libkk/kk_geometry.cl:14:libkk_prefix_sum_tess(global struct poly_tess_params *p)
+src/kosmickrisp/libkk/kk_geometry.cl:33:   uint alloc_B = poly_heap_alloc_offs(p->heap, size_B);
+src/kosmickrisp/libkk/kk_tessellation.cl:12:libkk_tess_setup_indirect(
+src/kosmickrisp/libkk/kk_tessellation.cl:13:   global struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellation.cl:48:   global uchar *blob = poly_heap_alloc(p->heap, alloc);
+src/kosmickrisp/libkk/kk_tessellator.cl:10:libkk_tess_isoline(constant struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellator.cl:18:libkk_tess_tri(constant struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellator.cl:26:libkk_tess_quad(constant struct poly_tess_params *p,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:960:   struct poly_heap *map = (struct poly_heap *)dev->heap->cpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:963:   *map = (struct poly_heap){
+src/kosmickrisp/vulkan/kk_cmd_draw.c:964:      .base = dev->heap->gpu + sizeof(struct poly_heap),
+src/kosmickrisp/vulkan/kk_cmd_draw.c:965:      .size = size - sizeof(struct poly_heap),
+src/kosmickrisp/vulkan/kk_cmd_draw.c:982:                           addr + offsetof(struct poly_heap, bottom), 0});
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1088:kk_upload_tess_params(struct kk_cmd_buffer *cmd, struct poly_tess_params *out,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1103:   struct poly_tess_params args = {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1127:   args.patch_coord_buffer = dev->heap->gpu + sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1157:      /* Allocate 3x indirect global+local grids for VS/TCS/tess */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1159:      gfx->tess.indirect_ptr = kk_pool_alloc(cmd, grid_stride * 3, 4);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1445:   data->index_buffer.addr = dev->heap->gpu + sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1446:   data->index_buffer.range = dev->heap->size_B - sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1723:         kk_pool_alloc(cmd, sizeof(struct poly_tess_params), 4);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1766:      struct libkk_tess_setup_indirect_args args = {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1768:         .grids = gfx->tess.indirect_ptr.gpu,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1782:      libkk_tess_setup_indirect_struct(cmd, kk_grid_1d(1), true, args);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1785:      grid_vs = kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 0u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1787:         kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 1u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1789:         kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 2u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1826:   libkk_prefix_sum_tess(cmd, kk_grid_1d(1024u), true, state);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1831:   draw.grid = kk_grid_indirect(gfx->tess.out_draws_addr);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1833:   draw.index.gpu.addr = dev->heap->gpu + sizeof(struct poly_heap);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1834:   draw.index.gpu.range = dev->heap->size_B - sizeof(struct poly_heap);
+
+=== TESS LIMITS ===
+src/panfrost/vulkan/panvk_vX_physical_device.c:919:      .maxTessellationGenerationLevel = 64,
+src/panfrost/vulkan/panvk_vX_physical_device.c:920:      .maxTessellationPatchSize = 32,
+src/panfrost/vulkan/panvk_vX_physical_device.c:921:      .maxTessellationControlPerVertexInputComponents = 128,
+src/panfrost/vulkan/panvk_vX_physical_device.c:922:      .maxTessellationControlPerVertexOutputComponents = 128,
+src/panfrost/vulkan/panvk_vX_physical_device.c:923:      .maxTessellationControlPerPatchOutputComponents = 120,
+src/panfrost/vulkan/panvk_vX_physical_device.c:924:      .maxTessellationControlTotalOutputComponents = 4216,
+src/panfrost/vulkan/panvk_vX_physical_device.c:925:      .maxTessellationEvaluationInputComponents = 128,
+src/panfrost/vulkan/panvk_vX_physical_device.c:926:      .maxTessellationEvaluationOutputComponents = 128,
+src/asahi/vulkan/hk_physical_device.c:735:      .maxTessellationGenerationLevel = 64,
+src/asahi/vulkan/hk_physical_device.c:736:      .maxTessellationPatchSize = 32,
+src/asahi/vulkan/hk_physical_device.c:737:      .maxTessellationControlPerVertexInputComponents = 128,
+src/asahi/vulkan/hk_physical_device.c:738:      .maxTessellationControlPerVertexOutputComponents = 128,
+src/asahi/vulkan/hk_physical_device.c:739:      .maxTessellationControlPerPatchOutputComponents = 120,
+src/asahi/vulkan/hk_physical_device.c:740:      .maxTessellationControlTotalOutputComponents = 4216,
+src/asahi/vulkan/hk_physical_device.c:741:      .maxTessellationEvaluationInputComponents = 128,
+src/asahi/vulkan/hk_physical_device.c:742:      .maxTessellationEvaluationOutputComponents = max_vgt_output_components,
+src/kosmickrisp/vulkan/kk_physical_device.c:556:      .maxTessellationGenerationLevel = 64,
+src/kosmickrisp/vulkan/kk_physical_device.c:557:      .maxTessellationPatchSize = 32,
+src/kosmickrisp/vulkan/kk_physical_device.c:558:      .maxTessellationControlPerVertexInputComponents = 128,
+src/kosmickrisp/vulkan/kk_physical_device.c:559:      .maxTessellationControlPerVertexOutputComponents = 128,
+src/kosmickrisp/vulkan/kk_physical_device.c:560:      .maxTessellationControlPerPatchOutputComponents = 120,
+src/kosmickrisp/vulkan/kk_physical_device.c:561:      .maxTessellationControlTotalOutputComponents = 4216,
+src/kosmickrisp/vulkan/kk_physical_device.c:562:      .maxTessellationEvaluationInputComponents = 128,
+src/kosmickrisp/vulkan/kk_physical_device.c:563:      .maxTessellationEvaluationOutputComponents = 128,
+
+=== BUILDS ===
+build-g720-kbase=ninja: Entering directory `build-g720-kbase' [0/1] Regenerating build files 
+build-g720-kbase-x11=[15/17] Linking static target src/panfrost/vulkan/libpanvk_v13.a [16/17] Linking static target src/panfrost/vulkan/libpanvk_v14.a [17/17] Linking target src/panfrost/vulkan/libvulkan_panfrost.so 
+
+=== RESULT ===
+patch_applied=NO
+gpu_executed=NO
+REAL_RC=0

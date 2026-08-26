@@ -1,0 +1,147 @@
+PANVK_G720_TESS_RESTORE_BUILD_AUDIT_V3
+date=2026-08-26T15:23:43-03:00
+===SOURCE===
+HEAD=0521a3257628e811cfead6b5a9753e9f705e2f31
+BRANCH=ci
+ M src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
+TRACKED_COUNT=1
+TARGET_MOD_COUNT=1
+GATES_PRESENT=0
+TESS_FEATURE_STILL_FALSE=YES
+===DIFF===
+ src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c | 19 -------------------
+ 1 file changed, 19 deletions(-)
+diff --git a/src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c b/src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
+index d9b74e0f2ad..f257f2c02c8 100644
+--- a/src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
++++ b/src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
+@@ -3771,10 +3771,4 @@ launch_tess_stages(struct panvk_cmd_buffer *cmdbuf,
+                  sw_vs_push.gpu, &vs_dispatch);
+ 
+-   /*
+-    * TEMPORARY RUNTIME ISOLATION:
+-    * execute only the software VS.  Do not dispatch TCS yet.
+-    */
+-
+-
+    /*
+     * WAIT above guarantees that the software VS has completed before the
+@@ -3793,10 +3787,4 @@ launch_tess_stages(struct panvk_cmd_buffer *cmdbuf,
+    };
+ 
+-   /*
+-    * TEMPORARY RAW-FAU VALIDATION:
+-    * SW VS executes; TCS is intentionally skipped.
+-    */
+-   return VK_SUCCESS;
+-
+    launch_gfx_cs(cmdbuf, tcs, &gfx->tess.tcs.desc,
+                  tcs_push.gpu, &tcs_dispatch);
+@@ -4314,11 +4302,4 @@ panvk_cmd_draw(struct panvk_cmd_buffer *cmdbuf, struct panvk_draw_info draw)
+          return;
+ 
+-      /*
+-       * TEMPORARY RUNTIME ISOLATION:
+-       * launch_tess_stages() currently dispatched only SW VS.
+-       * Stop before libpoly tessellator and TES/IDVS.
+-       */
+-      return;
+-
+       launch_tessellator(cmdbuf, &draw);
+ 
+===BUILD:build-g720-kbase-x11===
+ninja: Entering directory `build-g720-kbase-x11'
+[1/21] Generating src/git_sha1.h with a custom command
+[2/21] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/panvk_vX_physical_device.c.o
+[3/21] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_physical_device.c.o
+[4/21] Compiling C object src/panfrost/vulkan/libpanvk_v12.a.p/panvk_vX_physical_device.c.o
+[5/21] Compiling C object src/loader/libloader.a.p/loader.c.o
+[6/21] Linking static target src/loader/libloader.a
+[7/21] Compiling C object src/panfrost/vulkan/libpanvk_v10.a.p/panvk_vX_physical_device.c.o
+[8/21] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_draw.c.o
+[9/21] Linking static target src/panfrost/vulkan/libpanvk_v13.a
+[10/21] Compiling C object src/panfrost/vulkan/libpanvk_v12.a.p/csf_panvk_vX_cmd_draw.c.o
+[11/21] Linking static target src/panfrost/vulkan/libpanvk_v12.a
+[12/21] Compiling C object src/panfrost/vulkan/libpanvk_v7.a.p/panvk_vX_physical_device.c.o
+[13/21] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_physical_device.c.o
+[14/21] Linking static target src/panfrost/vulkan/libpanvk_v7.a
+[15/21] Compiling C object src/panfrost/vulkan/libpanvk_v6.a.p/panvk_vX_physical_device.c.o
+[16/21] Linking static target src/panfrost/vulkan/libpanvk_v6.a
+[17/21] Compiling C object src/panfrost/vulkan/libpanvk_v10.a.p/csf_panvk_vX_cmd_draw.c.o
+[18/21] Linking static target src/panfrost/vulkan/libpanvk_v10.a
+[19/21] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_draw.c.o
+[20/21] Linking static target src/panfrost/vulkan/libpanvk_v14.a
+[21/21] Linking target src/panfrost/vulkan/libvulkan_panfrost.so
+BUILD_RC=0
+===BUILD:build-g720-kbase===
+[437/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_cond_render.c.o
+[438/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_dispatch.c.o
+[439/489] Compiling C object src/panfrost/vulkan/libpanvk_v12.a.p/csf_panvk_vX_cmd_draw.c.o
+[440/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_event.c.o
+[441/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_xfb.c.o
+[442/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_buffer.c.o
+[443/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_event.c.o
+[444/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/panvk_vX_cmd_meta.c.o
+[445/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_exception_handler.c.o
+[446/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/meson-generated_.._.._libpan_libpan_shaders_v14.c.o
+[447/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/panvk_vX_shader.c.o
+[448/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_draw.c.o
+[449/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_precomp.c.o
+[450/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_instr.c.o
+[451/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_query.c.o
+[452/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_gpu_queue.c.o
+../src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:775:8: warning: variable 'prev_error_type' set but not used [-Wunused-but-set-variable]
+  775 |    int prev_error_type = 0xffffffff;
+      |        ^
+1 warning generated.
+[453/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_push_constant.c.o
+[454/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_dispatch.c.o
+[455/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_draw.c.o
+[456/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_frame_shaders.c.o
+[457/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_meta.c.o
+[458/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_desc_state.c.o
+[459/489] Compiling C++ object src/panfrost/vulkan/libpanvk_v14.a.p/meson-generated_.._.._libpan_libpan_v14.cpp.o
+[460/489] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_utrace.c.o
+[461/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_blend.c.o
+[462/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_device.c.o
+[463/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_nir_lower_input_attachment_loads.c.o
+[464/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_query_pool.c.o
+[465/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_cond_render.c.o
+[466/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_nir_lower_descriptors.c.o
+[467/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_buffer.c.o
+[468/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_dispatch.c.o
+[469/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_precomp_cache.c.o
+[470/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_event.c.o
+[471/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_xfb.c.o
+[472/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_shader.c.o
+[473/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_precomp.c.o
+[474/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_event.c.o
+[475/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_query.c.o
+[476/489] Linking static target src/panfrost/vulkan/libpanvk_v6.a
+[477/489] Linking static target src/panfrost/vulkan/libpanvk_v7.a
+[478/489] Linking static target src/panfrost/vulkan/libpanvk_v10.a
+[479/489] Linking static target src/panfrost/vulkan/libpanvk_v13.a
+[480/489] Linking static target src/panfrost/vulkan/libpanvk_v12.a
+[481/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_exception_handler.c.o
+[482/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_physical_device.c.o
+[483/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_gpu_queue.c.o
+../src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:775:8: warning: variable 'prev_error_type' set but not used [-Wunused-but-set-variable]
+  775 |    int prev_error_type = 0xffffffff;
+      |        ^
+1 warning generated.
+[484/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_instr.c.o
+[485/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_utrace.c.o
+[486/489] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_draw.c.o
+[487/489] Linking static target src/panfrost/vulkan/libpanvk_v14.a
+[488/489] Linking target src/panfrost/vulkan/libvulkan_panfrost.so
+BUILD_RC=0
+===ELF===
+-rwxr-xr-x+ 1 root root 111866536 Aug 26 15:20 build-g720-kbase-x11/src/panfrost/vulkan/libvulkan_panfrost.so
+f1f913e7d0db6bae5cc40aa19b446c153bb66d999b2dd7f88b00a2d1e905d990  build-g720-kbase-x11/src/panfrost/vulkan/libvulkan_panfrost.so
+-rwxr-xr-x+ 1 root root 111341048 Aug 26 15:23 build-g720-kbase/src/panfrost/vulkan/libvulkan_panfrost.so
+0c64736b257294922db3e7e0a4cdc70b7c08390e555083b9d76471d6e64c8ccb  build-g720-kbase/src/panfrost/vulkan/libvulkan_panfrost.so
+RESTORE_BUILD_RESULT=PASS
+GPU_EXECUTED=NO
+INNER_RC=0
+PROOT_RC=0
+OVERALL=PASS

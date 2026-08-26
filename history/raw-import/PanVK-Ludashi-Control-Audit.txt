@@ -1,0 +1,36 @@
+===== WINLATOR MALI LUDASHI CONTROL =====
+date=2026-08-26T08:36:34-03:00
+sha256=f0b3278fa8d1a7607dd29080a6f63ed9e9c39db7ca2231c0d90f23ef28295c1d
+expected=f0b3278fa8d1a7607dd29080a6f63ed9e9c39db7ca2231c0d90f23ef28295c1d
+HASH=PASS
+
+===== AAPT =====
+AAPT_RC=0
+package: name='com.ludashi.benchmark' versionCode='20' versionName='1.1 Bionic' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'
+sdkVersion:'26'
+targetSdkVersion:'28'
+application-label:'Winlator Mali'
+
+===== SIGNATURE =====
+APKSIGNER_RC=0
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Number of signers: 1
+V3.0 Signer: certificate SHA-256 digest: a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc
+
+===== ALIGNMENT =====
+ZIPALIGN_16K_RC=0
+787898064 res/zq.xml (OK - compressed)
+787898380 res/zr.png (OK)
+787899260 resources.arsc (OK)
+Verification successful
+
+APK_MODIFIED=NO
+APK_EXECUTED=NO
+GPU_EXECUTED=NO
+REAL_RC=0
+CONTROL_AUDIT=PASS

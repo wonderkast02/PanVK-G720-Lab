@@ -1,0 +1,77 @@
+============================================================
+ PanVK Bionic - clean NDK + static libdrm fallback
+============================================================
+date=2026-08-25T21:15:51-03:00
+
+===== 1. MAIN SOURCE =====
+branch=ci
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+tracked:
+MAIN_SOURCE_RESULT=PASS
+
+===== 2. EXISTING DETACHED WORKTREE =====
+worktree=/root/mesa-g720-bionic-20260825-202703
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+changed_files:
+src/util/u_gralloc/meson.build
+WORKTREE_RESULT=PASS
+
+===== 3. CLEAN NDK =====
+Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)
+Target: aarch64-unknown-linux-android28
+Thread model: posix
+InstalledDir: /data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin
+--- smoke dynamic ---
+  0x0000000000000001 (NEEDED)          Shared library: [libdl.so]
+  0x0000000000000001 (NEEDED)          Shared library: [libc.so]
+NDK_RESULT=PASS
+
+===== 4. HOST PRECOMPILERS =====
+/root/panvk-g720-host-tools-clean-0521a325/bin/mesa_clc
+/root/panvk-g720-host-tools-clean-0521a325/bin/vtn_bindgen2
+/root/panvk-g720-host-tools-clean-0521a325/bin/panfrost_compile
+HOST_PRECOMPILERS_RESULT=PASS
+
+===== 5. NULL PKG-CONFIG =====
+
+===== 6. CROSS FILE =====
+[binaries]
+c = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang'
+cpp = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++'
+ar = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'
+strip = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip'
+nm = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm'
+pkg-config = '/root/.cache/panvk-build/null-pkg-config'
+
+[host_machine]
+system = 'android'
+cpu_family = 'aarch64'
+cpu = 'armv8'
+endian = 'little'
+
+[properties]
+needs_exe_wrapper = true
+
+[built-in options]
+c_args = ['-fPIC']
+cpp_args = ['-fPIC']
+c_link_args = ['-Wl,--build-id=sha1']
+cpp_link_args = ['-Wl,--build-id=sha1']
+
+===== 7. LIBDRM WRAP AUDIT =====
+[wrap-file]
+directory = libdrm-2.4.133
+source_url = https://dri.freedesktop.org/libdrm/libdrm-2.4.133.tar.xz
+source_filename = libdrm-2.4.133.tar.xz
+source_hash = fc68f9d0ba2ea63c9432a299e14fea09fad7a8a66e8039fcd7802ca59f77b4f5
+source_fallback_url = https://wrapdb.mesonbuild.com/v2/libdrm_2.4.133-1/get_source/libdrm-2.4.133.tar.xz
+wrapdb_version = 2.4.133-1
+
+[provide]
+dependency_names = libdrm, libdrm_amdgpu, libdrm_etnaviv, libdrm_exynos, libdrm_freedreno, libdrm_intel, libdrm_nouveau, libdrm_omap, libdrm_radeon, libdrm_tegra
+LIBDRM_WRAP_RESULT=PASS
+
+===== 8. MESON SETUP =====
+proot info: vpid 1: terminated with signal 2
+PROOT_RESULT_CODE=1
+TERMUX_SESSION_REMAINS_OPEN=YES

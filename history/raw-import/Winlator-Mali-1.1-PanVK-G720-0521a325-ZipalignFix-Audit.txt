@@ -1,0 +1,135 @@
+============================================================
+ WINLATOR MALI 1.1 + PANVK G720 KBASE/CSF APK PACKAGER
+============================================================
+date=2026-08-26T07:35:23-03:00
+base_release=bionic-mali-1.1
+driver_id=panvk-g720-kbase-0521a325
+gpu_executed=NO
+
+===== 1. HOST / STORAGE =====
+termux_prefix=/data/data/com.termux/files/usr
+uname=Linux localhost 6.6.89-android15-8-g8e4be6b47e40-ab14134548-4k #1 SMP PREEMPT Fri Sep 19 15:34:56 UTC 2025 aarch64 Android
+home_free_kb=256175348
+
+===== 2. TOOLS =====
+pkg_install_rc=0
+curl=/data/data/com.termux/files/usr/bin/curl
+apktool=/data/data/com.termux/files/usr/bin/apktool
+aapt2=/data/data/com.termux/files/usr/bin/aapt2
+zipalign=/data/data/com.termux/files/usr/bin/zipalign
+apksigner=/data/data/com.termux/files/usr/bin/apksigner
+java=/data/data/com.termux/files/usr/bin/java
+keytool=/data/data/com.termux/files/usr/bin/keytool
+zstd=/data/data/com.termux/files/usr/bin/zstd
+tar=/data/data/com.termux/files/usr/bin/tar
+unzip=/data/data/com.termux/files/usr/bin/unzip
+python=/data/data/com.termux/files/usr/bin/python
+sha256sum=/data/data/com.termux/files/usr/bin/sha256sum
+
+===== 3. PREPARE PANVK ASSET =====
+asset_source=/sdcard/Download/adrenotools-panvk-g720-kbase-0521a325.tzst
+tzst_sha256=670dd902f663983c7bdbcab64ddd33460ed2339a12a5b465e3f0ad1bfc67d785
+tzst_embedded_so_sha256=4d1bf7958b7ddc899122bd382bc77eca7aca799d8bd74360e714ea63b9cc2263
+tzst_files=libvulkan_panfrost.so meta.json 
+meta_libraryName=libvulkan_panfrost.so
+meta_minApi=35
+meta_audit_rc=0
+PANVK_ASSET_RESULT=PASS
+
+===== 4. OFFICIAL BASE APK =====
+Downloading official Winlator Mali 1.1 APK (~753 MiB). This may take a while.
+download_rc=0
+base_size=789150601
+base_sha256=8b50f74b488da1c218448f7238b34ba4b1f44aeaaa01ffb3fb1e8911b8a6a54b
+BASE_APK_RESULT=PASS
+
+===== 5. APKTOOL DECODE =====
+decode_rc=0
+
+===== 6. INJECT ASSET + PATCH ADRENOTOOLS =====
+adrenotools_smali_matches=1
+smali=/data/data/com.termux/files/home/.cache/winlator-mali-panvk-0521a325/decoded/smali/com/winlator/cmod/contents/AdrenotoolsManager.smali
+smali_patch_rc=0
+45-    iget-object p1, p0, Lcom/winlator/cmod/contents/AdrenotoolsManager;->adrenotoolsContentDir:Ljava/io/File;
+46-
+47-    invoke-virtual {p1}, Ljava/io/File;->mkdirs()Z
+48-
+49-    :cond_0
+50:    const-string p1, "panvk-g720-kbase-0521a325"
+51-
+52-    invoke-virtual {p0, p1}, Lcom/winlator/cmod/contents/AdrenotoolsManager;->extractDriverFromResources(Ljava/lang/String;)Z
+53-
+54-    return-void
+55-.end method
+56-
+57-.method private reloadContainers(Ljava/lang/String;)V
+58-    .locals 11
+--
+884-
+885-.method public isFromResources(Ljava/lang/String;)Z
+886-    .locals 3
+887-
+888-
+889:    const-string v2, "panvk-g720-kbase-0521a325"
+890-
+891-    invoke-virtual {v2, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+892-
+893-    move-result v2
+894-
+895-    if-eqz v2, :panvk_g720_resource_normal
+896-
+897-    const/4 v2, 0x0
+driver_id_occurrences_in_smali=2
+
+===== 7. REBUILD =====
+build_rc=0
+unsigned_size=791967547
+APKTOOL_BUILD_RESULT=PASS
+
+===== 8. ZIPALIGN + SIGN =====
+zipalign_rc=0
+keygen_rc=0
+sign_rc=0
+
+===== 9. FINAL APK AUDIT =====
+signature_verify_rc=0
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V3.0 Signer: certificate DN: CN=PanVK G720 Experimental, OU=Development, O=PanVK, C=BR
+V3.0 Signer: certificate SHA-256 digest: 84cde8a88b930f008d48150ef01267ca94a57e88a1fa8f6caa43d5dd0d86d591
+V3.0 Signer: certificate SHA-1 digest: 4f043deebb8a4982ea0ffd76879383e2b599636c
+V3.0 Signer: certificate MD5 digest: a21f38b1e5a7412dba64171201dba359
+V3.0 Signer: key algorithm: RSA
+V3.0 Signer: key size (bits): 4096
+V3.0 Signer: public key SHA-256 digest: 45adb63f19eab9352c315a8fd33de88aa9b660cc4880a2c0988d04da6bab0118
+V3.0 Signer: public key SHA-1 digest: 6f901765be9742d43c3e23ea47a01c3ef2a76a8f
+V3.0 Signer: public key MD5 digest: 6fa468099dceef1e538c6ffc169b0f6a
+alignment_verify_rc=0
+embedded_asset_extract_rc=0
+embedded_asset_sha256=670dd902f663983c7bdbcab64ddd33460ed2339a12a5b465e3f0ad1bfc67d785
+source_asset_sha256=670dd902f663983c7bdbcab64ddd33460ed2339a12a5b465e3f0ad1bfc67d785
+embedded_tzst_extract_rc=0
+embedded_panvk_so_sha256=4d1bf7958b7ddc899122bd382bc77eca7aca799d8bd74360e714ea63b9cc2263
+driver_id_found_in_dex=classes.dex
+final_apk_size=791980829
+final_apk_sha256=b983880913e212a6f0c7504ab96bc69bca0714f3fcd8d40f3295b0ac6a917059
+asset_path=assets/graphics_driver/adrenotools-panvk-g720-kbase-0521a325.tzst
+download_copy_rc=0
+
+===== 10. RESULT =====
+PANVK_SOURCE_SHA256=4d1bf7958b7ddc899122bd382bc77eca7aca799d8bd74360e714ea63b9cc2263
+OFFICIAL_BASE_SHA256=8b50f74b488da1c218448f7238b34ba4b1f44aeaaa01ffb3fb1e8911b8a6a54b
+APK_RUNTIME_EXECUTED=NO
+GPU_EXECUTED=NO
+PRIMARY_PANVK_REPO_MODIFIED=NO
+SIGNATURE_NOTE=Custom test signature; uninstall differently-signed Winlator Mali before installing.
+REAL_RC=0
+WINLATOR_MALI_PANVK_APK_RESULT=PASS
+FINAL_APK=/sdcard/Download/Winlator-Mali-1.1-PanVK-G720-0521a325.apk

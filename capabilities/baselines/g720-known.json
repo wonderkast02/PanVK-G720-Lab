@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "subject": "Mali-G720 PanVK baseline",
+  "commit": "0521a3257628e811cfead6b5a9753e9f705e2f31",
+  "capabilities": {
+    "tessellationShader": {
+      "advertised": false,
+      "implemented": "partial",
+      "tested": true,
+      "status": "partial"
+    },
+    "direct_tessellation": {
+      "advertised": null,
+      "implemented": "yes",
+      "tested": true,
+      "status": "working"
+    },
+    "winlator_custom_driver": {
+      "advertised": null,
+      "implemented": "yes",
+      "tested": true,
+      "status": "working"
+    }
+  }
+}

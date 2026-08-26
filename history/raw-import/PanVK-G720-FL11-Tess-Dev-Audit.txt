@@ -1,0 +1,1320 @@
+PANVK_G720_FL11_TESS_DEV_AUDIT
+date=2026-08-26T14:49:12-03:00
+proot_rc=0
+=== SOURCE ===
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+branch=ci
+tracked_dirty=0
+?? meson.build.before-panvk-poly
+?? src/compiler/nir/nir_divergence_analysis.c.before-poly-param-uniform
+?? src/panfrost/lib/kmod/kbase_kmod.c.before-g720-regcount
+?? src/panfrost/lib/kmod/kbase_kmod.c.before-log-cleanup
+?? src/panfrost/libpan/meson.build.before-panvk-poly-precomp
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer
+?? src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec
+?? src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount
+?? src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup
+?? src/panfrost/vulkan/meson.build.before-poly-link
+?? src/panfrost/vulkan/panvk_cmd_draw.h.before-tess-binding
+?? src/panfrost/vulkan/panvk_shader.h.before-poly-sysvals
+?? src/panfrost/vulkan/panvk_shader.h.before-tess-metadata
+?? src/panfrost/vulkan/panvk_shader.h.before-tess-metadata-v2
+?? src/panfrost/vulkan/panvk_vX_cmd_push_constant.c.before-tess-push-dirty
+?? src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable
+?? src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-poly-sysvals
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-sw-tess-vs
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-swvs-tail-cf-guard
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-swvs-tail-guard
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-tcs-compile
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-tes-compile
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-tess-binding
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-tess-metadata
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-tess-metadata-v2
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-tess-tcs-info-gather
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-tess-vs-output-gather
+?? src/panfrost/vulkan/panvk_vX_shader.c.before-tess-zero-base
+?? src/poly/nir/poly_nir.h.before-panvk-tess-scope
+?? src/poly/nir/poly_nir_lower_tess.c.before-panvk-tess-scope
+?? "tall -y libllvmspirvlib-21-dev"
+
+=== FEATURE ADVERTISEMENT ===
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:549:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:540:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:540:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-indirect-launch:548:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-vertex-producer:548:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-final-idvs:548:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-isolate:548:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-zero-exec:548:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-swvs-fau-log:548:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-runtime-test:549:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug:549:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-fau-debug-v2:549:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-tcs-raw-fau:549:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tes-idvs-gated-v2:549:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/panvk_vX_device.c:553:   if (device->vk.enabled_features.bufferDeviceAddressCaptureReplay) {
+src/panfrost/vulkan/panvk_vX_physical_device.c:309:      .tessellationShader = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c:325:      .depthBounds = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c:335:      .pipelineStatisticsQuery = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c:427:      .bufferDeviceAddress = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c:429:      .bufferDeviceAddressCaptureReplay =
+src/panfrost/vulkan/panvk_vX_physical_device.c:431:      .bufferDeviceAddressMultiDevice = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c:435:      .shaderOutputViewportIndex = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c:436:      .shaderOutputLayer = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c:451:      .shaderZeroInitializeWorkgroupMemory = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c:571:      .attachmentFeedbackLoopLayout = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c:631:      .robustImageAccess2 = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:309:      .tessellationShader = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:325:      .depthBounds = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:335:      .pipelineStatisticsQuery = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:427:      .bufferDeviceAddress = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:429:      .bufferDeviceAddressCaptureReplay =
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:431:      .bufferDeviceAddressMultiDevice = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:435:      .shaderOutputViewportIndex = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:436:      .shaderOutputLayer = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:451:      .shaderZeroInitializeWorkgroupMemory = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:571:      .attachmentFeedbackLoopLayout = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable:631:      .robustImageAccess2 = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:309:      .tessellationShader = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:325:      .depthBounds = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:335:      .pipelineStatisticsQuery = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:427:      .bufferDeviceAddress = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:429:      .bufferDeviceAddressCaptureReplay =
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:431:      .bufferDeviceAddressMultiDevice = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:435:      .shaderOutputViewportIndex = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:436:      .shaderOutputLayer = false,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:451:      .shaderZeroInitializeWorkgroupMemory = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:571:      .attachmentFeedbackLoopLayout = true,
+src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits:631:      .robustImageAccess2 = false,
+
+=== TESS PIPELINE ===
+src/panfrost/vulkan/bifrost/panvk_vX_meta_desc_copy.c:26:   uint64_t tables[PANVK_BIFROST_DESC_TABLE_COUNT];
+src/panfrost/vulkan/bifrost/panvk_vX_meta_desc_copy.c:30:      uint32_t limits[PANVK_BIFROST_DESC_TABLE_COUNT];
+src/panfrost/vulkan/bifrost/panvk_vX_meta_desc_copy.c:94:    * VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT set, we need to make
+src/panfrost/vulkan/bifrost/panvk_vX_meta_desc_copy.c:131:    * VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT set, we need to make
+src/panfrost/vulkan/bifrost/panvk_vX_meta_desc_copy.c:455:      copy_info.desc_copy.limits[PANVK_BIFROST_DESC_TABLE_COUNT - 1];
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:93:   PANVK_IR_PASS_COUNT
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:198:      uint64_t ir_descs[PANVK_IR_PASS_COUNT];
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:227:   } src[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:234:   } dst[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:243:   PANVK_SB_ITER_COUNT = 5,
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:342:#define CS_REG_SCRATCH_COUNT                                                   \
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:348:   assert(start + count <= CS_REG_SCRATCH_COUNT);
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:555:      struct u_trace uts[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:562:      struct panvk_cs_state cs[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:678:      for (unsigned __val = 0; __val < PANVK_SB_ITER_COUNT; __val++)           \
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:800:   ctx->cur_sb = PANVK_SB_ITER_COUNT - 1;
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:807:   ctx->cur_sb = (ctx->cur_sb + 1) % PANVK_SB_ITER_COUNT;
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:833:              __upd_ctx.next_sb < PANVK_SB_ITER_COUNT;                         \
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:983:   VkPipelineStageFlags2 flags[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:984:   for (uint32_t sq = 0; sq < PANVK_SUBQUEUE_COUNT; ++sq)
+src/panfrost/vulkan/csf/panvk_queue.h:25:   PANVK_SUBQUEUE_COUNT,
+src/panfrost/vulkan/csf/panvk_queue.h:159:   struct panvk_subqueue subqueues[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:68:   STATIC_ASSERT(KBASE_MARK_ADDR_REG + 2 <= CS_REG_SCRATCH_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:69:   STATIC_ASSERT(KBASE_MARK_VALUE_REG + 1 <= CS_REG_SCRATCH_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:126:         for (uint32_t j = 0; j < PANVK_SUBQUEUE_COUNT; j++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:203:      static const reg_perm_cb_t ctx_reg_perms[PANVK_SUBQUEUE_COUNT] = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:208:      static const reg_perm_cb_t default_reg_perms[PANVK_SUBQUEUE_COUNT] = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:258:      BITFIELD_MASK(PANVK_SUBQUEUE_COUNT) & ~BITFIELD_BIT(signal_queue);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:332:add_execution_dependency(uint32_t wait_masks[static PANVK_SUBQUEUE_COUNT],
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:339:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:464:   uint32_t wait_masks[PANVK_SUBQUEUE_COUNT] = {0};
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:486:      for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:496:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:639:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:656:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:701:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:779:   const reg_perm_cb_t base_reg_perms[PANVK_SUBQUEUE_COUNT] = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:991:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:55:#include "poly/tessellator.h"
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:455:    * With tessellation, TES is lowered to the physical hardware vertex
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:459:      cmdbuf->state.gfx.tess.tes.shader
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:460:         ? cmdbuf->state.gfx.tess.tes.shader
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:545:    * Reset the bump allocator on the GPU before its first tessellation use
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:548:    * Simultaneous execution of the same tessellation command buffer still
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:549:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:565: * Allocate and initialize the libpoly ABI for a direct tessellation draw.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:567: * Indirect tessellation needs a GPU setup kernel because the vertex and
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:571:prepare_direct_tess_params(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:578:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:579:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:591:   assert((tcs->tess.tcs_output_stride & 3) == 0);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:593:   if (!input_patch_size || (tcs->tess.tcs_output_stride & 3))
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:596:   const uint64_t vs_outputs = vs->tess.vs_outputs;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:607:    * These fields are 32-bit in the libpoly ABI. Large draws will need
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:615:      tcs->tess.tcs_output_stride / sizeof(uint32_t);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:630:      nr_patches64 * tcs->tess.tcs_output_stride;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:676:   struct pan_ptr tess_params =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:678:                              sizeof(struct poly_tess_params), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:680:   if (!blob.gpu || !vertex_params.gpu || !tess_params.gpu)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:711:    * TCS / tessellator / TES parameters
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:713:   enum poly_tess_partitioning partitioning =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:714:      tes->tess.spacing == TESS_SPACING_EQUAL
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:716:      : tes->tess.spacing == TESS_SPACING_FRACTIONAL_ODD
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:720:   struct poly_tess_params *tp = tess_params.cpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:722:   *tp = (struct poly_tess_params) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:736:      /* Filled later by panlib_prefix_sum_tess(). */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:742:      .tcs_per_vertex_outputs = tcs->tess.tcs_per_vertex_outputs,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:744:      .output_patch_size = tcs->tess.tcs_output_patch_size,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:745:      .tcs_patch_constants = tcs->tess.tcs_nr_patch_outputs,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:751:      .points_mode = tes->tess.points,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:752:      .isolines = tes->tess.mode == TESS_PRIMITIVE_ISOLINES,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:756:      tp->ccw = tes->tess.ccw;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:768:   cmdbuf->state.gfx.sysvals.poly.tess_param_buffer =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:769:      tess_params.gpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:771:   cmdbuf->state.gfx.tess.out_draws = tp->out_draws;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:782:             (unsigned long long)tcs->tess.tcs_per_vertex_outputs,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:783:             tcs->tess.tcs_output_stride,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:788:             (unsigned long long)tess_params.gpu,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:798:    * These buffers are per draw, so every physical tess stage must get
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:821:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:826:      &cmdbuf->state.gfx.tess.tcs.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:865:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:870:      &cmdbuf->state.gfx.tess.tes.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:887:    * vertex buffers to TES. libpoly supplies TES input through its own
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:930:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:932:      &cmdbuf->state.gfx.tess.tcs.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:954:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:956:      &cmdbuf->state.gfx.tess.tes.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1054:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1055:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1246:      panvk_shader_only_variant(cmdbuf->state.gfx.tess.tcs.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1248:      panvk_shader_only_variant(cmdbuf->state.gfx.tess.tes.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1344:                dyn_gfx_state_dirty(cmdbuf, CB_ATTACHMENT_COUNT) ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2114:   for (uint32_t ir_pass = 0; ir_pass < PANVK_IR_PASS_COUNT; ir_pass++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2161:      static_assert(ARRAY_SIZE(cmdbuf->state.gfx.render.ir.fbds) == PANVK_IR_PASS_COUNT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2162:                    "ir.fbds array size must match PANVK_IR_PASS_COUNT");
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2774:      cfg.front_face_ccw = rs->front_face == VK_FRONT_FACE_COUNTER_CLOCKWISE;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3178:tess_output_prim(const struct panvk_shader *tes)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3180:   if (tes->tess.points)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3183:   if (tes->tess.mode == TESS_PRIMITIVE_ISOLINES)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3186:   assert(tes->tess.mode == TESS_PRIMITIVE_TRIANGLES ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3187:          tes->tess.mode == TESS_PRIMITIVE_QUADS);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3192:prepare_tess_draw(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3196:   const struct panvk_shader *tes_shader = gfx->tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3224:         .buffer_dev_addr = gfx->tess.out_draws,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3229:      .prim = tess_output_prim(tes_shader),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3280:    * own FAU blocks before the tessellator ran.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3285:    * prepare_direct_tess_params() dirties TES_PUSH_UNIFORMS for every
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3286:    * direct tessellation draw because the poly parameter addresses change.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3296:   gfx->tess.tes.push_uniforms = tes_push.gpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3300:                   gfx->tess.tes.push_uniforms |
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3324:   prepare_vertex_shader(cmdbuf, tes, &gfx->tess.tes.desc,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3607: * Execute the software vertex stage and tessellation control stage.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3610: * compute dispatch machinery so tessellation does not grow a second CSF
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3613: * The tessellator and final TES draw are intentionally not launched here yet.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3616:launch_tess_stages(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3623:      panvk_shader_only_variant(gfx->tess.tcs.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3630:          gfx->tess.tcs.shader->tess.tcs_output_patch_size);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3643:   /* An incomplete input patch produces no tessellated primitives. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3664:   gfx->tess.tcs.push_uniforms = tcs_push.gpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3669:      shader_uses_sysval(tcs, compute, poly.tess_param_buffer);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3680:              tcs, sysval_offset(compute, poly.tess_param_buffer))
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3704:             (unsigned long long)gfx->sysvals.poly.tess_param_buffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3709:             (unsigned long long)gfx->tess.tcs.desc.res_table,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3801:   launch_gfx_cs(cmdbuf, tcs, &gfx->tess.tcs.desc,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3808:dispatch_tess_topology(struct panvk_precomp_ctx *precomp_ctx,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3811:                       enum poly_tess_mode mode,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3812:                       uint64_t tess_params)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3816:   switch (tes->tess.mode) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3818:      panlib_tess_isoline(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3819:                          tess_params, mode);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3823:      panlib_tess_tri(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3824:                      tess_params, mode);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3828:      panlib_tess_quad(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3829:                       tess_params, mode);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3833:      assert(!"Invalid tessellation primitive mode");
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3839: * Run the libpoly fixed-function tessellator.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3841: * COUNT writes one index count per patch.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3845: * WITH_COUNTS then emits patch coordinates and the actual index data.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3848:launch_tessellator(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3852:   const struct panvk_shader *tes = gfx->tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3874:   const uint64_t tess_params = gfx->sysvals.poly.tess_param_buffer;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3876:   assert(tess_params);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3885:   dispatch_tess_topology(&precomp_ctx, tes, nr_patches,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3886:                          POLY_TESS_MODE_COUNT, tess_params);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3889:    * panlib_precomp_grid counts workgroups.  prefix_sum_tess itself has
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3892:   panlib_prefix_sum_tess(&precomp_ctx, panlib_1d(1),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3893:                          PANLIB_BARRIER_CSF_WAIT, tess_params);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3895:   dispatch_tess_topology(&precomp_ctx, tes, nr_patches,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3896:                          POLY_TESS_MODE_WITH_COUNTS, tess_params);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3900:    * executes on vertex/tiler.  Publish the tessellator outputs before the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3904:    * WITH_COUNTS already ends with a local compute WAIT.  emit_barrier()
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3927:      cs_move32_to(b, cs_sr_reg32(b, IDVS, INDEX_COUNT), draw->vertex.count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3928:      cs_move32_to(b, cs_sr_reg32(b, IDVS, INSTANCE_COUNT),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4164:         cs_load_to(b, cs_sr_reg_tuple(b, IDVS, INDEX_COUNT, 5),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4275:   if (cmdbuf->state.gfx.tess.tes.shader) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4280:      result = prepare_direct_tess_params(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4292:    * a hardware vertex shader after libpoly lowering.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4294:   if (cmdbuf->state.gfx.tess.tes.shader) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4312:      result = launch_tess_stages(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4318:       * launch_tess_stages() currently dispatched only SW VS.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4319:       * Stop before libpoly tessellator and TES/IDVS.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4323:      launch_tessellator(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4325:      struct panvk_draw_info tess_draw;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4326:      result = prepare_tess_draw(cmdbuf, &tess_draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4331:         panvk_shader_only_variant(cmdbuf->state.gfx.tess.tes.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4334:         cmdbuf, &tess_draw, tes,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4335:         &cmdbuf->state.gfx.tess.tes.desc,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4336:         cmdbuf->state.gfx.tess.tes.push_uniforms, 0);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4413:                               uint32_t firstIndex, int32_t vertexOffset,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4426:      .index = panvk_draw_info_index(cmdbuf, firstIndex),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5031:   for (uint32_t ir_pass = 0; ir_pass < PANVK_IR_PASS_COUNT; ir_pass++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5431:   for (uint32_t sq = 0; sq < PANVK_SUBQUEUE_COUNT; ++sq) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_event.c:33:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_event.c:74:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_event.c:116:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:277:                                            ? MALI_OCCLUSION_MODE_COUNTER
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:345:   for (int sq = 0; sq < PANVK_SUBQUEUE_COUNT; ++sq) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:368:                       PANVK_SUBQUEUE_COUNT - 1);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:430:   int offset = PANVK_SUBQUEUE_COUNT * sizeof(struct panvk_query_report);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:489:   for (uint32_t sq = 0; sq < PANVK_SUBQUEUE_COUNT; ++sq) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:533:   for (uint32_t sq = 0; sq < PANVK_SUBQUEUE_COUNT; ++sq) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:601:   for (uint32_t sq = 0; sq < PANVK_SUBQUEUE_COUNT; ++sq) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:621:            assert(PANVK_QUERY_TS_INFO_SUBQUEUE == PANVK_SUBQUEUE_COUNT - 1);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:637:      BITFIELD_MASK(PANVK_SUBQUEUE_COUNT) & ~BITFIELD_BIT(PANVK_SUBQUEUE_COMPUTE);
+src/panfrost/vulkan/csf/panvk_vX_event.c:27:      .size = sizeof(struct panvk_cs_sync32) * PANVK_SUBQUEUE_COUNT,
+src/panfrost/vulkan/csf/panvk_vX_event.c:38:                              PANVK_SUBQUEUE_COUNT, sobjs) {
+src/panfrost/vulkan/csf/panvk_vX_event.c:39:      memset(sobjs, 0, sizeof(struct panvk_cs_sync32) * PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_event.c:67:                                 PANVK_SUBQUEUE_COUNT, syncobjs) {
+src/panfrost/vulkan/csf/panvk_vX_event.c:68:      for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_event.c:83:                              PANVK_SUBQUEUE_COUNT, syncobjs) {
+src/panfrost/vulkan/csf/panvk_vX_event.c:84:      for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_event.c:97:                              PANVK_SUBQUEUE_COUNT, syncobjs) {
+src/panfrost/vulkan/csf/panvk_vX_event.c:98:      memset(syncobjs, 0, sizeof(*syncobjs) * PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:253:                                sizeof(*syncobjs) * PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:255:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:879:         for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:965:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:990:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:1017:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:1020:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:1368:   for (uint32_t subqueue = 0; subqueue < PANVK_SUBQUEUE_COUNT; subqueue++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:1831:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:1854:         ALIGN_POT(sizeof(struct panvk_cs_sync64), 64) * PANVK_SUBQUEUE_COUNT,
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:1897:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2238:   uint64_t kbase_target_seqnos[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2249:      struct panvk_utrace_flush_data *data[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2284:   submit->utrace.first_subqueue = PANVK_SUBQUEUE_COUNT;
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2318:            if (submit->utrace.first_subqueue == PANVK_SUBQUEUE_COUNT)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2372:      submit->signal_queue_mask |= BITFIELD_MASK(PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2640:   void *data, const uint64_t targets[PANVK_KBASE_SYNC_TARGET_COUNT],
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2646:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2651:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2667:   const uint64_t targets[PANVK_KBASE_SYNC_TARGET_COUNT],
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:2751:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:3204:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_utrace.c:24:      cs_scratch_reg64(b, CS_REG_SCRATCH_COUNT - 2);
+src/panfrost/vulkan/csf/panvk_vX_utrace.c:55:      MIN2(CS_REG_SCRATCH_COUNT - 4, CS_MAX_REG_TUPLE_SIZE);
+src/panfrost/vulkan/csf/panvk_vX_utrace.c:124:   assert(subqueue < PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:253:                                sizeof(*syncobjs) * PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:255:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:878:         for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:964:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:989:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:1016:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:1019:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:1367:   for (uint32_t subqueue = 0; subqueue < PANVK_SUBQUEUE_COUNT; subqueue++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:1830:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:1853:         ALIGN_POT(sizeof(struct panvk_cs_sync64), 64) * PANVK_SUBQUEUE_COUNT,
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:1896:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2237:   uint64_t kbase_target_seqnos[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2248:      struct panvk_utrace_flush_data *data[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2283:   submit->utrace.first_subqueue = PANVK_SUBQUEUE_COUNT;
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2317:            if (submit->utrace.first_subqueue == PANVK_SUBQUEUE_COUNT)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2371:      submit->signal_queue_mask |= BITFIELD_MASK(PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2639:   void *data, const uint64_t targets[PANVK_KBASE_SYNC_TARGET_COUNT],
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2645:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2650:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2667:   const uint64_t targets[PANVK_KBASE_SYNC_TARGET_COUNT],
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:2751:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:3204:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:253:                                sizeof(*syncobjs) * PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:255:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:880:         for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:966:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:991:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:1018:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:1021:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:1369:   for (uint32_t subqueue = 0; subqueue < PANVK_SUBQUEUE_COUNT; subqueue++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:1832:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:1855:         ALIGN_POT(sizeof(struct panvk_cs_sync64), 64) * PANVK_SUBQUEUE_COUNT,
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:1898:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2239:   uint64_t kbase_target_seqnos[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2250:      struct panvk_utrace_flush_data *data[PANVK_SUBQUEUE_COUNT];
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2285:   submit->utrace.first_subqueue = PANVK_SUBQUEUE_COUNT;
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2319:            if (submit->utrace.first_subqueue == PANVK_SUBQUEUE_COUNT)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2373:      submit->signal_queue_mask |= BITFIELD_MASK(PANVK_SUBQUEUE_COUNT);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2641:   void *data, const uint64_t targets[PANVK_KBASE_SYNC_TARGET_COUNT],
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2647:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2652:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2669:   const uint64_t targets[PANVK_KBASE_SYNC_TARGET_COUNT],
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:2753:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++)
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:3206:   for (uint32_t i = 0; i < PANVK_SUBQUEUE_COUNT; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:831:                dyn_gfx_state_dirty(cmdbuf, CB_ATTACHMENT_COUNT) ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1602:   for (uint32_t ir_pass = 0; ir_pass < PANVK_IR_PASS_COUNT; ir_pass++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1649:      static_assert(ARRAY_SIZE(cmdbuf->state.gfx.render.ir.fbds) == PANVK_IR_PASS_COUNT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1650:                    "ir.fbds array size must match PANVK_IR_PASS_COUNT");
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2262:      cfg.front_face_ccw = rs->front_face == VK_FRONT_FACE_COUNTER_CLOCKWISE;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2919:      cs_move32_to(b, cs_sr_reg32(b, IDVS, INDEX_COUNT), draw->vertex.count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2920:      cs_move32_to(b, cs_sr_reg32(b, IDVS, INSTANCE_COUNT),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3154:         cs_load_to(b, cs_sr_reg_tuple(b, IDVS, INDEX_COUNT, 5),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3328:                               uint32_t firstIndex, int32_t vertexOffset,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3341:      .index = panvk_draw_info_index(cmdbuf, firstIndex),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3946:   for (uint32_t ir_pass = 0; ir_pass < PANVK_IR_PASS_COUNT; ir_pass++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4346:   for (uint32_t sq = 0; sq < PANVK_SUBQUEUE_COUNT; ++sq) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:54:#include "poly/tessellator.h"
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:536:    * Reset the bump allocator on the GPU before its first tessellation use
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:539:    * Simultaneous execution of the same tessellation command buffer still
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:540:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:556: * Allocate and initialize the libpoly ABI for a direct tessellation draw.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:558: * Indirect tessellation needs a GPU setup kernel because the vertex and
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:562:prepare_direct_tess_params(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:569:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:570:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:582:   assert((tcs->tess.tcs_output_stride & 3) == 0);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:584:   if (!input_patch_size || (tcs->tess.tcs_output_stride & 3))
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:587:   const uint64_t vs_outputs = vs->tess.vs_outputs;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:598:    * These fields are 32-bit in the libpoly ABI. Large draws will need
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:606:      tcs->tess.tcs_output_stride / sizeof(uint32_t);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:621:      nr_patches64 * tcs->tess.tcs_output_stride;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:667:   struct pan_ptr tess_params =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:669:                              sizeof(struct poly_tess_params), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:671:   if (!blob.gpu || !vertex_params.gpu || !tess_params.gpu)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:702:    * TCS / tessellator / TES parameters
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:704:   enum poly_tess_partitioning partitioning =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:705:      tes->tess.spacing == TESS_SPACING_EQUAL
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:707:      : tes->tess.spacing == TESS_SPACING_FRACTIONAL_ODD
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:711:   struct poly_tess_params *tp = tess_params.cpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:713:   *tp = (struct poly_tess_params) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:727:      /* Filled later by panlib_prefix_sum_tess(). */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:733:      .tcs_per_vertex_outputs = tcs->tess.tcs_per_vertex_outputs,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:735:      .output_patch_size = tcs->tess.tcs_output_patch_size,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:736:      .tcs_patch_constants = tcs->tess.tcs_nr_patch_outputs,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:742:      .points_mode = tes->tess.points,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:743:      .isolines = tes->tess.mode == TESS_PRIMITIVE_ISOLINES,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:747:      tp->ccw = tes->tess.ccw;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:759:   cmdbuf->state.gfx.sysvals.poly.tess_param_buffer =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:760:      tess_params.gpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:762:   cmdbuf->state.gfx.tess.out_draws = tp->out_draws;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:765:    * These buffers are per draw, so every physical tess stage must get
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:788:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:793:      &cmdbuf->state.gfx.tess.tcs.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:832:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:837:      &cmdbuf->state.gfx.tess.tes.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:854:    * vertex buffers to TES. libpoly supplies TES input through its own
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:897:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:899:      &cmdbuf->state.gfx.tess.tcs.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:921:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:923:      &cmdbuf->state.gfx.tess.tes.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1020:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1021:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1212:      panvk_shader_only_variant(cmdbuf->state.gfx.tess.tcs.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1214:      panvk_shader_only_variant(cmdbuf->state.gfx.tess.tes.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1310:                dyn_gfx_state_dirty(cmdbuf, CB_ATTACHMENT_COUNT) ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2081:   for (uint32_t ir_pass = 0; ir_pass < PANVK_IR_PASS_COUNT; ir_pass++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2128:      static_assert(ARRAY_SIZE(cmdbuf->state.gfx.render.ir.fbds) == PANVK_IR_PASS_COUNT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2129:                    "ir.fbds array size must match PANVK_IR_PASS_COUNT");
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2741:      cfg.front_face_ccw = rs->front_face == VK_FRONT_FACE_COUNTER_CLOCKWISE;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3388: * Execute the software vertex stage and tessellation control stage.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3391: * compute dispatch machinery so tessellation does not grow a second CSF
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3394: * The tessellator and final TES draw are intentionally not launched here yet.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3397:launch_tess_stages(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3404:      panvk_shader_only_variant(gfx->tess.tcs.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3411:          gfx->tess.tcs.shader->tess.tcs_output_patch_size);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3424:   /* An incomplete input patch produces no tessellated primitives. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3445:   gfx->tess.tcs.push_uniforms = tcs_push.gpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3483:   launch_gfx_cs(cmdbuf, tcs, &gfx->tess.tcs.desc,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3500:      cs_move32_to(b, cs_sr_reg32(b, IDVS, INDEX_COUNT), draw->vertex.count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3501:      cs_move32_to(b, cs_sr_reg32(b, IDVS, INSTANCE_COUNT),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3735:         cs_load_to(b, cs_sr_reg_tuple(b, IDVS, INDEX_COUNT, 5),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3833:   if (cmdbuf->state.gfx.tess.tes.shader) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3838:      result = prepare_direct_tess_params(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3850:    * a hardware vertex shader after libpoly lowering.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3852:   if (cmdbuf->state.gfx.tess.tes.shader) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3857:      result = launch_tess_stages(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3937:                               uint32_t firstIndex, int32_t vertexOffset,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3950:      .index = panvk_draw_info_index(cmdbuf, firstIndex),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4555:   for (uint32_t ir_pass = 0; ir_pass < PANVK_IR_PASS_COUNT; ir_pass++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4955:   for (uint32_t sq = 0; sq < PANVK_SUBQUEUE_COUNT; ++sq) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:54:#include "poly/tessellator.h"
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:536:    * Reset the bump allocator on the GPU before its first tessellation use
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:539:    * Simultaneous execution of the same tessellation command buffer still
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:540:    * needs separate heap handling before tessellationShader can be exposed.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:556: * Allocate and initialize the libpoly ABI for a direct tessellation draw.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:558: * Indirect tessellation needs a GPU setup kernel because the vertex and
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:562:prepare_direct_tess_params(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:569:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:570:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:582:   assert((tcs->tess.tcs_output_stride & 3) == 0);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:584:   if (!input_patch_size || (tcs->tess.tcs_output_stride & 3))
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:587:   const uint64_t vs_outputs = vs->tess.vs_outputs;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:598:    * These fields are 32-bit in the libpoly ABI. Large draws will need
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:606:      tcs->tess.tcs_output_stride / sizeof(uint32_t);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:621:      nr_patches64 * tcs->tess.tcs_output_stride;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:667:   struct pan_ptr tess_params =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:669:                              sizeof(struct poly_tess_params), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:671:   if (!blob.gpu || !vertex_params.gpu || !tess_params.gpu)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:702:    * TCS / tessellator / TES parameters
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:704:   enum poly_tess_partitioning partitioning =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:705:      tes->tess.spacing == TESS_SPACING_EQUAL
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:707:      : tes->tess.spacing == TESS_SPACING_FRACTIONAL_ODD
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:711:   struct poly_tess_params *tp = tess_params.cpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:713:   *tp = (struct poly_tess_params) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:727:      /* Filled later by panlib_prefix_sum_tess(). */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:733:      .tcs_per_vertex_outputs = tcs->tess.tcs_per_vertex_outputs,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:735:      .output_patch_size = tcs->tess.tcs_output_patch_size,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:736:      .tcs_patch_constants = tcs->tess.tcs_nr_patch_outputs,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:742:      .points_mode = tes->tess.points,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:743:      .isolines = tes->tess.mode == TESS_PRIMITIVE_ISOLINES,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:747:      tp->ccw = tes->tess.ccw;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:759:   cmdbuf->state.gfx.sysvals.poly.tess_param_buffer =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:760:      tess_params.gpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:762:   cmdbuf->state.gfx.tess.out_draws = tp->out_draws;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:765:    * These buffers are per draw, so every physical tess stage must get
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:788:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:793:      &cmdbuf->state.gfx.tess.tcs.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:832:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:837:      &cmdbuf->state.gfx.tess.tes.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:854:    * vertex buffers to TES. libpoly supplies TES input through its own
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:897:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:899:      &cmdbuf->state.gfx.tess.tcs.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:921:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:923:      &cmdbuf->state.gfx.tess.tes.desc;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1020:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1021:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1212:      panvk_shader_only_variant(cmdbuf->state.gfx.tess.tcs.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1214:      panvk_shader_only_variant(cmdbuf->state.gfx.tess.tes.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1310:                dyn_gfx_state_dirty(cmdbuf, CB_ATTACHMENT_COUNT) ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2081:   for (uint32_t ir_pass = 0; ir_pass < PANVK_IR_PASS_COUNT; ir_pass++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2128:      static_assert(ARRAY_SIZE(cmdbuf->state.gfx.render.ir.fbds) == PANVK_IR_PASS_COUNT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2129:                    "ir.fbds array size must match PANVK_IR_PASS_COUNT");
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2741:      cfg.front_face_ccw = rs->front_face == VK_FRONT_FACE_COUNTER_CLOCKWISE;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3388: * Execute the software vertex stage and tessellation control stage.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3391: * compute dispatch machinery so tessellation does not grow a second CSF
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3394: * The tessellator and final TES draw are intentionally not launched here yet.
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3397:launch_tess_stages(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3404:      panvk_shader_only_variant(gfx->tess.tcs.shader);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3411:          gfx->tess.tcs.shader->tess.tcs_output_patch_size);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3424:   /* An incomplete input patch produces no tessellated primitives. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3445:   gfx->tess.tcs.push_uniforms = tcs_push.gpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3483:   launch_gfx_cs(cmdbuf, tcs, &gfx->tess.tcs.desc,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3490:dispatch_tess_topology(struct panvk_precomp_ctx *precomp_ctx,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3493:                       enum poly_tess_mode mode,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3494:                       uint64_t tess_params)
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3498:   switch (tes->tess.mode) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3500:      panlib_tess_isoline(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3501:                          tess_params, mode);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3505:      panlib_tess_tri(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3506:                      tess_params, mode);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3510:      panlib_tess_quad(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+
+=== INDIRECT/DRAW/QUERY/XFB ===
+src/panfrost/vulkan/00-panvk-defaults.conf:6:               ANGLE requires VK_EXT_transform_feedback or vertexPipelineStoresAndAtomics
+src/panfrost/vulkan/00-panvk-defaults.conf:8:               we enable support for vertexPipelineStoresAndAtomics to allow XFB emulation
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:152: * VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT is set on the command buffer. */
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:159:struct panvk_cs_timestamp_query {
+src/panfrost/vulkan/csf/panvk_cmd_buffer.h:165:struct panvk_cs_occlusion_query {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:90:   unsigned core_id_range = pan_query_core_id_range(&phys_dev->kmod.dev->props);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:94:         pan_query_thread_tls_alloc(&phys_dev->kmod.dev->props);
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:268:   cs_single_link_list_for_each_from(b, next, struct panvk_cs_timestamp_query,
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:271:                   offsetof(struct panvk_cs_timestamp_query, avail));
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:292:    * Additionally, simultaneous use secondaries also need to flush if they
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:293:    * contain timestamp query writes to avoid adding the same node more than
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:297:      (cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT) &&
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:974:   if (PANVK_DEBUG(FORCE_SIMULTANEOUS)) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:975:      cmdbuf->flags |= VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_buffer.c:1126:      /* Inherit the occlusion query state so that if the secondary contains
+src/panfrost/vulkan/csf/panvk_vX_cmd_dispatch.c:157:         pan_query_core_id_range(&phys_dev->kmod.dev->props);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:36:#include "panvk_query_pool.h"
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:756:      tp->ccw = tes->tess.ccw;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:757:      tp->ccw ^=
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1680:      pan_query_tiler_features(&phys_dev->kmod.dev->props);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1682:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:1894:   if (!(cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT) &&
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2028:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2032:    * simultaneous use of the command buffer), we can avoid the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2607:         cmdbuf, desc, sizeof(struct panvk_cs_occlusion_query), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2615:      struct panvk_cs_occlusion_query *oq = new_oq_node.cpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2617:      *oq = (struct panvk_cs_occlusion_query){
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2619:         .syncobj = last_syncobj + view_idx * sizeof(struct panvk_query_available_obj),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2628:         offsetof(struct panvk_cs_occlusion_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2639:       cmdbuf->state.gfx.occlusion_query.mode == MALI_OCCLUSION_MODE_DISABLED ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2640:       cmdbuf->state.gfx.occlusion_query.syncobj ==
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2651:                cmdbuf->state.gfx.occlusion_query.ptr);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2654:      cmdbuf->state.gfx.occlusion_query.syncobj;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2691:                                 fs->info.fs.can_discard || alpha_to_coverage;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2735:         bool oq = cmdbuf->state.gfx.occlusion_query.mode !=
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2774:      cfg.front_face_ccw = rs->front_face == VK_FRONT_FACE_COUNTER_CLOCKWISE;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2778:       * not have polygon winding, and FrontFacing is defined as true for
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2781:       * Do not let the Mali DCD front/back face cull bits discard point/line
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:2792:      cfg.occlusion_query = cmdbuf->state.gfx.occlusion_query.mode;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3026:         cfg.primitive_restart = cmdbuf->state.gfx.idvs.restart;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3097:   if (!cmdbuf->vk.dynamic_graphics_state.rs.rasterizer_discard_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3247:   if (!cmdbuf->vk.dynamic_graphics_state.rs.rasterizer_discard_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3360:update_prims_generated_query(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3366:   struct panvk_prims_generated_query_state *state =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3367:      &cmdbuf->state.gfx.prims_generated_query;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3372:   assert(!draw->index.index_size || !ia->primitive_restart_enable);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3377:   if (draw->index.index_size && ia->primitive_restart_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3380:      struct panlib_update_prims_generated_query_restart_args args = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3415:      panlib_update_prims_generated_query_restart_struct(
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3422:      struct panlib_update_prims_generated_query_indirect_args args = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3434:      panlib_update_prims_generated_query_indirect_struct(
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3468:   /* The software XFB lowering currently launches one invocation per input
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3474:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:3544:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4353:   update_prims_generated_query(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4413:                               uint32_t firstIndex, int32_t vertexOffset,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4426:      .index = panvk_draw_info_index(cmdbuf, firstIndex),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4438:panvk_per_arch(CmdDrawIndirect)(VkCommandBuffer commandBuffer, VkBuffer _buffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4481:panvk_per_arch(CmdDrawIndirectCount)(VkCommandBuffer commandBuffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4593:         pan_query_optimal_tib_size(PAN_ARCH, phys_dev->model),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4595:         pan_query_optimal_z_tib_size(PAN_ARCH, phys_dev->model),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:4881:      cfg.flags_0.occlusion_query = MALI_OCCLUSION_MODE_DISABLED;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5161:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5165:    * simultaneous use of the command buffer), we can avoid the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5397:                                           struct panvk_cs_occlusion_query, node) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5399:                         offsetof(struct panvk_cs_occlusion_query, syncobj));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5445:                      offsetof(struct panvk_cs_timestamp_query, reports));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5452:                      offsetof(struct panvk_cs_timestamp_query, node.next));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5455:            /* WAR on panvk_cs_timestamp_query::next. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5460:                       offsetof(struct panvk_cs_timestamp_query, node.next));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5465:               current, offsetof(struct panvk_cs_timestamp_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5505:      /* Flush the last occlusion query before ending the render pass if
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5506:       * this query has ended while we were inside the render pass. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c:5508:          cmdbuf->state.gfx.occlusion_query.syncobj) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_precomp.c:30:          "Cannot use both CSF_SYNC and CSF_WAIT barriers simultaneously");
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:26:#include "panvk_query_pool.h"
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:30:panvk_subqueue_for_query_type(VkQueryType type)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:40:      UNREACHABLE("Unsupported query type");
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:44:/* At the API level, a query consists of a status and a result.  Both are
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:45: * uninitialized initially.  There are these query operations:
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:49: *    to the final query value.  Because of VK_QUERY_RESULT_PARTIAL_BIT, the
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:50: *    result must hold valid intermediate query values while the query is
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:54: * All query operations define execution dependencies among themselves when
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:58: * We use a panvk_cs_sync32 to store the status of a query:
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:60: *  - Reset op waits on all prior query operations affecting the query before
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:70:/* Default path for query types that don't need special logic */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:73:               struct cs_index zero_regs, uint32_t query_count)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:75:   const uint32_t regs_per_query = 2;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:76:   const uint32_t queries_per_batch = zero_regs.size / regs_per_query;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:77:   uint32_t remaining_queries = query_count;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:81:   if (query_count > queries_per_batch * 4) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:86:         new_zero_regs.size / regs_per_query;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:87:      uint32_t full_batches = query_count / adjusted_queries_per_batch;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:97:         query_count - (full_batches * adjusted_queries_per_batch);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:103:         MIN2(remaining_queries - i, queries_per_batch) * regs_per_query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:112:                        struct panvk_query_pool *pool, uint32_t first_query,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:113:                        uint32_t query_count)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:116:      panvk_subqueue_for_query_type(pool->vk.query_type);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:119:   /* Wait on deferred sync to ensure all prior query operations have
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:130:   /* Zero all query syncobj so it reports non-available. We don't use
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:134:   cs_move64_to(b, addr, panvk_query_available_dev_addr(pool, first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:135:   reset_queries_batch(b, addr, zero_regs, query_count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:137:   cs_move64_to(b, addr, panvk_query_report_dev_addr(pool, first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:138:   reset_queries_batch(b, addr, zero_regs, query_count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:161:                  uint32_t query_count)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:167:   assert(query_count <= scratch_regs.size / regs_per_copy);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:169:   for (uint32_t i = 0; i < query_count; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:181:   for (uint32_t i = 0; i < query_count; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:194:panvk_copy_query_results(struct panvk_cmd_buffer *cmd,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:195:                         struct panvk_query_pool *pool,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:196:                         uint32_t first_query, uint32_t query_count,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:202:      panvk_subqueue_for_query_type(pool->vk.query_type);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:205:   /* Wait for query syncobjs to be signalled. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:228:   if (query_count > 2 * queries_per_batch) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:229:      uint32_t copied_query_count =
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:230:         query_count - (query_count % queries_per_batch);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:232:      cs_move32_to(b, counter, copied_query_count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:234:      cs_move64_to(b, res_addr, panvk_query_report_dev_addr(pool, first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:236:                   panvk_query_available_dev_addr(pool, first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:249:      dst_buffer_addr += stride * copied_query_count;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:250:      first_query += copied_query_count;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:251:      query_count -= copied_query_count;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:254:   for (uint32_t i = 0; i < query_count; i += queries_per_batch) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:257:                   panvk_query_report_dev_addr(pool, i + first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:259:                   panvk_query_available_dev_addr(pool, i + first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:262:                        MIN2(queries_per_batch, query_count - i));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:267:panvk_cmd_begin_occlusion_query(struct panvk_cmd_buffer *cmd,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:268:                                struct panvk_query_pool *pool, uint32_t query,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:271:   uint64_t report_addr = panvk_query_report_dev_addr(pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:273:   cmd->state.gfx.occlusion_query.ptr = report_addr;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:274:   cmd->state.gfx.occlusion_query.syncobj =
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:275:      panvk_query_available_dev_addr(pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:276:   cmd->state.gfx.occlusion_query.mode = flags & VK_QUERY_CONTROL_PRECISE_BIT
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:283:    *   "When an occlusion query begins, the count of passing samples
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:298:panvk_cmd_end_occlusion_query(struct panvk_cmd_buffer *cmd,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:299:                              struct panvk_query_pool *pool, uint32_t query)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:301:   uint64_t syncobj_addr = panvk_query_available_dev_addr(pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:304:   cmd->state.gfx.occlusion_query.ptr = 0;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:305:   cmd->state.gfx.occlusion_query.syncobj = 0;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:306:   cmd->state.gfx.occlusion_query.mode = MALI_OCCLUSION_MODE_DISABLED;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:310:    * occlusion query end when the fragment job is issued. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:315:    * A query that begins in a subpass, must end in the same subpass.
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:316:    * Therefore, if the occlusion query ends outside of a render pass, multiview
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:333:   /* Signal the query syncobj after the flush is effective. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:335:   cs_move64_to(b, oq_syncobj, panvk_query_available_dev_addr(pool, query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:342:                                  struct panvk_query_pool *pool,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:343:                                  uint32_t first_query, uint32_t query_count)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:353:      int offset = sq * sizeof(struct panvk_query_report);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:358:      cs_move32_to(b, counter, query_count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:359:      cs_move64_to(b, addr, panvk_query_report_dev_addr(pool, first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:366:          * one store because of the memory layout of the query report values. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:374:         cs_add_imm64(b, addr, addr, pool->query_stride);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:387:   cs_move64_to(b, addr, panvk_query_available_dev_addr(pool, first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:388:   reset_queries_batch(b, addr, zero_regs, query_count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:420:                       struct panvk_query_pool *pool, uint32_t first_query)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:430:   int offset = PANVK_SUBQUEUE_COUNT * sizeof(struct panvk_query_report);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:438:   for (uint32_t query = first_query; query < first_query + n_views; ++query) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:439:      cs_move64_to(b, addr, panvk_query_report_dev_addr(pool, query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:445:panvk_add_finished_query(struct panvk_cmd_buffer *cmd,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:447:                         struct panvk_query_pool *pool, uint32_t query)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:453:      cmd, desc, sizeof(struct panvk_cs_timestamp_query), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:455:   *((struct panvk_cs_timestamp_query *)new_ts_node.cpu) =
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:456:      (struct panvk_cs_timestamp_query){
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:458:         .reports = panvk_query_report_dev_addr(pool, query),
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:459:         .avail = panvk_query_available_dev_addr(pool, query),
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:468:      new_node_ptr, offsetof(struct panvk_cs_timestamp_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:475:                         struct panvk_query_pool *pool, uint32_t query)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:500:      for (uint32_t q = query; q < query + n_views; ++q) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:502:            cmd, desc, sizeof(struct panvk_cs_timestamp_query), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:503:         *((struct panvk_cs_timestamp_query *)new_ts_node.cpu) =
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:504:            (struct panvk_cs_timestamp_query){
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:507:                  write_report ? panvk_query_report_dev_addr(pool, q) : 0,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:508:               .avail = panvk_query_available_dev_addr(pool, q),
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:516:            new_node_ptr, offsetof(struct panvk_cs_timestamp_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:525:                         struct panvk_query_pool *pool, uint32_t query)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:539:      int offset = sq * sizeof(struct panvk_query_report);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:541:      for (uint32_t q = query; q < query + n_views; ++q) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:544:         cs_move64_to(b, addr, panvk_query_report_dev_addr(pool, q));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:551:   for (uint32_t q = query; q < query + n_views; ++q)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:552:      panvk_add_finished_query(cmd, stage, pool, q);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:556:panvk_cmd_write_timestamp_query(struct panvk_cmd_buffer *cmd,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:558:                                struct panvk_query_pool *pool, uint32_t query)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:571:      panvk_cs_defer_timestamp(cmd, stage, pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:573:      panvk_cs_write_timestamp(cmd, stage, pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:575:   panvk_cs_write_ts_info(cmd, stage, pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:581:panvk_copy_timestamp_query_results(struct panvk_cmd_buffer *cmd,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:582:                                   struct panvk_query_pool *pool,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:583:                                   uint32_t first_query, uint32_t query_count,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:591:    * into a buffer, such that any following query operations like reset
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:596:   uint32_t query_stride = pool->query_stride;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:597:   size_t buf_sz = query_count * query_stride;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:613:      cs_move64_to(b, src, panvk_query_report_dev_addr(pool, first_query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:617:      cs_move32_to(b, count, query_count);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:628:         cs_add_imm64(b, src, src, query_stride);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:629:         cs_add_imm64(b, dst, dst, query_stride);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:644:   const struct panlib_copy_ts_query_result_args push = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:646:      .available_addr = panvk_query_available_dev_addr(pool, first_query),
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:647:      .query_stride = pool->query_stride,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:648:      /* The intermediate buffer starts at first_query. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:649:      .first_query = 0,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:650:      .query_count = query_count,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:651:      .report_count = pool->reports_per_query,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:658:   panlib_copy_ts_query_result_struct(&precomp_ctx, panlib_1d(query_count),
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:663:panvk_cmd_begin_prims_generated_query(
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:664:   struct panvk_cmd_buffer *cmd, struct panvk_query_pool *pool, uint32_t query,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:667:   uint64_t report_addr = panvk_query_report_dev_addr(pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:669:   cmd->state.gfx.prims_generated_query.ptr = report_addr;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:670:   cmd->state.gfx.prims_generated_query.syncobj =
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:671:      panvk_query_available_dev_addr(pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:675:    *   "When a primitives generated query begins, the count of primitives
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:690:panvk_cmd_end_prims_generated_query(
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:691:   struct panvk_cmd_buffer *cmd, struct panvk_query_pool *pool, uint32_t query)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:693:   cmd->state.gfx.prims_generated_query.ptr = 0;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:694:   cmd->state.gfx.prims_generated_query.syncobj = 0;
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:697:   struct cs_index query_syncobj = cs_scratch_reg64(b, 0);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:713:   /* Signal the query syncobj after the flush is effective. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:715:   cs_move64_to(b, query_syncobj, panvk_query_available_dev_addr(pool, query));
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:716:   cs_sync32_set(b, true, MALI_CS_SYNC_SCOPE_CSG, val, query_syncobj,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:722:                                  VkQueryPool queryPool, uint32_t firstQuery,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:723:                                  uint32_t queryCount)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:726:   VK_FROM_HANDLE(panvk_query_pool, pool, queryPool);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:728:   if (queryCount == 0)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:731:   switch (pool->vk.query_type) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:734:      panvk_cmd_reset_queries(cmd, pool, firstQuery, queryCount);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:738:      panvk_cmd_reset_timestamp_queries(cmd, pool, firstQuery, queryCount);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:742:      UNREACHABLE("Unsupported query type");
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:748:                                        VkQueryPool queryPool, uint32_t query,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:753:   VK_FROM_HANDLE(panvk_query_pool, pool, queryPool);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:755:   /* TODO: transform feedback */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:758:   switch (pool->vk.query_type) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:760:      panvk_cmd_begin_occlusion_query(cmd, pool, query, flags);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:764:      panvk_cmd_begin_prims_generated_query(cmd, pool, query, flags);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:768:      UNREACHABLE("Unsupported query type");
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:774:                                      VkQueryPool queryPool, uint32_t query,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:778:   VK_FROM_HANDLE(panvk_query_pool, pool, queryPool);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:780:   /* TODO: transform feedback */
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:783:   switch (pool->vk.query_type) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:785:      panvk_cmd_end_occlusion_query(cmd, pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:789:      panvk_cmd_end_prims_generated_query(cmd, pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:793:      UNREACHABLE("Unsupported query type");
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:800:                                   VkQueryPool queryPool, uint32_t query)
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:803:   VK_FROM_HANDLE(panvk_query_pool, pool, queryPool);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:805:   panvk_cmd_write_timestamp_query(cmd, stage, pool, query);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:810:   VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t firstQuery,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:811:   uint32_t queryCount, VkBuffer dstBuffer, VkDeviceSize dstOffset,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:815:   VK_FROM_HANDLE(panvk_query_pool, pool, queryPool);
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:820:   switch (pool->vk.query_type) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:823:      panvk_copy_query_results(cmd, pool, firstQuery, queryCount,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:829:      panvk_copy_timestamp_query_results(cmd, pool, firstQuery, queryCount,
+src/panfrost/vulkan/csf/panvk_vX_cmd_query.c:835:      UNREACHABLE("Unsupported query type");
+src/panfrost/vulkan/csf/panvk_vX_cmd_xfb.c:19:      cmdbuf, desc, PANVK_MAX_XFB_BUFFERS * sizeof(uint32_t),
+src/panfrost/vulkan/csf/panvk_vX_cmd_xfb.c:33:   assert(firstBinding + bindingCount <= PANVK_MAX_XFB_BUFFERS);
+src/panfrost/vulkan/csf/panvk_vX_cmd_xfb.c:53:   assert(firstCounterRange + counterRangeCount <= PANVK_MAX_XFB_BUFFERS);
+src/panfrost/vulkan/csf/panvk_vX_cmd_xfb.c:66:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_xfb.c:98:   assert(firstCounterRange + counterRangeCount <= PANVK_MAX_XFB_BUFFERS);
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c:3191:    * every Vulkan status query. */
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-g720-regcount:3191:    * every Vulkan status query. */
+src/panfrost/vulkan/csf/panvk_vX_gpu_queue.c.before-log-cleanup:3193:    * every Vulkan status query. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:35:#include "panvk_query_pool.h"
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1168:      pan_query_tiler_features(&phys_dev->kmod.dev->props);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1170:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1382:   if (!(cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT) &&
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1516:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:1520:    * simultaneous use of the command buffer), we can avoid the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2095:         cmdbuf, desc, sizeof(struct panvk_cs_occlusion_query), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2103:      struct panvk_cs_occlusion_query *oq = new_oq_node.cpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2105:      *oq = (struct panvk_cs_occlusion_query){
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2107:         .syncobj = last_syncobj + view_idx * sizeof(struct panvk_query_available_obj),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2116:         offsetof(struct panvk_cs_occlusion_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2127:       cmdbuf->state.gfx.occlusion_query.mode == MALI_OCCLUSION_MODE_DISABLED ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2128:       cmdbuf->state.gfx.occlusion_query.syncobj ==
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2139:                cmdbuf->state.gfx.occlusion_query.ptr);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2142:      cmdbuf->state.gfx.occlusion_query.syncobj;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2179:                                 fs->info.fs.can_discard || alpha_to_coverage;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2223:         bool oq = cmdbuf->state.gfx.occlusion_query.mode !=
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2262:      cfg.front_face_ccw = rs->front_face == VK_FRONT_FACE_COUNTER_CLOCKWISE;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2266:       * not have polygon winding, and FrontFacing is defined as true for
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2269:       * Do not let the Mali DCD front/back face cull bits discard point/line
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2280:      cfg.occlusion_query = cmdbuf->state.gfx.occlusion_query.mode;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2514:         cfg.primitive_restart = cmdbuf->state.gfx.idvs.restart;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2585:   if (!cmdbuf->vk.dynamic_graphics_state.rs.rasterizer_discard_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2662:update_prims_generated_query(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2668:   struct panvk_prims_generated_query_state *state =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2669:      &cmdbuf->state.gfx.prims_generated_query;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2674:   assert(!draw->index.index_size || !ia->primitive_restart_enable);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2679:   if (draw->index.index_size && ia->primitive_restart_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2682:      struct panlib_update_prims_generated_query_restart_args args = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2717:      panlib_update_prims_generated_query_restart_struct(
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2724:      struct panlib_update_prims_generated_query_indirect_args args = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2736:      panlib_update_prims_generated_query_indirect_struct(
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2770:   /* The software XFB lowering currently launches one invocation per input
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2776:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:2846:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3268:   update_prims_generated_query(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3328:                               uint32_t firstIndex, int32_t vertexOffset,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3341:      .index = panvk_draw_info_index(cmdbuf, firstIndex),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3353:panvk_per_arch(CmdDrawIndirect)(VkCommandBuffer commandBuffer, VkBuffer _buffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3396:panvk_per_arch(CmdDrawIndirectCount)(VkCommandBuffer commandBuffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3508:         pan_query_optimal_tib_size(PAN_ARCH, phys_dev->model),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3510:         pan_query_optimal_z_tib_size(PAN_ARCH, phys_dev->model),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:3796:      cfg.flags_0.occlusion_query = MALI_OCCLUSION_MODE_DISABLED;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4076:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4080:    * simultaneous use of the command buffer), we can avoid the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4312:                                           struct panvk_cs_occlusion_query, node) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4314:                         offsetof(struct panvk_cs_occlusion_query, syncobj));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4360:                      offsetof(struct panvk_cs_timestamp_query, reports));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4367:                      offsetof(struct panvk_cs_timestamp_query, node.next));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4370:            /* WAR on panvk_cs_timestamp_query::next. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4375:                       offsetof(struct panvk_cs_timestamp_query, node.next));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4380:               current, offsetof(struct panvk_cs_timestamp_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4420:      /* Flush the last occlusion query before ending the render pass if
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4421:       * this query has ended while we were inside the render pass. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-desc:4423:          cmdbuf->state.gfx.occlusion_query.syncobj) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:35:#include "panvk_query_pool.h"
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:747:      tp->ccw = tes->tess.ccw;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:748:      tp->ccw ^=
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1647:      pan_query_tiler_features(&phys_dev->kmod.dev->props);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1649:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1861:   if (!(cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT) &&
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1995:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:1999:    * simultaneous use of the command buffer), we can avoid the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2574:         cmdbuf, desc, sizeof(struct panvk_cs_occlusion_query), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2582:      struct panvk_cs_occlusion_query *oq = new_oq_node.cpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2584:      *oq = (struct panvk_cs_occlusion_query){
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2586:         .syncobj = last_syncobj + view_idx * sizeof(struct panvk_query_available_obj),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2595:         offsetof(struct panvk_cs_occlusion_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2606:       cmdbuf->state.gfx.occlusion_query.mode == MALI_OCCLUSION_MODE_DISABLED ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2607:       cmdbuf->state.gfx.occlusion_query.syncobj ==
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2618:                cmdbuf->state.gfx.occlusion_query.ptr);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2621:      cmdbuf->state.gfx.occlusion_query.syncobj;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2658:                                 fs->info.fs.can_discard || alpha_to_coverage;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2702:         bool oq = cmdbuf->state.gfx.occlusion_query.mode !=
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2741:      cfg.front_face_ccw = rs->front_face == VK_FRONT_FACE_COUNTER_CLOCKWISE;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2745:       * not have polygon winding, and FrontFacing is defined as true for
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2748:       * Do not let the Mali DCD front/back face cull bits discard point/line
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2759:      cfg.occlusion_query = cmdbuf->state.gfx.occlusion_query.mode;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:2993:         cfg.primitive_restart = cmdbuf->state.gfx.idvs.restart;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3064:   if (!cmdbuf->vk.dynamic_graphics_state.rs.rasterizer_discard_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3141:update_prims_generated_query(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3147:   struct panvk_prims_generated_query_state *state =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3148:      &cmdbuf->state.gfx.prims_generated_query;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3153:   assert(!draw->index.index_size || !ia->primitive_restart_enable);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3158:   if (draw->index.index_size && ia->primitive_restart_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3161:      struct panlib_update_prims_generated_query_restart_args args = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3196:      panlib_update_prims_generated_query_restart_struct(
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3203:      struct panlib_update_prims_generated_query_indirect_args args = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3215:      panlib_update_prims_generated_query_indirect_struct(
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3249:   /* The software XFB lowering currently launches one invocation per input
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3255:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3325:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3877:   update_prims_generated_query(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3937:                               uint32_t firstIndex, int32_t vertexOffset,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3950:      .index = panvk_draw_info_index(cmdbuf, firstIndex),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:3962:panvk_per_arch(CmdDrawIndirect)(VkCommandBuffer commandBuffer, VkBuffer _buffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4005:panvk_per_arch(CmdDrawIndirectCount)(VkCommandBuffer commandBuffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4117:         pan_query_optimal_tib_size(PAN_ARCH, phys_dev->model),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4119:         pan_query_optimal_z_tib_size(PAN_ARCH, phys_dev->model),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4405:      cfg.flags_0.occlusion_query = MALI_OCCLUSION_MODE_DISABLED;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4685:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4689:    * simultaneous use of the command buffer), we can avoid the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4921:                                           struct panvk_cs_occlusion_query, node) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4923:                         offsetof(struct panvk_cs_occlusion_query, syncobj));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4969:                      offsetof(struct panvk_cs_timestamp_query, reports));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4976:                      offsetof(struct panvk_cs_timestamp_query, node.next));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4979:            /* WAR on panvk_cs_timestamp_query::next. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4984:                       offsetof(struct panvk_cs_timestamp_query, node.next));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:4989:               current, offsetof(struct panvk_cs_timestamp_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:5029:      /* Flush the last occlusion query before ending the render pass if
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:5030:       * this query has ended while we were inside the render pass. */
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-precomp:5032:          cmdbuf->state.gfx.occlusion_query.syncobj) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:35:#include "panvk_query_pool.h"
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:747:      tp->ccw = tes->tess.ccw;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:748:      tp->ccw ^=
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1647:      pan_query_tiler_features(&phys_dev->kmod.dev->props);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1649:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1861:   if (!(cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT) &&
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1995:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:1999:    * simultaneous use of the command buffer), we can avoid the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2574:         cmdbuf, desc, sizeof(struct panvk_cs_occlusion_query), 8);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2582:      struct panvk_cs_occlusion_query *oq = new_oq_node.cpu;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2584:      *oq = (struct panvk_cs_occlusion_query){
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2586:         .syncobj = last_syncobj + view_idx * sizeof(struct panvk_query_available_obj),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2595:         offsetof(struct panvk_cs_occlusion_query, node),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2606:       cmdbuf->state.gfx.occlusion_query.mode == MALI_OCCLUSION_MODE_DISABLED ||
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2607:       cmdbuf->state.gfx.occlusion_query.syncobj ==
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2618:                cmdbuf->state.gfx.occlusion_query.ptr);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2621:      cmdbuf->state.gfx.occlusion_query.syncobj;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2658:                                 fs->info.fs.can_discard || alpha_to_coverage;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2702:         bool oq = cmdbuf->state.gfx.occlusion_query.mode !=
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2741:      cfg.front_face_ccw = rs->front_face == VK_FRONT_FACE_COUNTER_CLOCKWISE;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2745:       * not have polygon winding, and FrontFacing is defined as true for
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2748:       * Do not let the Mali DCD front/back face cull bits discard point/line
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2759:      cfg.occlusion_query = cmdbuf->state.gfx.occlusion_query.mode;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:2993:         cfg.primitive_restart = cmdbuf->state.gfx.idvs.restart;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3064:   if (!cmdbuf->vk.dynamic_graphics_state.rs.rasterizer_discard_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3141:update_prims_generated_query(struct panvk_cmd_buffer *cmdbuf,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3147:   struct panvk_prims_generated_query_state *state =
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3148:      &cmdbuf->state.gfx.prims_generated_query;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3153:   assert(!draw->index.index_size || !ia->primitive_restart_enable);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3158:   if (draw->index.index_size && ia->primitive_restart_enable) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3161:      struct panlib_update_prims_generated_query_restart_args args = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3196:      panlib_update_prims_generated_query_restart_struct(
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3203:      struct panlib_update_prims_generated_query_indirect_args args = {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3215:      panlib_update_prims_generated_query_indirect_struct(
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3249:   /* The software XFB lowering currently launches one invocation per input
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3255:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3325:   for (uint32_t i = 0; i < PANVK_MAX_XFB_BUFFERS; i++) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:3988:   update_prims_generated_query(cmdbuf, &draw);
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4048:                               uint32_t firstIndex, int32_t vertexOffset,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4061:      .index = panvk_draw_info_index(cmdbuf, firstIndex),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4073:panvk_per_arch(CmdDrawIndirect)(VkCommandBuffer commandBuffer, VkBuffer _buffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4116:panvk_per_arch(CmdDrawIndirectCount)(VkCommandBuffer commandBuffer,
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4228:         pan_query_optimal_tib_size(PAN_ARCH, phys_dev->model),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4230:         pan_query_optimal_z_tib_size(PAN_ARCH, phys_dev->model),
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4516:      cfg.flags_0.occlusion_query = MALI_OCCLUSION_MODE_DISABLED;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4796:      cmdbuf->flags & VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:4800:    * simultaneous use of the command buffer), we can avoid the
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:5032:                                           struct panvk_cs_occlusion_query, node) {
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:5034:                         offsetof(struct panvk_cs_occlusion_query, syncobj));
+src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c.before-tess-varying-producer:5080:                      offsetof(struct panvk_cs_timestamp_query, reports));
+
+=== TESTS / SCRIPTS / DOC ===
+./src/asahi/libagx/tessellation.cl
+./src/asahi/libagx/tessellator.cl
+./src/asahi/libagx/tessellator.h
+./src/compiler/nir/nir_lower_indirect_derefs_to_if_else_trees.c
+./src/compiler/nir/nir_lower_io_indirect_loads.c
+./src/compiler/nir/nir_lower_tess_coord_z.c
+./src/compiler/nir/nir_divergence_analysis.c.before-poly-param-uniform
+./src/compiler/nir/nir_lower_poly_line_smooth.c
+./src/freedreno/ir3/ir3_nir_lower_tess.c
+./src/glx/indirect_glx.c
+./src/glx/indirect_init.h
+./src/glx/indirect_texture_compression.c
+./src/glx/indirect_transpose_matrix.c
+./src/glx/indirect_vertex_array.c
+./src/glx/indirect_vertex_array.h
+./src/glx/indirect_vertex_array_priv.h
+./src/glx/indirect_vertex_program.c
+./src/glx/indirect_window_pos.c
+./src/intel/blorp/blorp_indirect_copy.c
+./src/intel/vulkan/genX_cmd_draw_generated_indirect.h
+./src/kosmickrisp/libkk/kk_tessellation.cl
+./src/kosmickrisp/libkk/kk_tessellator.cl
+./src/kosmickrisp/libkk/kk_tessellator.h
+./src/mesa/main/polygon.c
+./src/mesa/main/polygon.h
+./src/mesa/state_tracker/st_atom_tess.c
+./src/microsoft/compiler/dxil_nir_tess.c
+./src/nouveau/vulkan/nvk_cmd_indirect.c
+./src/nouveau/vulkan/nvk_indirect_execution_set.c
+./src/nouveau/vulkan/nvk_indirect_execution_set.h
+./src/panfrost/libpan/indirect_dispatch.cl
+./src/panfrost/libpan/meson.build.before-panvk-poly-precomp
+./src/panfrost/libpan/poly_tessellation.cl
+./src/panfrost/vulkan/meson.build.before-poly-link
+./src/panfrost/vulkan/panvk_shader.h.before-poly-sysvals
+./src/panfrost/vulkan/panvk_vX_shader.c.before-poly-sysvals
+./src/panfrost/vulkan/panvk_vX_shader.c.before-sw-tess-vs
+./src/panfrost/vulkan/panvk_shader.h.before-tess-metadata
+./src/panfrost/vulkan/panvk_vX_shader.c.before-tess-metadata
+./src/panfrost/vulkan/panvk_shader.h.before-tess-metadata-v2
+./src/panfrost/vulkan/panvk_vX_shader.c.before-tess-metadata-v2
+./src/panfrost/vulkan/panvk_cmd_draw.h.before-tess-binding
+./src/panfrost/vulkan/panvk_vX_shader.c.before-tess-binding
+./src/panfrost/vulkan/panvk_vX_cmd_push_constant.c.before-tess-push-dirty
+./src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-enable
+./src/panfrost/vulkan/panvk_vX_physical_device.c.before-tess-limits
+./src/panfrost/vulkan/panvk_vX_shader.c.before-tess-zero-base
+./src/panfrost/vulkan/panvk_vX_shader.c.before-tess-vs-output-gather
+./src/panfrost/vulkan/panvk_vX_shader.c.before-tess-tcs-info-gather
+./src/poly/cl/tessellation.cl
+./src/poly/cl/tessellator.h
+./src/poly/nir/poly_nir.h
+./src/poly/nir/poly_nir_lower_gs.c
+./src/poly/nir/poly_nir_lower_sysvals.c
+./src/poly/nir/poly_nir_lower_tess.c
+./src/poly/nir/poly_nir_lower_vs.c
+./src/poly/nir/poly_nir_passthrough_gs.c
+./src/poly/nir/poly_nir.h.before-panvk-tess-scope
+./src/poly/nir/poly_nir_lower_tess.c.before-panvk-tess-scope
+./src/poly/tessellator.h
+./meson.build.before-panvk-poly
+README.rst:127:The direct PanVK/libpoly tessellation path has now executed end-to-end on the
+README.rst:143:   tessellation prefix sum
+README.rst:146:   topology WITH_COUNTS
+README.rst:177:- direct SW-VS -> TCS -> COUNT -> PREFIX -> WITH_COUNTS -> TES/IDVS execution;
+README.rst:178:- final normal rasterized tessellation draw with successful CSF completion;
+README.rst:182:  ``inner=3, outer={2,3,4}``: all 12 expected tessellation-coordinate points
+README.rst:186:- ``fractional_even_spacing`` parity-aligned triangle case: 19/19 expected
+README.rst:188:- ``fractional_odd_spacing`` parity-aligned triangle case: 29/29 expected
+README.rst:190:- quad point-mode case ``inner={4,3}, outer={2,3,4,6}``: 21/21 points;
+README.rst:191:- isoline point-mode case ``outer={4,6}``: 28/28 points.
+README.rst:199:``tessellationShader`` remains ``false`` in the published checkpoint.
+README.rst:205:- audit and validation of application indirect tessellation draws;
+README.rst:206:- multiple sequential tessellation draws and complete PanVK dirty-state
+README.rst:212:  tessellation coordinates are implementation-defined;
+README.rst:217:checkpoint merely to run tessellation tests.
+README.rst:224:- tessellationShader — disabled; direct path hardware-validated, integration/conformance work remains
+docs/_extra/specs/OLD/MESA_texture_array.spec:803:    ||2005/12/12||0.3||idr||Updated fragment program interactions.||
+docs/drivers/zink.rst:140:  * :vk-feat:`tessellationShader`
+docs/envvars.rst:656:      dump shader assembly for tessellation control shaders
+docs/envvars.rst:658:      force usage of 8-patches tessellation control shaders (only
+docs/envvars.rst:661:      dump shader assembly for tessellation evaluation shaders
+docs/envvars.rst:1536:      Dump tessellation control shaders.
+docs/envvars.rst:1538:      Dump tessellation evaluation shaders.
+docs/envvars.rst:1892:      Print tessellation control shaders
+docs/envvars.rst:1894:      Print tessellation evaluation shaders
+docs/envvars.rst:1906:      Use Wave32 for vertex, tessellation, and geometry shaders.
+docs/envvars.rst:1912:      Use Wave64 for vertex, tessellation, and geometry shaders.
+docs/envvars.rst:1995:      Print tessellation control shaders
+docs/envvars.rst:1997:      Print tessellation evaluation shaders
+docs/features.txt:134:  GL_ARB_tessellation_shader                            DONE (freedreno/a6xx)
+docs/features.txt:290:  GL_OES_tessellation_shader                            DONE (freedreno/a6xx, all drivers that support GL_ARB_tessellation_shader)
+docs/gallium/context.rst:115:* ``set_tess_state`` configures the default tessellation parameters:
+docs/gallium/context.rst:117:  * ``default_outer_level`` is the default value for the outer tessellation
+docs/gallium/context.rst:119:  * ``default_inner_level`` is the default value for the inner tessellation
+docs/gallium/context.rst:122:  for tessellation.
+docs/gallium/context.rst:527:Number of tessellation control shader threads launched.
+docs/gallium/context.rst:528:Number of tessellation evaluation shader threads launched.
+docs/gallium/screen.rst:294:  How many per-patch outputs and inputs are supported between tessellation
+docs/gallium/screen.rst:295:  control and tessellation evaluation shaders, not counting in TESSINNER and
+docs/gallium/screen.rst:438:  ``VARYING_SLOT_VIEWPORT`` are supported as tessellation evaluation
+docs/gallium/screen.rst:536:* ``pipe_caps.glsl_tess_levels_as_inputs``: True if the driver wants TESSINNER and TESSOUTER to be inputs (rather than system values) for tessellation evaluation shaders.
+docs/gallium/tgsi.rst:3258:tessellation evaluation shaders, respectively. Only the value written in the
+docs/gallium/tgsi.rst:3272:tessellation evaluation shaders, respectively. Only the value written in the
+docs/gallium/tgsi.rst:3394:For tessellation evaluation/control shaders, this semantic label indicates a
+docs/gallium/tgsi.rst:3401:For tessellation evaluation shaders, this semantic label indicates the
+docs/gallium/tgsi.rst:3408:For tessellation evaluation/control shaders, this semantic label indicates the
+docs/gallium/tgsi.rst:3409:outer tessellation levels of the patch. Isoline tessellation will only have XY
+docs/gallium/tgsi.rst:3416:For tessellation evaluation/control shaders, this semantic label indicates the
+docs/gallium/tgsi.rst:3417:inner tessellation levels of the patch. The X value is only defined for
+docs/gallium/tgsi.rst:3418:triangle tessellation, while quads will have XY defined. This is entirely
+docs/gallium/tgsi.rst:3419:undefined for isoline tessellation.
+docs/gallium/tgsi.rst:3424:For tessellation evaluation/control shaders, this semantic label indicates the
+docs/gallium/tgsi.rst:3712:The effect of this property is undefined if a geometry or tessellation shader
+docs/gallium/tgsi.rst:3718:The number of vertices written by the tessellation control shader. This
+docs/gallium/tgsi.rst:3719:effectively defines the patch input size of the tessellation evaluation shader
+docs/gallium/tgsi.rst:3725:This sets the tessellation primitive mode, one of ``MESA_PRIM_TRIANGLES``,
+docs/gallium/tgsi.rst:3727:separate isolines settings, the regular lines is assumed to mean isolines.)
+docs/gallium/tgsi.rst:3732:This sets the spacing mode of the tessellation generator, one of
+docs/relnotes/11.0.0.rst:47:-  GL_ARB_tessellation_shader on nvc0, radeonsi
+docs/relnotes/11.2.0.rst:37:-  GL_ARB_tessellation_shader on i965 and r600 (evergreen/cayman only)
+docs/relnotes/11.2.0.rst:187:   GfxBench 4 tessellation demos misrender
+docs/relnotes/11.2.0.rst:303:   Wrong gl_TessLevelOuter interpretation for isolines
+docs/relnotes/12.0.0.rst:170:   Wrong gl_TessLevelOuter interpretation for isolines
+docs/relnotes/12.0.0.rst:312:   [radeonsi tessellation] [R9 290/390] Random "texture flickering"
+docs/relnotes/12.0.5.rst:83:-  radeonsi: fix gl_PatchVerticesIn for tessellation evaluation shader
+docs/relnotes/13.0.0.rst:52:-  GL_OES_tessellation_shader on i965/gen7+, nvc0, radeonsi
+docs/relnotes/13.0.3.rst:109:-  radeonsi: apply a tessellation bug workaround for SI
+docs/relnotes/13.0.3.rst:134:-  radeonsi: fix isolines tess factor writes to control ring
+docs/relnotes/13.0.6.rst:217:-  radeonsi: fix broken tessellation on Carrizo and Stoney
+docs/relnotes/17.0.1.rst:156:-  radeonsi: fix broken tessellation on Carrizo and Stoney
+docs/relnotes/17.0.6.rst:127:-  radeonsi: fix gl_PrimitiveID in tessellation with instanced draws on
+docs/relnotes/17.1.1.rst:119:-  radeonsi: fix primitive ID in fragment shader when using tessellation
+docs/relnotes/17.1.1.rst:120:-  radeonsi: fix gl_PrimitiveID in tessellation with instanced draws on
+docs/relnotes/17.1.1.rst:123:   tessellation
+docs/relnotes/17.1.3.rst:95:-  radeonsi: fix a GPU hang with tessellation on 2-CU configs
+docs/relnotes/17.1.8.rst:78:-  radeonsi/gfx9: add a temporary workaround for a tessellation driver
+docs/relnotes/17.2.3.rst:137:-  radeonsi: deduce rast_prim correctly for tessellation point mode
+docs/relnotes/18.1.9.rst:37:   - [DXVK] Batman: Arkham City with tessellation enabled hangs on SKL
+docs/relnotes/18.2.1.rst:34:   - [DXVK] Batman: Arkham City with tessellation enabled hangs on SKL
+docs/relnotes/18.3.0.rst:135:   - [DXVK] Batman: Arkham City with tessellation enabled hangs on SKL
+docs/relnotes/18.3.3.rst:133:   tessellation
+docs/relnotes/18.3.5.rst:42:   KHR-GL46.tessellation_shader.single.xfb_captures_data_from_correct_stage
+docs/relnotes/19.0.0.rst:96:   KHR-GL46.tessellation_shader.single.xfb_captures_data_from_correct_stage
+docs/relnotes/19.0.0.rst:115:   dEQP-GLES31.functional.tessellation.invariance.\* start failing on
+docs/relnotes/19.0.0.rst:954:-  mesa/main: make \_mesa_has_tessellation return bool
+docs/relnotes/19.0.0.rst:1786:   tessellation
+docs/relnotes/19.1.0.rst:92:   KHR-GL46.tessellation_shader.single.xfb_captures_data_from_correct_stage
+docs/relnotes/19.1.0.rst:3303:-  iris: Rework default tessellation level uploads
+docs/relnotes/19.2.0.rst:325:-  radeonsi/gfx10: fix tessellation for the legacy pipeline
+docs/relnotes/19.2.2.rst:107:-  iris: Implement the Gen < 9 tessellation quads workaround
+docs/relnotes/19.3.0.rst:2123:-  iris: Implement the Gen < 9 tessellation quads workaround
+docs/relnotes/19.3.0.rst:2324:-  radeonsi/gfx10: fix tessellation for the legacy pipeline
+docs/relnotes/19.3.3.rst:149:-  ac/gpu_info: always use distributed tessellation on gfx10
+docs/relnotes/19.3.5.rst:135:-  mesa: fix immediate mode with tessellation and varying patch vertices
+docs/relnotes/20.0.0.rst:1406:-  v3d: fix packet descriptions for geometry and tessellation shaders
+docs/relnotes/20.0.0.rst:1548:-  gallium/gallivm/tgsi: enable tessellation shaders
+docs/relnotes/20.0.0.rst:1550:-  gallium/swr: implementation of tessellation shaders compilation
+docs/relnotes/20.0.0.rst:1551:-  gallium/swr: fix tessellation state save/restore
+docs/relnotes/20.0.0.rst:1552:-  docs: Update SWR tessellation support
+docs/relnotes/20.0.0.rst:2004:-  freedreno/ir3: Add ir3 intrinsics for tessellation
+docs/relnotes/20.0.0.rst:2006:-  freedreno/ir3: Add tessellation field to shader key
+docs/relnotes/20.0.0.rst:2007:-  freedreno/ir3: Extend geometry lowering pass to handle tessellation
+docs/relnotes/20.0.0.rst:2012:-  freedreno/ir3: Setup inputs and outputs for tessellation stages
+docs/relnotes/20.0.0.rst:2015:-  freedreno/ir3: Allocate const space for tessellation parameters
+docs/relnotes/20.0.0.rst:2016:-  freedreno/a6xx: Build the right draw command for tessellation
+docs/relnotes/20.0.0.rst:2017:-  freedreno/a6xx: Allocate and program tessellation buffer
+docs/relnotes/20.0.0.rst:2018:-  freedreno/a6xx: Emit constant parameters for tessellation stages
+docs/relnotes/20.0.0.rst:2019:-  freedreno/a6xx: Program state for tessellation stages
+docs/relnotes/20.0.0.rst:2020:-  freedreno: Use bypass rendering for tessellation
+docs/relnotes/20.0.0.rst:2022:-  freedreno/blitter: Save tessellation state
+docs/relnotes/20.0.0.rst:2024:-  freedreno/a6xx: Turn on tessellation shaders
+docs/relnotes/20.0.0.rst:2355:-  ac/gpu_info: always use distributed tessellation on gfx10
+docs/relnotes/20.0.0.rst:2410:-  radeonsi: move tessellation shader code into si_shader_llvm_tess.c
+docs/relnotes/20.0.1.rst:131:-  mesa: fix immediate mode with tessellation and varying patch vertices
+docs/relnotes/20.1.0.rst:1355:-  gallivm/nir: add tessellation i/o support.
+docs/relnotes/20.1.0.rst:1357:-  draw: add main tessellation code
+docs/relnotes/20.1.0.rst:1358:-  draw: hook up final bits of tessellation
+docs/relnotes/20.1.0.rst:1360:-  llvmpipe: add support for tessellation shaders
+docs/relnotes/20.1.0.rst:1371:-  draw: collect tessellation invocations statistics
+docs/relnotes/20.1.0.rst:1372:-  llvmpipe: report tessellation shader statistics.
+docs/relnotes/20.1.0.rst:1378:-  draw: fix tessellation stats query
+docs/relnotes/20.1.0.rst:1400:-  draw/tess: free tessellation control shader i/o memory.
+docs/relnotes/20.1.0.rst:2938:-  mesa: fix immediate mode with tessellation and varying patch vertices
+docs/relnotes/20.1.0.rst:3046:-  radeonsi: set better tessellation tunables on gfx9 and gfx10
+docs/relnotes/20.1.0.rst:3907:-  radv: use better tessellation tunables on GFX9+
+docs/relnotes/20.1.0.rst:4157:-  aco: Setup tessellation control shader variables.
+docs/relnotes/20.1.0.rst:4159:-  aco: Implement load_primitive_id for tessellation shaders.
+docs/relnotes/20.1.0.rst:4161:-  aco: Implement load_invocation_id for tessellation control shaders.
+docs/relnotes/20.1.0.rst:4162:-  aco: Implement control_barrier for tessellation control shaders.
+docs/relnotes/20.1.0.rst:4165:-  aco: Setup correct HW stages when tessellation is used.
+docs/relnotes/20.1.0.rst:4172:-  aco: Refactor load_per_vertex_input in preparation for tessellation.
+docs/relnotes/20.1.0.rst:4173:-  aco: Refactor VS output stores in preparation for tessellation.
+docs/relnotes/20.1.0.rst:4176:-  aco: Implement tessellation control shader input/output.
+docs/relnotes/20.1.0.rst:4177:-  aco: Store VS outputs correctly when tessellation is used.
+docs/relnotes/20.1.0.rst:4179:-  radv: Enable ACO for tessellation control shaders.
+docs/relnotes/20.1.0.rst:4180:-  aco: Setup tessellation evaluation shader variables.
+docs/relnotes/20.1.1.rst:73:-  llvmpipe: do not enable tessellation shader without llvm coroutines
+docs/relnotes/20.1.9.rst:38:- \[RADV\] Problems reading primitive ID in fragment shader after tessellation
+docs/relnotes/20.2.0.rst:92:- [RADV] Problems reading primitive ID in fragment shader after tessellation
+docs/relnotes/20.2.0.rst:1012:- turnip: Lower shaders for tessellation
+docs/relnotes/20.2.0.rst:1019:- turnip: Force sysmem for tessellation
+docs/relnotes/20.2.0.rst:1021:- turnip: Enable tessellationShader physical device feature
+docs/relnotes/20.2.0.rst:1060:- llvmpipe: do not enable tessellation shader without llvm coroutines support
+docs/relnotes/20.2.0.rst:1340:- draw/tess: free tessellation control shader i/o memory.
+docs/relnotes/20.2.0.rst:2959:- nir: Fix divergence analysis for tessellation input/outputs
+docs/relnotes/20.2.0.rst:3338:- radeonsi: add a debug option to enable NGG culling for tessellation
+docs/relnotes/20.2.0.rst:3572:- nir: allow lower_psiz_mov to run in tessellation stages
+docs/relnotes/20.2.0.rst:4472:- radv: remove unnecessary radv_tessellation_state::num_patches
+docs/relnotes/20.2.0.rst:4477:- radv: remove unnecessary radv_tessellation_state::lds_size
+docs/relnotes/20.2.0.rst:4478:- radv: clean up tessellation state emission
+docs/relnotes/21.0.0.rst:2479:- doc/features: mark off tessellation for zink
+docs/relnotes/21.0.0.rst:2487:- zink: require KHR_maintenance2 for tessellation and set bottom-left origin
+docs/relnotes/21.0.0.rst:2814:- radv: correctly enable WGP_MODE for tessellation control
+docs/relnotes/21.1.5.rst:68:- draw: fix tessellation output vertex size calculation
+docs/relnotes/21.3.0.rst:1726:- tu: allow dynamic primitive topology with tessellation
+docs/relnotes/22.0.0.rst:443:- iris: Enable tessellation redistribution
+docs/relnotes/22.0.0.rst:444:- anv: Enable tessellation redistribution
+docs/relnotes/22.0.0.rst:864:- zink/ci: Add GL4.6 tessellation flake
+docs/relnotes/22.0.0.rst:1081:- mesa/\*: use an internal enum for tessellation primitive types.
+docs/relnotes/22.0.0.rst:2221:- microsoft/compiler: Add mapping from MESA_SHADER_* to DXIL_*_SHADER for tessellation
+docs/relnotes/22.0.0.rst:2313:- intel/genxml: Update genxml to support tessellation/geometry distribution
+docs/relnotes/22.1.0.rst:1006:- zink: fix tessellation shader key matching.
+docs/relnotes/22.1.0.rst:3182:- radv: allow to force per-vertex VRS in the tessellation stage
+docs/relnotes/22.1.3.rst:65:- tu: Fix linemode for tessellation with isolines
+docs/relnotes/22.1.5.rst:36:- anv: KHR-GL46.tessellation_shader.single.xfb_captures_data_from_correct_stage fails on TGL
+docs/relnotes/22.3.3.rst:155:- radv: fix re-emitting tessellation domain origin when it's dynamic
+docs/relnotes/23.2.1.rst:74:- KHR-GLES31.core.texture_cube_map_array.image_op_tessellation_evaluation_sh fail on GFX12+
+docs/relnotes/23.2.1.rst:2247:- intel/genxml: align some fields on gen9/11/12/125 with media driver.
+docs/relnotes/23.2.1.rst:2248:- intel/genxml: add a command VD_CONTROL_STATE to gen12/125
+docs/relnotes/24.0.0.rst:321:- asahi: Add XML for hw tessellation
+docs/relnotes/24.0.0.rst:1742:- nak/nir: Lower tessellation and geometry I/O
+docs/relnotes/24.0.0.rst:1744:- nak: NVIDIA calls them tessellation init shaders
+docs/relnotes/24.0.0.rst:1751:- nak,nvk: Plumb through tessellation info
+docs/relnotes/24.0.0.rst:2245:- nvk: Support extended dynamic state for tessellation domain origin
+docs/relnotes/24.0.3.rst:173:- iris: Fix tessellation evaluation shaders that use scratch
+docs/relnotes/24.1.2.rst:190:- radeonsi: fix assert triggered on gfx6 after the tessellation update
+docs/relnotes/25.0.0.rst:246:- llvmpipe: spec\@arb_tessellation_shader\@execution\@gs-primitiveid-instanced is fixed
+docs/relnotes/25.0.0.rst:247:- zink: spec\@arb_tessellation_shader\@execution\@gs-primitiveid-instanced is fixed
+docs/relnotes/25.0.0.rst:3008:- radeonsi: don't set BREAK_PRIMGRP/WAVE_AT_EOI when tessellation is disabled
+docs/relnotes/25.1.0.rst:252:- draw: fix gl_PrimitiveID in tessellation
+docs/relnotes/25.1.0.rst:347:- libagx: fix ia_primitives with tessellation
+docs/relnotes/25.1.0.rst:476:- hk: fix tessellation + clipper queries
+docs/relnotes/25.2.6.rst:133:- winsys/radeon: fix completely broken tessellation for gfx6-7
+docs/relnotes/25.3.0.rst:3218:- nir: add a new intrinsic for load dynamic tessellation config
+docs/relnotes/25.3.0.rst:3221:- brw: add support for separate tessellation shader compilation
+docs/relnotes/25.3.0.rst:3222:- anv: prep work for separate tessellation shaders
+docs/relnotes/25.3.0.rst:3282:- brw: handle GLSL/GLSL tessellation parameters
+docs/relnotes/25.3.0.rst:3526:- winsys/radeon: fix completely broken tessellation for gfx6-7
+docs/relnotes/25.3.0.rst:3777:- gallium: Do not flush subnormals during tessellation.
+docs/relnotes/25.3.0.rst:4824:- radv: add radv_cmd_set_tessellation_domain_origin()
+docs/relnotes/25.3.0.rst:4901:- radv: pre-compute tessellation num patches/lds size earlier
+docs/relnotes/25.3.0.rst:5491:- radv: Don't set SWITCH_ON_EOI without tessellation
+docs/relnotes/26.1.0.rst:307:- kk: Rework draw recording for easier addition of stages like tessellation
+docs/relnotes/20.3.0.rst:135:- \[RADV\] Problems reading primitive ID in fragment shader after tessellation
+docs/relnotes/20.3.5.rst:236:- radv: correctly enable WGP_MODE for tessellation control
+docs/relnotes/21.1.0.rst:219:- turnip: dEQP-VK.tessellation.invariance.outer_triangle_set.quads_fractional_odd_spacing failure
+docs/relnotes/21.1.0.rst:1532:- lavapipe: handle tessellation domain winding
+docs/relnotes/21.1.0.rst:4151:- zink: relax tessellation shader reqs
+docs/relnotes/21.1.0.rst:4738:- radv: correctly enable WGP_MODE for tessellation control
+docs/relnotes/21.1.0.rst:5371:- nir: Add tessellation related AMD-specific intrinsics.
+docs/relnotes/21.1.0.rst:5374:- aco: Implement the new tessellation I/O related NIR intrinsics.
+docs/relnotes/21.1.0.rst:5377:- ac/llvm: Implement the new tessellation intrinsics.
+docs/relnotes/21.2.0.rst:1813:- draw: fix tessellation output vertex size calculation
+docs/relnotes/21.2.0.rst:3153:- draw: Plug leak when combining tessellation with primitive assembly.
+docs/relnotes/22.2.0.rst:125:- anv: KHR-GL46.tessellation_shader.single.xfb_captures_data_from_correct_stage fails on TGL
+docs/relnotes/22.2.0.rst:1338:- tu: Fix linemode for tessellation with isolines
+docs/relnotes/22.2.0.rst:3862:- radeonsi: align the tessellation ring address to 2MB
+docs/relnotes/22.2.0.rst:3930:- radeonsi/gfx11: emit SQ_NON_EVENT for tessellation at the end of IBs
+docs/relnotes/22.2.0.rst:5492:- radv: reduce radv_tessellation_info::patch_control_points to 8-bit
+docs/relnotes/22.3.0.rst:91:- !19259 broke some piglit arb_tessellation_shader tests with radeonsi if TCS passthrough shader is cached
+docs/relnotes/22.3.0.rst:101:- freedreno/a6xx: spec@arb_tessellation_shader@execution@tess-instance-id fail
+docs/relnotes/22.3.0.rst:2468:- vulkan: Add dynamic state for tessellation domain origin
+docs/relnotes/22.3.0.rst:3446:- radeonsi: make the primitive type constant with tessellation
+docs/relnotes/22.3.0.rst:3455:- radeonsi: move patch_vertices-related tessellation updates out of si_draw
+docs/relnotes/22.3.0.rst:4744:- radv: convert radv_tessellation_info to vk_tessellation_state
+docs/relnotes/22.3.0.rst:4957:- radv: add support for dynamic tessellation domain origin
+docs/relnotes/22.3.0.rst:5009:- radv: fix fallback for extreme geometry with tessellation on GFX11
+docs/relnotes/22.3.0.rst:5222:- anv: dynamic state for tessellation domain origin
+docs/relnotes/23.1.0.rst:3301:- radeonsi/gfx11: adjust ACCUM_* fields for tessellation
+docs/relnotes/23.1.0.rst:4741:- radv: adjust ACCUM tessellation fields on GFX11+
+docs/relnotes/23.1.7.rst:41:- KHR-GLES31.core.texture_cube_map_array.image_op_tessellation_evaluation_sh fail on GFX12+
+docs/relnotes/23.3.0.rst:183:- KHR-GLES31.core.texture_cube_map_array.image_op_tessellation_evaluation_sh fail on GFX12+
+docs/relnotes/23.3.0.rst:1197:- tu: Rewrite tessellation modes handling
+docs/relnotes/23.3.0.rst:3060:- nouveau/codegen: Add capability to pre-specify tessellation domain
+docs/relnotes/23.3.0.rst:3079:- nvk: Basic tessellation shader support
+docs/relnotes/23.3.0.rst:3081:- nvk: Enable multiview with tessellation shader
+docs/relnotes/23.3.0.rst:3083:- nvk: Respect tessellation domain origin state
+docs/relnotes/23.3.0.rst:3084:- nvk: Lower io to temporaries for tessellation evaluation nir
+docs/relnotes/23.3.0.rst:3089:- nvk: Do not keep redundant info for tessellation domain
+docs/relnotes/23.3.0.rst:3090:- nouveau/codegen: Do not keep redundant info for tessellation domain
+docs/relnotes/23.3.0.rst:4176:- isl: add Gfx12/12.5 restriction on 3D surfaces & compression
+docs/relnotes/23.3.0.rst:5620:- radv: use the number of VS outputs for computing the tessellation info
+docs/relnotes/24.1.0.rst:305:- asahi: Implement skeleton for tessellation
+docs/relnotes/24.1.0.rst:2976:- spirv2dxil: Trivial fixes for tessellation shaders
+docs/relnotes/24.1.0.rst:2978:- dzn: Fix tessellation shader insertion into PSO desc
+docs/relnotes/24.1.0.rst:3094:- ir3: remove unnecessary tessellation epilogue
+docs/relnotes/24.1.0.rst:3514:- iris: Fix tessellation evaluation shaders that use scratch
+docs/relnotes/24.1.0.rst:4119:- radeonsi: allocate only one set of tessellation rings per device
+docs/relnotes/24.1.0.rst:4121:- radeonsi: program tessellation rings right before draws
+docs/relnotes/24.1.0.rst:5556:- ac: allow to use 64K of LDS for tessellation on GFX9+
+docs/relnotes/24.2.0.rst:1968:- iris,anv/xe2+: Set tessellation redistribution regions per patch to recommended values.
+docs/relnotes/24.2.0.rst:3709:- radeonsi: fix assert triggered on gfx6 after the tessellation update
+docs/relnotes/24.3.0.rst:2281:- nak: Plumb tessellation parameters through ShaderStageInfo
+docs/relnotes/24.3.0.rst:4114:- radeonsi: fix broken tessellation in Unigine Heaven
+docs/relnotes/24.3.0.rst:4249:- svga/ci: triage piglit tessellation failures
+docs/relnotes/24.3.0.rst:4980:- radeonsi/ci: mark \*.tessellation_shader_tessellation.max_in_out_attributes as fixed
+docs/relnotes/25.2.0.rst:341:- hk: fix tessellation + clipper queries
+docs/relnotes/25.2.0.rst:3222:- ac/gpu_info: print tessellation ring info
+docs/relnotes/26.0.0.rst:2428:- brw: Calculate tessellation URB offsets when lowering to URB intrinsics
+docs/relnotes/26.0.0.rst:2594:- brw: handle GLSL/GLSL tessellation parameters
+docs/relnotes/26.0.0.rst:2805:- winsys/radeon: fix completely broken tessellation for gfx6-7
+docs/relnotes/26.0.0.rst:3923:- radv: support more tessellation parameters with TCS for ESO unlinked shaders
+docs/relnotes/26.1.2.rst:160:- brw: Fix URB read length for tessellation evaluation shaders
+docs/sourcetree.rst:127:            tessellation shaders
+docs/vulkan/graphics-state.rst:245:.. c:autostruct:: vk_tessellation_state
+
+=== BUILDS ===
+/root/SPIRV-Tools-g720-glibc/build-g720-wrapper
+/root/SPIRV-Tools-g720-glibc/build_overrides
+/root/bionic-vulkan-wrapper-src/build-support
+/root/box64/build
+/root/build
+/root/build-bionic-libdrm-20260825-214209
+/root/build-bionic-meson-20260825-213645
+/root/build-g720-bionic-20260825-202703
+/root/build-g720-bionic-libdrm-20260825-211551
+/root/build-g720-host-pan-compiler-0521a325
+/root/build-g720-host-pan-compiler-clean-0521a325
+/root/build-g720-kbase-android-bionic-trial
+/root/build-g720-kbase-android-bionic-trial.before-20260825-193522
+/root/dxvk-g720-lab-src/build.w64
+/root/mesa-bionic-meson-20260825-213645/build-support
+/root/mesa-funnymdzz/build
+/root/mesa-funnymdzz/build-g720-kbase
+/root/mesa-funnymdzz/build-g720-kbase-x11
+/root/mesa-funnymdzz/build-support
+/root/mesa-g720-bionic-20260825-202703/build-support
+/root/mesa/build
+/root/mesa/build-support
+
+=== WORKTREES ===
+/root/mesa-funnymdzz                    0521a325762 [ci]
+/root/mesa-bionic-meson-20260825-213645 0521a325762 (detached HEAD)
+/root/mesa-g720-bionic-20260825-202703  0521a325762 (detached HEAD)
+/root/panvk-main-docs                   ef60b98679b (detached HEAD)
+
+=== RECENT COMMITS ===
+0521a325762 panvk: validate direct libpoly tessellation path on G720
+b2f8cfa0d75 docs: sync G720 tessellation runtime status
+0a742fa22ec panvk/csf: stage direct tessellation VS and TCS
+85b972dd387 panvk/csf: add per-command-buffer poly heap
+cfba9cef269 panvk: add TCS and TES shader plumbing
+65aeaf80726 panfrost/libpan: scope tessellation kernels to CSF architectures
+78880712caa docs: restore upstream README after G720 project status
+3b6014d1348 docs: update G720 kbase project status and tessellation roadmap
+2aef87163bf panfrost/libpan: add poly tessellation precompiled kernels
+8edb5d94746 nir/panfrost: preserve pointer size for precompiled compute variants
+c095a8c6532 panvk/g720: checkpoint current kbase and poly tessellation work
+a6799dbeb02 panvk/kbase: use CSF-reported register count for G720
+8dfd821085a more logging / less spammy
+7d104dbb74a Remove kbase-debug workflows
+d7930c1f44d Add CI build for working prototype
+
+=== END ===
+
+=== LORD EVIDENCE TARGET ===
+MC7_vkCreateDevice_queue_swapchain=PROVEN
+DXVK_max_FL=10_1
+primary_blocker=tessellationShader_false
+no_patch_applied=YES
+gpu_executed_by_this_command=NO
+REAL_RC=0

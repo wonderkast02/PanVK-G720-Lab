@@ -1,0 +1,74 @@
+===== WINLATOR PANVK INSTALL ROOT-CAUSE AUDIT =====
+date=2026-08-26T08:14:28-03:00
+apk=/sdcard/Download/Winlator-Mali-1.1-PanVK-G720-0521a325.apk
+package_expected=com.winlator.mali
+
+===== 1. APK PARSER =====
+AAPT_RC=0
+package: name='com.winlator.mali' versionCode='20' versionName='1.1 Bionic' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'
+sdkVersion:'26'
+targetSdkVersion:'28'
+parsed_package=com.winlator.mali
+
+===== 2. SIGNATURE =====
+APKSIGNER_RC=0
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Number of signers: 1
+V3.0 Signer: certificate SHA-256 digest: 84cde8a88b930f008d48150ef01267ca94a57e88a1fa8f6caa43d5dd0d86d591
+
+===== 3. PAGE SIZE / ZIP ALIGNMENT =====
+device_page_size=4096
+ZIPALIGN_4K_RC=0
+791888452 res/zE.png (OK)
+791888824 res/zM.gif (OK)
+791889996 res/zr.png (OK)
+Verification successful
+ZIPALIGN_16K_RC=0
+791888452 res/zE.png (OK)
+791888824 res/zM.gif (OK)
+791889996 res/zr.png (OK)
+Verification successful
+
+===== 4. NATIVE LIB STORAGE =====
+ 2099504  Defl:N   818001  61% 2026-08-26 10:52 89e869d9  lib/arm64-v8a/libconscrypt_jni.so
+  915592  Defl:N   268052  71% 2026-08-26 10:52 61814407  lib/arm64-v8a/libfakeinput.so
+    4128  Defl:N     1369  67% 2026-08-26 10:52 242b8ba5  lib/arm64-v8a/libfile_redirect_hook.so
+    4440  Defl:N     1476  67% 2026-08-26 10:52 c0c3857e  lib/arm64-v8a/libgsl_alloc_hook.so
+  282232  Defl:N    91460  68% 2026-08-26 10:52 841ae1bf  lib/arm64-v8a/libhook_impl.so
+   34424  Defl:N    14203  59% 2026-08-26 10:52 d2173903  lib/arm64-v8a/libltdl.so
+    4344  Defl:N     1435  67% 2026-08-26 10:52 922992e8  lib/arm64-v8a/libmain_hook.so
+  810520  Defl:N   284993  65% 2026-08-26 10:52 9f7881ff  lib/arm64-v8a/libopenxr_loader.so
+ 1132936  Defl:N   366883  68% 2026-08-26 10:52 d45127a6  lib/arm64-v8a/libpatchelf.so
+  293456  Defl:N    97640  67% 2026-08-26 10:52 61c376f4  lib/arm64-v8a/libpulse.so
+   67416  Defl:N    23326  65% 2026-08-26 10:52 a9476d0e  lib/arm64-v8a/libpulseaudio.so
+  415400  Defl:N   154506  63% 2026-08-26 10:52 790da654  lib/arm64-v8a/libpulsecommon-13.0.so
+  547264  Defl:N   187717  66% 2026-08-26 10:52 da65cf59  lib/arm64-v8a/libpulsecore-13.0.so
+  403392  Defl:N   167179  59% 2026-08-26 10:52 2078a97d  lib/arm64-v8a/libsndfile.so
+  407192  Defl:N   137728  66% 2026-08-26 10:52 d8fff3be  lib/arm64-v8a/libwinlator.so
+  571304  Defl:N   244405  57% 2026-08-26 10:52 ecad7d50  lib/arm64-v8a/libzstd-jni-1.5.2-3.so
+
+===== 5. CORRECT PACKAGE-ID QUERY =====
+PM_LIST_RC=2
+cmd: Failure calling service package: Failed transaction (2147483646)
+CMD_LIST_RC=0
+Error: java.lang.SecurityException: Permission Denial: runListPackages from pm command asks to run as user 999 but is calling from uid u0a492; this requires android.permission.INTERACT_ACROSS_USERS_FULL
+PM_PATH_RC=2
+cmd: Failure calling service package: Failed transaction (2147483646)
+INSTALLED_PACKAGE=NO
+
+===== 6. INSTALLED PACKAGE DETAILS =====
+INSTALLED_PACKAGE_DETAILS=NOT_APPLICABLE
+
+===== 7. CLASSIFICATION =====
+PRIMARY_HYPOTHESIS=NOT_SIGNATURE_CONFLICT_WITH_INSTALLED_COM_WINLATOR_MALI
+APK_CORRUPTION=NOT_SUPPORTED_BY_CURRENT_EVIDENCE
+ALIGNMENT_TEST_VALID=YES
+APK_MODIFIED=NO
+GPU_EXECUTED=NO
+REAL_RC=0
+ROOT_CAUSE_AUDIT=PASS

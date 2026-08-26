@@ -1,0 +1,30 @@
+===== BASELINE =====
+branch=ci
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+tracked_dirty=NO
+worktree_head=0521a3257628e811cfead6b5a9753e9f705e2f31
+===== HOST TOOLS PATH =====
+PATH=/root/panvk-g720-host-tools-clean-0521a325/bin:/usr/lib/llvm-21/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+/root/panvk-g720-host-tools-clean-0521a325/bin/mesa_clc
+/root/panvk-g720-host-tools-clean-0521a325/bin/vtn_bindgen2
+/root/panvk-g720-host-tools-clean-0521a325/bin/panfrost_compile
+===== RECONFIGURE STATIC LIBDRM =====
+MESON_RC=0
+MESON_RESULT=PASS
+===== TARGETED RELINK =====
+NINJA_RC=0
+NINJA_RESULT=PASS
+===== ELF =====
+ 0x000000000000001d (RUNPATH)            Library runpath: [$ORIGIN/../../android_stub]
+ 0x0000000000000001 (NEEDED)             Shared library: [libhardware.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblog.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libnativewindow.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsync.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so]
+ 0x000000000000000e (SONAME)             Library soname: [libvulkan_panfrost.so]
+STATIC_LIBDRM_RELINK_RESULT=PASS
+d357e8a8df4a34a09c5b1ab4085b956a7a2642f4b98a101da4af731eb765ebe6  /root/build-bionic-libdrm-20260825-214209/src/panfrost/vulkan/libvulkan_panfrost.so
+REAL_RC=0
+OVERALL_RESULT=PASS

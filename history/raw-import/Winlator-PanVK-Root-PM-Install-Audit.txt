@@ -1,0 +1,33 @@
+===== WINLATOR PANVK DIRECT PACKAGE MANAGER INSTALL =====
+date=2026-08-26T08:18:54-03:00
+
+===== 1. APK INTEGRITY =====
+apk_sha256=b983880913e212a6f0c7504ab96bc69bca0714f3fcd8d40f3295b0ac6a917059
+expected_sha256=b983880913e212a6f0c7504ab96bc69bca0714f3fcd8d40f3295b0ac6a917059
+APK_HASH=PASS
+
+===== 2. ROOT AVAILABILITY =====
+SU_RC=1
+No su program found on this device. Termux
+does not supply tools for rooting, see e.g.
+http://www.androidcentral.com/root for
+information about rooting Android.
+ROOT_AVAILABLE=NO
+FAIL_STAGE=ROOT_REQUIRED_FOR_DIRECT_PM_DIAGNOSTIC
+
+===== 3. PRE-INSTALL PACKAGE STATE =====
+
+===== 4. STAGE APK FOR PACKAGE MANAGER =====
+
+===== 5. DIRECT PM INSTALL =====
+
+===== 6. FAILURE CLASSIFICATION =====
+
+===== 7. POST-INSTALL STATE =====
+APK_RUNTIME_EXECUTED=NO
+GPU_EXECUTED=NO
+
+===== 8. CLEANUP =====
+ROOT_TEMP_APK_REMOVED=YES
+REAL_RC=20
+DIRECT_PM_INSTALL_AUDIT=FAIL

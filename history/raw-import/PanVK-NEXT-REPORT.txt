@@ -1,0 +1,49 @@
+===== PANVK OFFICIAL WINLATOR DEEP SEARCH =====
+date=2026-08-26T08:33:47-03:00
+expected_sha256=8b50f74b488da1c218448f7238b34ba4b1f44aeaaa01ffb3fb1e8911b8a6a54b
+
+candidate=/data/data/com.termux/files/home/.cache/winlator-mali-panvk-0521a325/Winlator-Mali-1.1-PanVK-G720-0521a325.apk
+size=791980829
+sha256=b983880913e212a6f0c7504ab96bc69bca0714f3fcd8d40f3295b0ac6a917059
+MATCH=NO
+
+candidate=/sdcard/Download/GPU-Agent/system.img
+size=880345088
+sha256=83cc99d3b2618ffe3ed692766bc19c3e94b8f41a8a70d427cf1fb6df7c076e71
+MATCH=NO
+
+candidate=/sdcard/Download/JOGOS/PC/RESIDENT EVIL 2 Opti V4 FIX/gamedata/re_chunk_000.pak.patch_001.pak
+size=838589233
+sha256=d37a9a545c27e3a79b852f86d8d4b68f36740e158b81a20ab0054bb3802ca01f
+MATCH=NO
+
+candidate=/sdcard/Download/JOGOS/PC/RESIDENT EVIL 2 Opti V4 FIX/gamedata/re_chunk_000.pak.patch_002.pak
+size=867030129
+sha256=7c6fc9dc77e1de83f9098b9a50a8ad6b17c7262bf3eb488f933ac8bd7f476dbb
+MATCH=NO
+
+candidate=/sdcard/Download/JOGOS/PC/RESIDENT EVIL 2 Opti V4 FIX/gamedata/re_chunk_000.pak.patch_003.pak
+size=873336871
+sha256=8e17de35509b5e75d6f05e800022b3ab4d8a3f9e51c16f174056755cdb9b2d34
+MATCH=NO
+
+candidate=/sdcard/Download/Winlator-Mali-1.1-Ludashi.apk
+size=789162895
+sha256=f0b3278fa8d1a7607dd29080a6f63ed9e9c39db7ca2231c0d90f23ef28295c1d
+MATCH=NO
+
+candidate=/sdcard/Download/Winlator-Mali-1.1-PanVK-G720-0521a325.apk
+size=791980829
+sha256=b983880913e212a6f0c7504ab96bc69bca0714f3fcd8d40f3295b0ac6a917059
+MATCH=NO
+
+
+===== RESULT =====
+OFFICIAL_BASE_FOUND=NO
+OFFICIAL_BASE_NOT_PRESENT_IN_SEARCHED_STORAGE=YES
+ADB_USED=NO
+ROOT_USED=NO
+APK_MODIFIED=NO
+GPU_EXECUTED=NO
+REAL_RC=10
+DEEP_SEARCH_RESULT=FAIL

@@ -1,0 +1,17 @@
+name: Investigation
+description: Evidence-driven G720/PanVK investigation
+title: "[INV] "
+labels: ["investigation"]
+body:
+- type: textarea
+  id: env
+  attributes: {label: Environment, description: "Device/GPU, PanVK commit, Mesa/DXVK, kernel/Android"}
+  validations: {required: true}
+- type: textarea
+  id: evidence
+  attributes: {label: Observed/expected/reproduction/evidence}
+  validations: {required: true}
+- type: dropdown
+  id: class
+  attributes: {label: Classification, options: [PROVEN, STRONG, OPEN, DISCARDED]}
+  validations: {required: true}

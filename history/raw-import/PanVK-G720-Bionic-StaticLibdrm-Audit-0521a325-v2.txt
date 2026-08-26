@@ -1,0 +1,72 @@
+============================================================
+ PanVK G720 - static libdrm relink + installed ELF audit
+============================================================
+date=2026-08-25T22:04:20-03:00
+
+===== 1. BASELINE =====
+branch=ci
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+wonder_ci=0521a3257628e811cfead6b5a9753e9f705e2f31
+tracked_dirty=NO
+worktree_head=0521a3257628e811cfead6b5a9753e9f705e2f31
+worktree_changed=src/panfrost/vulkan/panvk_device.h
+src/util/u_gralloc/meson.build
+BASELINE_RESULT=PASS
+
+===== 2. CURRENT DRIVER AUDIT =====
+ 0x000000000000001d (RUNPATH)            Library runpath: [$ORIGIN/../../../subprojects/libdrm-2.4.133:$ORIGIN/../../android_stub]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdrm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libhardware.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblog.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libnativewindow.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsync.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so]
+ 0x000000000000000e (SONAME)             Library soname: [libvulkan_panfrost.so]
+
+===== 3. RECONFIGURE LIBDRM STATIC =====
+MESON_RECONFIGURE_RC=1
+FAIL_STAGE=STATIC_LIBDRM_RECONFIGURE
+4:Build dir: /root/build-bionic-libdrm-20260825-214209
+29:mesa-bionic-meson-20260825-213645/meson.build:980:18: ERROR: Program 'mesa_clc' not found or not executable
+31:A full log can be found at /root/build-bionic-libdrm-20260825-214209/meson-logs/meson-log.txt
+--- MESON TAIL ---
+The Meson build system
+Version: 1.10.1
+Source dir: /root/mesa-bionic-meson-20260825-213645
+Build dir: /root/build-bionic-libdrm-20260825-214209
+Build type: cross build
+Project name: mesa
+Project version: 26.3.0-devel
+C compiler for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang (clang 21.0.0 "Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)")
+C linker for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang ld.lld 21.0.0
+C++ compiler for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang++ -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables --start-no-unused-arguments -static-libstdc++ --end-no-unused-arguments (clang 21.0.0 "Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)")
+C++ linker for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang++ -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables --start-no-unused-arguments -static-libstdc++ --end-no-unused-arguments ld.lld 21.0.0
+C compiler for the build machine: cc (gcc 15.2.0 "cc (Ubuntu 15.2.0-16ubuntu1) 15.2.0")
+C linker for the build machine: cc ld.bfd 2.46
+C++ compiler for the build machine: c++ (gcc 15.2.0 "c++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0")
+C++ linker for the build machine: c++ ld.bfd 2.46
+Build machine cpu family: aarch64
+Build machine cpu: aarch64
+Host machine cpu family: aarch64
+Host machine cpu: armv8
+Target machine cpu family: aarch64
+Target machine cpu: armv8
+Checking for size of "void*" : 8 
+mesa-bionic-meson-20260825-213645/meson.build:653: WARNING: cannot auto-detect -mtls-dialect when cross-compiling, using compiler default
+Dependency libglvnd skipped: feature glvnd disabled
+Program glslangValidator found: YES (/usr/bin/glslangValidator)
+Dependency libva skipped: feature gallium-va disabled
+Program mesa_clc found: NO
+
+mesa-bionic-meson-20260825-213645/meson.build:980:18: ERROR: Program 'mesa_clc' not found or not executable
+
+A full log can be found at /root/build-bionic-libdrm-20260825-214209/meson-logs/meson-log.txt
+
+============================================================
+REAL_RC=20
+OVERALL_RESULT=FAIL
+MAIN_SOURCE_PATCHED=NO
+GPU_EXECUTED=NO
+============================================================

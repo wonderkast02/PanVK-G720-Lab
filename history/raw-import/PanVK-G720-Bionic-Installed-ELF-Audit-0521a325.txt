@@ -1,0 +1,22 @@
+===== BASELINE =====
+branch=ci
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+tracked_dirty=NO
+===== PREINSTALL ELF =====
+ 0x000000000000001d (RUNPATH)            Library runpath: [$ORIGIN/../../android_stub]
+ 0x0000000000000001 (NEEDED)             Shared library: [libhardware.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblog.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libnativewindow.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsync.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so]
+ 0x000000000000000e (SONAME)             Library soname: [libvulkan_panfrost.so]
+===== MESON INSTALL =====
+INSTALL_RC=1
+FAIL_STAGE=MESON_INSTALL
+Installing subprojects/libdrm-2.4.133/libdrm.a to /root/panvk-bionic-final-stage/usr/lib
+
+ERROR: File 'subprojects/libdrm-2.4.133/nouveau/libdrm_nouveau.a' could not be found
+REAL_RC=1
+OVERALL_RESULT=FAIL

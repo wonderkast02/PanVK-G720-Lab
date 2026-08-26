@@ -1,0 +1,397 @@
+============================================================
+ PanVK G720 - official libdrm fallback + Bionic build
+============================================================
+date=2026-08-25T21:42:08-03:00
+ndk_clang=/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+ndk_root=/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29
+
+===== 1. BASELINE =====
+branch=ci
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+wonder_ci=0521a3257628e811cfead6b5a9753e9f705e2f31
+tracked_dirty=NO
+MAIN_BASELINE_RESULT=PASS
+
+===== 2. REUSE ISOLATED WORKTREE =====
+worktree=/root/mesa-bionic-meson-20260825-213645
+worktree_head=0521a3257628e811cfead6b5a9753e9f705e2f31
+worktree_changed=src/util/u_gralloc/meson.build
+UGRALLOC_ISOLATION_RESULT=PASS
+
+===== 3. HOST TOOLS + NDK =====
+/root/panvk-g720-host-tools-clean-0521a325/bin/mesa_clc
+/root/panvk-g720-host-tools-clean-0521a325/bin/vtn_bindgen2
+/root/panvk-g720-host-tools-clean-0521a325/bin/panfrost_compile
+Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)
+Target: aarch64-unknown-linux-android35
+Thread model: posix
+InstalledDir: /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin
+HOST_AND_NDK_RESULT=PASS
+
+===== 4. CROSS FILE =====
+[binaries]
+c = '/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang'
+cpp = ['/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang++', '-fno-exceptions', '-fno-unwind-tables', '-fno-asynchronous-unwind-tables', '--start-no-unused-arguments', '-static-libstdc++', '--end-no-unused-arguments']
+ar = '/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'
+strip = '/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip'
+nm = '/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm'
+c_ld = 'lld'
+cpp_ld = 'lld'
+
+[host_machine]
+system = 'android'
+cpu_family = 'aarch64'
+cpu = 'armv8'
+endian = 'little'
+
+===== 5. MESON: OFFICIAL DRM FALLBACK =====
+MESON_RC=0
+MESON_RESULT=PASS
+Build dir: /root/build-bionic-libdrm-20260825-214209
+Program mesa_clc found: YES (/root/panvk-g720-host-tools-clean-0521a325/bin/mesa_clc)
+Program vtn_bindgen2 found: YES (/root/panvk-g720-host-tools-clean-0521a325/bin/vtn_bindgen2)
+Run-time dependency libdrm found: NO (tried pkgconfig and cmake)
+Looking for a fallback subproject for the dependency libdrm
+Downloading libdrm source from https://dri.freedesktop.org/libdrm/libdrm-2.4.133.tar.xz
+Executing subproject libdrm 
+libdrm| Project name: libdrm
+libdrm| Project version: 2.4.133
+libdrm| C compiler for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang (clang 21.0.0 "Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)")
+libdrm| C linker for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang ld.lld 21.0.0
+libdrm| C compiler for the build machine: cc (gcc 15.2.0 "cc (Ubuntu 15.2.0-16ubuntu1) 15.2.0")
+libdrm| C linker for the build machine: cc ld.bfd 2.46
+libdrm| Dependency threads found: YES unknown (cached)
+libdrm| Checking for function "secure_getenv" : NO
+libdrm| Program symbols-check.py found: YES (/usr/bin/python3 /root/mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/symbols-check.py)
+libdrm| Program nm found: YES
+libdrm| Program python3 found: YES (/usr/bin/python3)
+libdrm| Run-time dependency atomic_ops found: NO (tried pkgconfig and cmake)
+libdrm| Checking if "Intel Atomics" links: YES
+libdrm| Dependency pciaccess skipped: feature intel disabled
+libdrm| Checking for function "dlsym" : YES
+libdrm| Checking for function "clock_gettime" : YES
+libdrm| Checking if "sys/sysctl.h works" compiles: NO
+libdrm| Check usable header "sys/select.h" : YES
+libdrm| Check usable header "alloca.h" : YES
+libdrm| Header "sys/sysmacros.h" has symbol "major" : YES (cached)
+libdrm| Header "sys/sysmacros.h" has symbol "minor" : YES (cached)
+libdrm| Header "sys/sysmacros.h" has symbol "makedev" : YES (cached)
+libdrm| Header "sys/mkdev.h" has symbol "major" : NO (cached)
+libdrm| Checking for function "open_memstream" : YES
+libdrm| Compiler for C supports arguments -Wsign-compare: YES
+libdrm| Compiler for C supports arguments -Werror=undef: YES
+libdrm| Compiler for C supports arguments -Werror=implicit-function-declaration: YES (cached)
+libdrm| Compiler for C supports arguments -Wpointer-arith: YES
+libdrm| Compiler for C supports arguments -Wwrite-strings: YES
+libdrm| Compiler for C supports arguments -Wstrict-prototypes: YES
+libdrm| Compiler for C supports arguments -Wmissing-prototypes: YES
+libdrm| Compiler for C supports arguments -Wmissing-declarations: YES
+libdrm| Compiler for C supports arguments -Wnested-externs: YES
+libdrm| Compiler for C supports arguments -Wpacked: YES
+libdrm| Compiler for C supports arguments -Wswitch-enum: YES
+libdrm| Compiler for C supports arguments -Wmissing-format-attribute: YES
+libdrm| Compiler for C supports arguments -Wstrict-aliasing=2: YES
+libdrm| Compiler for C supports arguments -Winit-self: YES
+libdrm| Compiler for C supports arguments -Winline: YES
+libdrm| Compiler for C supports arguments -Wshadow: YES
+libdrm| Compiler for C supports arguments -Wdeclaration-after-statement: YES
+libdrm| Compiler for C supports arguments -Wold-style-definition: YES
+libdrm| Compiler for C supports arguments -Wno-unused-parameter: YES
+libdrm| Compiler for C supports arguments -Wno-attributes: YES
+libdrm| Compiler for C supports arguments -Wno-long-long: YES
+libdrm| Compiler for C supports arguments -Wno-missing-field-initializers: YES (cached)
+libdrm| Run-time dependency cairo found: NO (tried pkgconfig and cmake)
+libdrm| Run-time dependency valgrind found: NO (tried pkgconfig)
+libdrm| Program rst2man rst2man.py found: NO
+libdrm| Compiler for C supports function attribute visibility:hidden: YES (cached)
+libdrm| Configuring config.h using configuration
+libdrm| Found pkg-config: NO
+libdrm| Build targets in project: 19
+libdrm| Subproject libdrm finished.
+Dependency libdrm found: YES 2.4.133 (overridden)
+Build targets in project: 200
+libdrm 2.4.133
+  Subprojects
+    libdrm              : YES
+    Cross files         : /tmp/panvk-bionic-libdrm.ini
+    allow-fallback-for  : libdrm
+
+===== 6. NINJA =====
+NINJA_RC=1
+NINJA_RESULT=FAIL
+FAIL_STAGE=NINJA
+1200:FAILED: [code=1] src/panfrost/vulkan/libvulkan_panfrost.so 
+1202:ld.lld: error: undefined symbol: panthor_kmod_get_csif_props
+1211:ld.lld: error: undefined symbol: panthor_kmod_get_flush_id
+1219:clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+--- NINJA TAIL ---
+[940/1131] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_event.c.o
+[941/1131] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_instr.c.o
+[942/1131] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_precomp.c.o
+[943/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/meson-generated_.._.._libpan_libpan_shaders_v14.c.o
+[944/1131] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_gpu_queue.c.o
+[945/1131] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_utrace.c.o
+[946/1131] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_query.c.o
+[947/1131] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_cmd_draw.c.o
+[948/1131] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/csf_panvk_vX_exception_handler.c.o
+[949/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_dispatch.c.o
+[950/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_desc_state.c.o
+[951/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_draw.c.o
+[952/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_buffer_view.c.o
+[953/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_frame_shaders.c.o
+[954/1131] Compiling C++ object src/panfrost/vulkan/libpanvk_v14.a.p/meson-generated_.._.._libpan_libpan_v14.cpp.o
+[955/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_blend.c.o
+[956/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_descriptor_set_layout.c.o
+[957/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_device.c.o
+[958/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_precomp_cache.c.o
+[959/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_physical_device.c.o
+[960/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_descriptor_set.c.o
+[961/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_push_constant.c.o
+[962/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_cmd_meta.c.o
+[963/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_sampler.c.o
+[964/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_nir_lower_input_attachment_loads.c.o
+[965/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_nir_lower_descriptors.c.o
+[966/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_query_pool.c.o
+[967/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_image_view.c.o
+[968/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_cond_render.c.o
+[969/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_buffer.c.o
+[970/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_dispatch.c.o
+[971/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_xfb.c.o
+[972/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_event.c.o
+[973/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_shader.c.o
+[974/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_precomp.c.o
+[975/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_event.c.o
+[976/1131] Generating symbol file subprojects/libdrm-2.4.133/nouveau/libdrm_nouveau.so.p/libdrm_nouveau.so.symbols
+[977/1131] Compiling C object subprojects/libdrm-2.4.133/radeon/libdrm_radeon.so.p/radeon_bo_gem.c.o
+[978/1131] Compiling C object subprojects/libdrm-2.4.133/radeon/libdrm_radeon.so.p/radeon_cs_gem.c.o
+[979/1131] Compiling C object subprojects/libdrm-2.4.133/radeon/libdrm_radeon.so.p/radeon_cs_space.c.o
+[980/1131] Compiling C object subprojects/libdrm-2.4.133/radeon/libdrm_radeon.so.p/radeon_bo.c.o
+[981/1131] Compiling C object subprojects/libdrm-2.4.133/radeon/libdrm_radeon.so.p/radeon_cs.c.o
+[982/1131] Compiling C object subprojects/libdrm-2.4.133/radeon/libdrm_radeon.so.p/radeon_surface.c.o
+[983/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_instr.c.o
+[984/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/freedreno_device.c.o
+[985/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_utrace.c.o
+[986/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_query.c.o
+[987/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/freedreno_bo_cache.c.o
+[988/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/freedreno_bo.c.o
+[989/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_gpu_queue.c.o
+[990/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/freedreno_ringbuffer.c.o
+[991/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/msm_msm_bo.c.o
+[992/1131] Linking static target subprojects/libdrm-2.4.133/tests/util/libutil.a
+[993/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_cmd_draw.c.o
+[994/1131] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/csf_panvk_vX_exception_handler.c.o
+[995/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/freedreno_pipe.c.o
+[996/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/msm_msm_ringbuffer.c.o
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/freedreno/msm/msm_ringbuffer.c:412:20: warning: format specifies type 'unsigned long' but the argument has type '__u64' (aka 'unsigned long long') [-Wformat]
+  410 |                         ERROR_MSG("    reloc[%d]: submit_offset=%u, or=%08x, shift=%d, reloc_idx=%u"
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  411 |                                         ", reloc_offset=%"PRIu64, j, r->submit_offset, r->or, r->shift,
+      |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  412 |                                         r->reloc_idx, r->reloc_offset);
+      |                                         ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/freedreno/freedreno_priv.h:194:7: note: expanded from macro 'ERROR_MSG'
+  193 |                 do { drmMsg("[E] " fmt " (%s:%d)\n", \
+      |                                    ~~~
+  194 |                                 ##__VA_ARGS__, __FUNCTION__, __LINE__); } while (0)
+      |                                   ^~~~~~~~~~~
+1 warning generated.
+[997/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/msm_msm_pipe.c.o
+[998/1131] Compiling C object subprojects/libdrm-2.4.133/tests/modeprint/modeprint.p/modeprint.c.o
+[999/1131] Compiling C object subprojects/libdrm-2.4.133/tests/proptest/proptest.p/proptest.c.o
+[1000/1131] Compiling C object subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so.p/msm_msm_device.c.o
+[1001/1131] Compiling C object subprojects/libdrm-2.4.133/tests/radeon/radeon_ttm.p/rbo.c.o
+[1002/1131] Compiling C object subprojects/libdrm-2.4.133/tests/modetest/modetest.p/buffers.c.o
+[1003/1131] Compiling C object subprojects/libdrm-2.4.133/tests/vbltest/vbltest.p/vbltest.c.o
+[1004/1131] Compiling C object subprojects/libdrm-2.4.133/tests/modetest/modetest.p/cursor.c.o
+[1005/1131] Compiling C object subprojects/libdrm-2.4.133/tests/radeon/radeon_ttm.p/radeon_ttm.c.o
+[1006/1131] Compiling C object subprojects/libdrm-2.4.133/tests/etnaviv/etnaviv_cmd_stream_test.p/etnaviv_cmd_stream_test.c.o
+[1007/1131] Generating symbol file subprojects/libdrm-2.4.133/etnaviv/libdrm_etnaviv.so.p/libdrm_etnaviv.so.symbols
+[1008/1131] Compiling C object subprojects/libdrm-2.4.133/tests/etnaviv/etnaviv_2d_test.p/write_bmp.c.o
+[1009/1131] Compiling C object subprojects/libdrm-2.4.133/tests/modetest/modetest.p/modetest.c.o
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/modetest/modetest.c:2423:4: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+ 2423 |                         getchar();
+      |                         ^~~~~~~
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/modetest/modetest.c:2474:4: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+ 2474 |                         getchar();
+      |                         ^~~~~~~
+2 warnings generated.
+[1010/1131] Compiling C object subprojects/libdrm-2.4.133/tests/etnaviv/etnaviv_bo_cache_test.p/etnaviv_bo_cache_test.c.o
+[1011/1131] Linking static target src/c11/impl/libmesa_util_c11.a
+[1012/1131] Compiling C object subprojects/libdrm-2.4.133/tests/etnaviv/etnaviv_2d_test.p/etnaviv_2d_test.c.o
+[1013/1131] Compiling C object subprojects/libdrm-2.4.133/tests/hash.p/hash.c.o
+[1014/1131] Compiling C object subprojects/libdrm-2.4.133/tests/drmsl.p/drmsl.c.o
+[1015/1131] Compiling C object subprojects/libdrm-2.4.133/tests/nouveau/threaded.p/threaded.c.o
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/nouveau/threaded.c:130:6: warning: variable 't1' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+  130 |         if (!err) {
+      |             ^~~~
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/nouveau/threaded.c:135:15: note: uninitialized use occurs here
+  135 |         pthread_join(t1, NULL);
+      |                      ^~
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/nouveau/threaded.c:130:2: note: remove the 'if' if its condition is always true
+  130 |         if (!err) {
+      |         ^~~~~~~~~
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/nouveau/threaded.c:81:14: note: initialize the variable 't1' to silence this warning
+   81 |         pthread_t t1, t2;
+      |                     ^
+      |                      = 0
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/nouveau/threaded.c:130:6: warning: variable 't2' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+  130 |         if (!err) {
+      |             ^~~~
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/nouveau/threaded.c:136:15: note: uninitialized use occurs here
+  136 |         pthread_join(t2, NULL);
+      |                      ^~
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/nouveau/threaded.c:130:2: note: remove the 'if' if its condition is always true
+  130 |         if (!err) {
+      |         ^~~~~~~~~
+../mesa-bionic-meson-20260825-213645/subprojects/libdrm-2.4.133/tests/nouveau/threaded.c:81:18: note: initialize the variable 't2' to silence this warning
+   81 |         pthread_t t1, t2;
+      |                         ^
+      |                          = 0
+2 warnings generated.
+[1016/1131] Linking static target src/util/u_gralloc/lib_mesa_u_gralloc.a
+[1017/1131] Linking static target src/util/blake3/libblake3.a
+[1018/1131] Linking static target src/util/libmesa_util_simd.a
+[1019/1131] Generating symbol file src/android_stub/libnativewindow.so.p/libnativewindow.so.symbols
+[1020/1131] Generating symbol file src/android_stub/libsync.so.p/libsync.so.symbols
+[1021/1131] Linking static target src/util/libxmlconfig.a
+[1022/1131] Linking static target src/util/libmesa_util.a
+[1023/1131] Linking static target src/compiler/libcompiler.a
+[1024/1131] Compiling C object subprojects/libdrm-2.4.133/tests/drmdevice.p/drmdevice.c.o
+[1025/1131] Generating symbol file src/android_stub/liblog.so.p/liblog.so.symbols
+[1026/1131] Linking static target src/compiler/spirv/libvtn.a
+[1027/1131] Linking static target src/poly/nir/liblibpoly_nir.a
+[1028/1131] Linking static target src/vulkan/util/libvulkan_util.a
+[1029/1131] Linking static target src/vulkan/runtime/libvulkan_runtime.a
+[1030/1131] Linking static target src/vulkan/runtime/libvulkan_instance.a
+[1031/1131] Generating symbol file src/android_stub/libhardware.so.p/libhardware.so.symbols
+[1032/1131] Linking static target src/vulkan/runtime/libvulkan_lite_runtime.a
+[1033/1131] Linking static target src/vulkan/wsi/libvulkan_wsi.a
+[1034/1131] Linking static target src/panfrost/shared/libpanfrost_shared.a
+[1035/1131] Linking static target src/panfrost/model/libpanfrost_model_lib.a
+[1036/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v4.a
+[1037/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v5.a
+[1038/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v6.a
+[1039/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v7.a
+[1040/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v9.a
+[1041/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v10.a
+[1042/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v12.a
+[1043/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v13.a
+[1044/1131] Linking static target src/panfrost/genxml/libpandecode-arch-v14.a
+[1045/1131] Linking static target src/panfrost/genxml/libpanfrost_decode.a
+[1046/1131] Linking static target src/panfrost/lib/kmod/libpankmod_lib.a
+[1047/1131] Linking static target src/panfrost/lib/libpan-format-v5.a
+[1048/1131] Linking static target src/panfrost/lib/libpan-format-v6.a
+[1049/1131] Linking static target src/panfrost/lib/libpan-format-v7.a
+[1050/1131] Linking static target src/panfrost/lib/libpan-format-v9.a
+[1051/1131] Linking static target src/panfrost/lib/libpan-format-v10.a
+[1052/1131] Linking static target src/panfrost/lib/libpan-format-v12.a
+[1053/1131] Linking static target src/panfrost/lib/libpan-format-v13.a
+[1054/1131] Linking static target src/panfrost/lib/libpan-format-v14.a
+[1055/1131] Linking static target src/panfrost/lib/libpan-arch-v4.a
+[1056/1131] Linking static target src/panfrost/lib/libpan-arch-v5.a
+[1057/1131] Linking static target src/panfrost/lib/libpan-arch-v6.a
+[1058/1131] Linking static target src/panfrost/lib/libpan-arch-v7.a
+[1059/1131] Linking static target src/panfrost/lib/libpan-arch-v9.a
+[1060/1131] Linking static target src/panfrost/lib/libpan-arch-v10.a
+[1061/1131] Linking static target src/panfrost/lib/libpan-arch-v12.a
+[1062/1131] Linking static target src/panfrost/lib/libpan-arch-v13.a
+[1063/1131] Linking static target src/panfrost/lib/libpan-arch-v14.a
+[1064/1131] Linking static target src/panfrost/lib/libpanfrost_lib.a
+[1065/1131] Linking static target src/panfrost/compiler/bifrost/valhall/libpanfrost_valhall_disasm.a
+[1066/1131] Linking static target src/panfrost/compiler/bifrost/libpanfrost_bifrost_disasm.a
+[1067/1131] Linking static target src/compiler/nir/libnir.a
+[1068/1131] Linking static target src/panfrost/compiler/midgard/libpanfrost_midgard_disasm.a
+[1069/1131] Linking static target src/panfrost/compiler/midgard/libpanfrost_midgard.a
+[1070/1131] Linking static target src/panfrost/compiler/libpanfrost_compiler.a
+[1071/1131] Linking static target src/panfrost/compiler/bifrost/libpanfrost_bifrost.a
+[1072/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g51.c.o
+[1073/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g52.c.o
+[1074/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g715.c.o
+[1075/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g710.c.o
+[1076/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g31.c.o
+[1077/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g71.c.o
+[1078/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g720.c.o
+[1079/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g1.c.o
+[1080/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g76.c.o
+[1081/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g72.c.o
+[1082/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g78.c.o
+[1083/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g77.c.o
+[1084/1131] Linking static target src/panfrost/vulkan/libpanvk_v6.a
+[1085/1131] Linking static target src/panfrost/vulkan/libpanvk_v7.a
+[1086/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_g725.c.o
+[1087/1131] Linking static target src/panfrost/vulkan/libpanvk_v10.a
+[1088/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_t760.c.o
+[1089/1131] Linking static target src/panfrost/vulkan/libpanvk_v12.a
+[1090/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_t830.c.o
+[1091/1131] Linking static target src/panfrost/vulkan/libpanvk_v13.a
+[1092/1131] Linking static target src/panfrost/vulkan/libpanvk_v14.a
+[1093/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_t720.c.o
+[1094/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/meson-generated_.._panvk_drirc.c.o
+[1095/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/meson-generated_.._panvk_entrypoints.c.o
+[1096/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_bind_queue.c.o
+[1097/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_buffer.c.o
+[1098/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/meson-generated_.._panvk_tracepoints.c.o
+[1099/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/meson-generated_.._mali_perf_t880.c.o
+[1100/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_cmd_pool.c.o
+[1101/1131] Compiling C object src/panfrost/perf/libpanfrost_perf.a.p/pan_perf.c.o
+[1102/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_async_bind.c.o
+[1103/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_device_memory.c.o
+[1104/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_priv_bo.c.o
+[1105/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_nir_lower_tile_image.c.o
+[1106/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_mempool.c.o
+[1107/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_instance.c.o
+[1108/1131] Linking target subprojects/libdrm-2.4.133/radeon/libdrm_radeon.so
+[1109/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_utrace.c.o
+[1110/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_physical_device.c.o
+[1111/1131] Linking target subprojects/libdrm-2.4.133/freedreno/libdrm_freedreno.so
+[1112/1131] Linking target subprojects/libdrm-2.4.133/tests/modeprint/modeprint
+[1113/1131] Linking target subprojects/libdrm-2.4.133/tests/proptest/proptest
+[1114/1131] Linking target subprojects/libdrm-2.4.133/tests/modetest/modetest
+[1115/1131] Linking target subprojects/libdrm-2.4.133/tests/vbltest/vbltest
+[1116/1131] Linking target subprojects/libdrm-2.4.133/tests/radeon/radeon_ttm
+[1117/1131] Linking target subprojects/libdrm-2.4.133/tests/etnaviv/etnaviv_2d_test
+[1118/1131] Linking target subprojects/libdrm-2.4.133/tests/etnaviv/etnaviv_cmd_stream_test
+[1119/1131] Linking target subprojects/libdrm-2.4.133/tests/etnaviv/etnaviv_bo_cache_test
+[1120/1131] Linking target subprojects/libdrm-2.4.133/tests/nouveau/threaded
+[1121/1131] Linking target subprojects/libdrm-2.4.133/tests/drmsl
+[1122/1131] Linking target subprojects/libdrm-2.4.133/tests/hash
+[1123/1131] Linking static target src/panfrost/perf/libpanfrost_perf.a
+[1124/1131] Linking target subprojects/libdrm-2.4.133/tests/drmdevice
+[1125/1131] Generating src/panfrost/vulkan/panfrost_devenv_icd with a custom command
+[1126/1131] Generating src/panfrost/vulkan/panfrost_icd with a custom command
+[1127/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_wsi.c.o
+[1128/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_image.c.o
+[1129/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_android.c.o
+[1130/1131] Compiling C object src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_host_copy.c.o
+[1131/1131] Linking target src/panfrost/vulkan/libvulkan_panfrost.so
+FAILED: [code=1] src/panfrost/vulkan/libvulkan_panfrost.so 
+/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android35-clang++ -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables --start-no-unused-arguments -static-libstdc++ --end-no-unused-arguments  -o src/panfrost/vulkan/libvulkan_panfrost.so src/panfrost/vulkan/libvulkan_panfrost.so.p/meson-generated_.._panvk_entrypoints.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/meson-generated_.._panvk_tracepoints.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/meson-generated_.._panvk_drirc.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_async_bind.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_bind_queue.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_buffer.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_cmd_pool.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_device_memory.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_host_copy.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_image.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_instance.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_mempool.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_nir_lower_tile_image.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_physical_device.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_priv_bo.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_utrace.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_wsi.c.o src/panfrost/vulkan/libvulkan_panfrost.so.p/panvk_android.c.o -Wl,--as-needed -Wl,--no-undefined -fuse-ld=lld -Wl,-O1 -shared -fPIC -Wl,-soname,libvulkan_panfrost.so -Wl,--whole-archive -Wl,--start-group src/panfrost/vulkan/libpanvk_v6.a src/panfrost/vulkan/libpanvk_v7.a src/panfrost/vulkan/libpanvk_v10.a src/panfrost/vulkan/libpanvk_v12.a src/panfrost/vulkan/libpanvk_v13.a src/panfrost/vulkan/libpanvk_v14.a src/vulkan/runtime/libvulkan_lite_runtime.a src/vulkan/runtime/libvulkan_runtime.a src/vulkan/runtime/libvulkan_instance.a src/vulkan/wsi/libvulkan_wsi.a -Wl,--no-whole-archive -Wl,-plugin-opt=-emulated-tls=0 '-Wl,-rpath,$ORIGIN/../../../subprojects/libdrm-2.4.133:$ORIGIN/../../android_stub' src/panfrost/shared/libpanfrost_shared.a src/util/libmesa_util.a src/util/libmesa_util_simd.a src/util/blake3/libblake3.a src/c11/impl/libmesa_util_c11.a subprojects/libdrm-2.4.133/libdrm.so src/android_stub/libhardware.so src/android_stub/liblog.so src/android_stub/libnativewindow.so src/android_stub/libsync.so src/panfrost/genxml/libpanfrost_decode.a src/panfrost/genxml/libpandecode-arch-v4.a src/compiler/nir/libnir.a src/compiler/libcompiler.a src/panfrost/genxml/libpandecode-arch-v5.a src/panfrost/genxml/libpandecode-arch-v6.a src/panfrost/genxml/libpandecode-arch-v7.a src/panfrost/genxml/libpandecode-arch-v9.a src/panfrost/genxml/libpandecode-arch-v10.a src/panfrost/genxml/libpandecode-arch-v12.a src/panfrost/genxml/libpandecode-arch-v13.a src/panfrost/genxml/libpandecode-arch-v14.a src/panfrost/lib/libpanfrost_lib.a src/panfrost/lib/libpan-format-v5.a src/panfrost/model/libpanfrost_model_lib.a src/panfrost/lib/libpan-format-v6.a src/panfrost/lib/libpan-format-v7.a src/panfrost/lib/libpan-format-v9.a src/panfrost/lib/libpan-format-v10.a src/panfrost/lib/libpan-format-v12.a src/panfrost/lib/libpan-format-v13.a src/panfrost/lib/libpan-format-v14.a src/panfrost/lib/libpan-arch-v4.a src/panfrost/lib/libpan-arch-v5.a src/panfrost/lib/libpan-arch-v6.a src/panfrost/lib/libpan-arch-v7.a src/panfrost/lib/libpan-arch-v9.a src/panfrost/lib/libpan-arch-v10.a src/panfrost/lib/libpan-arch-v12.a src/panfrost/lib/libpan-arch-v13.a src/panfrost/lib/libpan-arch-v14.a src/panfrost/lib/kmod/libpankmod_lib.a src/panfrost/compiler/libpanfrost_compiler.a src/panfrost/compiler/midgard/libpanfrost_midgard.a src/panfrost/compiler/midgard/libpanfrost_midgard_disasm.a src/panfrost/compiler/bifrost/libpanfrost_bifrost.a src/panfrost/compiler/bifrost/libpanfrost_bifrost_disasm.a src/panfrost/compiler/bifrost/valhall/libpanfrost_valhall_disasm.a src/poly/nir/liblibpoly_nir.a src/vulkan/util/libvulkan_util.a src/util/u_gralloc/lib_mesa_u_gralloc.a src/compiler/spirv/libvtn.a src/util/libxmlconfig.a -Wl,--version-script /root/mesa-bionic-meson-20260825-213645/src/vulkan/vulkan-android.sym -Wl,-Bsymbolic -Wl,--gc-sections -Wl,--build-id=sha1 -lm -pthread -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -lz -Wl,--end-group
+ld.lld: error: undefined symbol: panthor_kmod_get_csif_props
+>>> referenced by panvk_vX_device.c
+>>>               libpanvk_v10.a.p/panvk_vX_device.c.o:(panvk_v10_create_device) in archive src/panfrost/vulkan/libpanvk_v10.a
+>>> referenced by panvk_vX_cmd_buffer.c
+>>>               libpanvk_v10.a.p/csf_panvk_vX_cmd_buffer.c.o:(init_cs_builders) in archive src/panfrost/vulkan/libpanvk_v10.a
+>>> referenced by panvk_vX_cmd_draw.c
+>>>               libpanvk_v10.a.p/csf_panvk_vX_cmd_draw.c.o:(panvk_v10_device_draw_context_init) in archive src/panfrost/vulkan/libpanvk_v10.a
+>>> referenced 24 more times
+
+ld.lld: error: undefined symbol: panthor_kmod_get_flush_id
+>>> referenced by panvk_vX_gpu_queue.c
+>>>               libpanvk_v10.a.p/csf_panvk_vX_gpu_queue.c.o:(panvk_v10_gpu_queue_submit) in archive src/panfrost/vulkan/libpanvk_v10.a
+>>> referenced by panvk_vX_gpu_queue.c
+>>>               libpanvk_v10.a.p/csf_panvk_vX_gpu_queue.c.o:(panvk_v10_gpu_queue_submit) in archive src/panfrost/vulkan/libpanvk_v10.a
+>>> referenced by panvk_vX_gpu_queue.c
+>>>               libpanvk_v10.a.p/csf_panvk_vX_gpu_queue.c.o:(panvk_v10_gpu_queue_submit) in archive src/panfrost/vulkan/libpanvk_v10.a
+>>> referenced 13 more times
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+============================================================
+REAL_RC=41
+OVERALL_RESULT=FAIL
+MAIN_SOURCE_PATCHED=NO
+TESSELLATION_CHANGED=NO
+GPU_EXECUTED=NO
+============================================================
+
+PROOT_RC=41

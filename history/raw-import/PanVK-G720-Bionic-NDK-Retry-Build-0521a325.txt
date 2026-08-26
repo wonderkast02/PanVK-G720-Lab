@@ -1,0 +1,444 @@
+============================================================
+ PanVK G720 Bionic - clean NDK retry 2
+============================================================
+date=2026-08-25T20:27:03-03:00
+
+===== 1. BASELINE =====
+branch=ci
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+wonder_ci=0521a3257628e811cfead6b5a9753e9f705e2f31
+tracked_dirty=NO
+BASELINE_RESULT=PASS
+
+===== 2. PRIVATE WORK DIR =====
+drwxr-xr-x+ 2 root root 3452 Aug 25 20:27 /root/.cache/panvk-build
+PRIVATE_WORKDIR_RESULT=PASS
+
+===== 3. NDK TOOLCHAIN =====
+/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang
+/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++
+/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar
+/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip
+/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm
+/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-readelf
+Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)
+Target: aarch64-unknown-linux-android28
+Thread model: posix
+InstalledDir: /data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin
+
+===== 4. CLEAN NDK SMOKE =====
+smoke_compile_rc=0
+--- ELF header ---
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Type:                              DYN (Shared object file)
+  Machine:                           AArch64
+--- dynamic ---
+  0x0000000000000001 (NEEDED)          Shared library: [libdl.so]
+  0x0000000000000001 (NEEDED)          Shared library: [libc.so]
+CLEAN_NDK_SMOKE_RESULT=PASS
+
+===== 5. HOST PRECOMPILERS =====
+/root/panvk-g720-host-tools-clean-0521a325/bin/mesa_clc
+/root/panvk-g720-host-tools-clean-0521a325/bin/vtn_bindgen2
+/root/panvk-g720-host-tools-clean-0521a325/bin/panfrost_compile
+HOST_PRECOMPILERS_RESULT=PASS
+
+===== 6. DETACHED WORKTREE =====
+Preparing worktree (detached HEAD 0521a325762)
+Updating files:   4% (561/13503)Updating files:   5% (676/13503)Updating files:   6% (811/13503)Updating files:   7% (946/13503)Updating files:   8% (1081/13503)Updating files:   9% (1216/13503)Updating files:   9% (1217/13503)Updating files:  10% (1351/13503)Updating files:  11% (1486/13503)Updating files:  12% (1621/13503)Updating files:  13% (1756/13503)Updating files:  13% (1772/13503)Updating files:  14% (1891/13503)Updating files:  15% (2026/13503)Updating files:  16% (2161/13503)Updating files:  17% (2296/13503)Updating files:  17% (2337/13503)Updating files:  18% (2431/13503)Updating files:  19% (2566/13503)Updating files:  20% (2701/13503)Updating files:  21% (2836/13503)Updating files:  21% (2956/13503)Updating files:  22% (2971/13503)Updating files:  23% (3106/13503)Updating files:  24% (3241/13503)Updating files:  25% (3376/13503)Updating files:  26% (3511/13503)Updating files:  26% (3593/13503)Updating files:  27% (3646/13503)Updating files:  28% (3781/13503)Updating files:  29% (3916/13503)Updating files:  30% (4051/13503)Updating files:  30% (4171/13503)Updating files:  31% (4186/13503)Updating files:  32% (4321/13503)Updating files:  33% (4456/13503)Updating files:  34% (4592/13503)Updating files:  35% (4727/13503)Updating files:  35% (4780/13503)Updating files:  36% (4862/13503)Updating files:  37% (4997/13503)Updating files:  38% (5132/13503)Updating files:  39% (5267/13503)Updating files:  39% (5388/13503)Updating files:  40% (5402/13503)Updating files:  41% (5537/13503)Updating files:  42% (5672/13503)Updating files:  43% (5807/13503)Updating files:  44% (5942/13503)Updating files:  44% (5994/13503)Updating files:  45% (6077/13503)Updating files:  46% (6212/13503)Updating files:  47% (6347/13503)Updating files:  48% (6482/13503)Updating files:  48% (6598/13503)Updating files:  49% (6617/13503)Updating files:  50% (6752/13503)Updating files:  51% (6887/13503)Updating files:  52% (7022/13503)Updating files:  53% (7157/13503)Updating files:  53% (7171/13503)Updating files:  54% (7292/13503)Updating files:  55% (7427/13503)Updating files:  56% (7562/13503)Updating files:  56% (7602/13503)Updating files:  57% (7697/13503)Updating files:  58% (7832/13503)Updating files:  59% (7967/13503)Updating files:  60% (8102/13503)Updating files:  61% (8237/13503)Updating files:  61% (8238/13503)Updating files:  62% (8372/13503)Updating files:  63% (8507/13503)Updating files:  64% (8642/13503)Updating files:  65% (8777/13503)Updating files:  66% (8912/13503)Updating files:  66% (8995/13503)Updating files:  67% (9048/13503)Updating files:  68% (9183/13503)Updating files:  69% (9318/13503)Updating files:  70% (9453/13503)Updating files:  71% (9588/13503)Updating files:  72% (9723/13503)Updating files:  73% (9858/13503)Updating files:  74% (9993/13503)Updating files:  75% (10128/13503)Updating files:  75% (10186/13503)Updating files:  76% (10263/13503)Updating files:  77% (10398/13503)Updating files:  78% (10533/13503)Updating files:  79% (10668/13503)Updating files:  80% (10803/13503)Updating files:  81% (10938/13503)Updating files:  82% (11073/13503)Updating files:  83% (11208/13503)Updating files:  84% (11343/13503)Updating files:  85% (11478/13503)Updating files:  85% (11548/13503)Updating files:  86% (11613/13503)Updating files:  87% (11748/13503)Updating files:  88% (11883/13503)Updating files:  89% (12018/13503)Updating files:  90% (12153/13503)Updating files:  91% (12288/13503)Updating files:  92% (12423/13503)Updating files:  93% (12558/13503)Updating files:  94% (12693/13503)Updating files:  94% (12792/13503)Updating files:  95% (12828/13503)Updating files:  96% (12963/13503)Updating files:  97% (13098/13503)Updating files:  98% (13233/13503)Updating files:  99% (13368/13503)Updating files: 100% (13503/13503)Updating files: 100% (13503/13503), done.
+HEAD is now at 0521a325762 panvk: validate direct libpoly tessellation path on G720
+worktree=/root/mesa-g720-bionic-20260825-202703
+worktree_head=0521a3257628e811cfead6b5a9753e9f705e2f31
+
+===== 7. U_GRALLOC SOURCE AUDIT =====
+# Mesa 3-D graphics library
+#
+# Copyright (C) 2022 Roman Stratiienko (r.stratiienko@gmail.com)
+# SPDX-License-Identifier: MIT
+
+c_args_for_u_gralloc = []
+cpp_args_for_u_gralloc = []
+options_for_u_gralloc = []
+deps_for_u_gralloc = [
+  dependency('gralloctypes'),
+  dependency('hidlbase'),
+  dependency('utils'),
+  dependency('ui'), # for gralloc5
+  dep_android
+]
+
+files_u_gralloc = files(
+  'u_gralloc.c',
+  'u_gralloc_internal.c',
+  'u_gralloc_fallback.c',
+  'u_gralloc_cros_api.c',
+  'u_gralloc_libdrm.c',
+  'u_gralloc_qcom.c',
+)
+
+if dep_android_ui.found()
+  # files_u_gralloc += files('u_gralloc_imapper5_api.cpp')
+  # c_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+  # cpp_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+  # options_for_u_gralloc += 'cpp_std=c++17'
+elif dep_android_mapper4.found()
+  # files_u_gralloc += files('u_gralloc_imapper4_api.cpp')
+  # c_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+  # cpp_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+  # options_for_u_gralloc += 'cpp_std=c++17'
+  # deps_for_u_gralloc += dep_android_mapper4
+endif
+
+# Integrate gralloc5 for panvk
+files_u_gralloc += files('u_gralloc_imapper5_api.cpp')
+c_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+cpp_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+c_args_for_u_gralloc += '-D_LIBCPP_ABI_NAMESPACE=__1'
+cpp_args_for_u_gralloc += '-D_LIBCPP_ABI_NAMESPACE=__1'
+options_for_u_gralloc += 'cpp_std=c++17'
+# deps_for_u_gralloc += dep_android_mapper4
+
+if with_freedreno_vk or with_gallium_freedreno
+  c_args_for_u_gralloc += '-DHAS_FREEDRENO'
+endif
+
+_libmesa_u_gralloc = static_library(
+  '_mesa_u_gralloc',
+  [files_u_gralloc],
+  include_directories : [inc_include, inc_util],
+  c_args : c_args_for_u_gralloc,
+  cpp_args : cpp_args_for_u_gralloc,
+  override_options : options_for_u_gralloc,
+  gnu_symbol_visibility : 'hidden',
+  build_by_default : false,
+  dependencies: deps_for_u_gralloc,
+)
+
+idep_u_gralloc = declare_dependency(link_with: _libmesa_u_gralloc)
+
+===== 8. APPLY UPSTREAM-LIKE STUB-SAFE U_GRALLOC =====
+diff --git a/src/util/u_gralloc/meson.build b/src/util/u_gralloc/meson.build
+index aecadf6a882..9e026e7a6d8 100644
+--- a/src/util/u_gralloc/meson.build
++++ b/src/util/u_gralloc/meson.build
+@@ -1,18 +1,12 @@
+ # Mesa 3-D graphics library
+ #
+-# Copyright (C) 2022 Roman Stratiienko (r.stratiienko@gmail.com)
++# Copyright (C) 2022 Roman Stratiienko
+ # SPDX-License-Identifier: MIT
+ 
+ c_args_for_u_gralloc = []
+ cpp_args_for_u_gralloc = []
+ options_for_u_gralloc = []
+-deps_for_u_gralloc = [
+-  dependency('gralloctypes'),
+-  dependency('hidlbase'),
+-  dependency('utils'),
+-  dependency('ui'), # for gralloc5
+-  dep_android
+-]
++deps_for_u_gralloc = [dep_android]
+ 
+ files_u_gralloc = files(
+   'u_gralloc.c',
+@@ -24,27 +18,18 @@ files_u_gralloc = files(
+ )
+ 
+ if dep_android_ui.found()
+-  # files_u_gralloc += files('u_gralloc_imapper5_api.cpp')
+-  # c_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+-  # cpp_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+-  # options_for_u_gralloc += 'cpp_std=c++17'
++  files_u_gralloc += files('u_gralloc_imapper5_api.cpp')
++  c_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
++  cpp_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
++  options_for_u_gralloc += 'cpp_std=c++17'
+ elif dep_android_mapper4.found()
+-  # files_u_gralloc += files('u_gralloc_imapper4_api.cpp')
+-  # c_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+-  # cpp_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+-  # options_for_u_gralloc += 'cpp_std=c++17'
+-  # deps_for_u_gralloc += dep_android_mapper4
++  files_u_gralloc += files('u_gralloc_imapper4_api.cpp')
++  c_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
++  cpp_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
++  options_for_u_gralloc += 'cpp_std=c++17'
++  deps_for_u_gralloc += dep_android_mapper4
+ endif
+ 
+-# Integrate gralloc5 for panvk
+-files_u_gralloc += files('u_gralloc_imapper5_api.cpp')
+-c_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+-cpp_args_for_u_gralloc += '-DUSE_IMAPPER4_METADATA_API'
+-c_args_for_u_gralloc += '-D_LIBCPP_ABI_NAMESPACE=__1'
+-cpp_args_for_u_gralloc += '-D_LIBCPP_ABI_NAMESPACE=__1'
+-options_for_u_gralloc += 'cpp_std=c++17'
+-# deps_for_u_gralloc += dep_android_mapper4
+-
+ if with_freedreno_vk or with_gallium_freedreno
+   c_args_for_u_gralloc += '-DHAS_FREEDRENO'
+ endif
+UGRALLOC_PATCH_SCOPE=DETACHED_WORKTREE_ONLY
+
+===== 9. NULL PKG-CONFIG =====
+
+===== 10. CROSS FILE =====
+[binaries]
+c = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang'
+cpp = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++'
+ar = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'
+strip = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip'
+nm = '/data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm'
+pkg-config = '/root/.cache/panvk-build/null-pkg-config'
+
+[host_machine]
+system = 'android'
+cpu_family = 'aarch64'
+cpu = 'armv8'
+endian = 'little'
+
+[properties]
+needs_exe_wrapper = true
+
+[built-in options]
+c_args = ['-fPIC']
+cpp_args = ['-fPIC']
+c_link_args = ['-Wl,--build-id=sha1']
+cpp_link_args = ['-Wl,--build-id=sha1']
+
+===== 11. MESON CONFIGURE =====
+TARGET_SETUP_RC=1
+TARGET_SETUP_RESULT=FAIL
+FAIL_STAGE=TARGET_MESON
+The Meson build system
+Version: 1.10.1
+Source dir: /root/mesa-g720-bionic-20260825-202703
+Build dir: /root/build-g720-bionic-20260825-202703
+Build type: cross build
+Project name: mesa
+Project version: 26.3.0-devel
+C compiler for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang (clang 21.0.0 "Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)")
+C linker for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang ld.lld 21.0.0
+C++ compiler for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++ (clang 21.0.0 "Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)")
+C++ linker for the host machine: /data/data/com.termux/files/home/.local/panvk-ndk-r29/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang++ ld.lld 21.0.0
+C compiler for the build machine: cc (gcc 15.2.0 "cc (Ubuntu 15.2.0-16ubuntu1) 15.2.0")
+C linker for the build machine: cc ld.bfd 2.46
+C++ compiler for the build machine: c++ (gcc 15.2.0 "c++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0")
+C++ linker for the build machine: c++ ld.bfd 2.46
+Build machine cpu family: aarch64
+Build machine cpu: aarch64
+Host machine cpu family: aarch64
+Host machine cpu: armv8
+Target machine cpu family: aarch64
+Target machine cpu: armv8
+Checking for size of "void*" : 8 
+meson.build:653: WARNING: cannot auto-detect -mtls-dialect when cross-compiling, using compiler default
+Dependency libglvnd skipped: feature glvnd disabled
+Program glslangValidator found: YES (/usr/bin/glslangValidator)
+Dependency libva skipped: feature gallium-va disabled
+Program mesa_clc found: YES (/root/panvk-g720-host-tools-clean-0521a325/bin/mesa_clc)
+Program vtn_bindgen2 found: YES (/root/panvk-g720-host-tools-clean-0521a325/bin/vtn_bindgen2)
+Program python3.16 found: NO
+Program python3.15 found: NO
+Program python3.14 found: YES 3.14.4 3.14.4 (/usr/bin/python3.14)
+Fetching value of define "ETIME" : 62 
+Compiler for C supports arguments -gsplit-dwarf: YES 
+Compiler for C supports link arguments -Wl,--gdb-index: YES 
+Checking for function "bswap32" : YES 
+Checking for function "bswap64" : YES 
+Checking for function "clz" : YES 
+Checking for function "clzll" : YES 
+Checking for function "ctz" : YES 
+Checking for function "expect" : YES 
+Checking for function "ffs" : YES 
+Checking for function "ffsll" : YES 
+Checking for function "popcount" : YES 
+Checking for function "popcountll" : YES 
+Checking for function "unreachable" : YES 
+Checking for function "types_compatible_p" : YES 
+Checking for function "__builtin_add_overflow" : YES 
+Checking for function "__builtin_add_overflow_p" : NO 
+Checking for function "__builtin_sub_overflow_p" : NO 
+Checking for function "__builtin_arm_get_fpscr" : NO 
+Checking for function "__builtin_arm_set_fpscr" : NO 
+Checking for function "__builtin_aarch64_get_fpcr" : NO 
+Checking for function "__builtin_aarch64_set_fpcr" : NO 
+Compiler for C supports function attribute const: YES 
+Compiler for C supports function attribute flatten: YES 
+Compiler for C supports function attribute malloc: YES 
+Compiler for C supports function attribute pure: YES 
+Compiler for C supports function attribute unused: YES 
+Compiler for C supports function attribute warn_unused_result: YES 
+Compiler for C supports function attribute weak: YES 
+Compiler for C supports function attribute format: YES 
+Compiler for C supports function attribute packed: YES 
+Compiler for C supports function attribute returns_nonnull: YES 
+Compiler for C supports function attribute alias: YES 
+Compiler for C supports function attribute noreturn: YES 
+Compiler for C supports function attribute optimize: NO 
+Compiler for C supports function attribute cold: YES 
+Compiler for C supports function attribute visibility:hidden: YES 
+Checking if "__uint128_t" compiles: YES 
+Checking for function "reallocarray" : NO 
+Checking for function "fmemopen" : YES 
+Checking if "gc-sections" links: YES 
+Compiler for C supports arguments -Werror=implicit-function-declaration: YES 
+Compiler for C supports arguments -Werror=missing-prototypes: YES 
+Compiler for C supports arguments -Werror=return-type: YES 
+Compiler for C supports arguments -Werror=empty-body: YES 
+Compiler for C supports arguments -Werror=incompatible-pointer-types: YES 
+Compiler for C supports arguments -Werror=int-conversion: YES 
+Compiler for C supports arguments -Wimplicit-fallthrough: YES 
+Compiler for C supports arguments -Wmisleading-indentation: YES 
+Compiler for C supports arguments -Wno-error=maybe-uninitialized: NO 
+Compiler for C supports arguments -Wno-missing-field-initializers: YES 
+Compiler for C supports arguments -Wno-format-truncation: YES 
+Compiler for C supports arguments -Wno-nonnull-compare: NO 
+Compiler for C supports arguments -fno-math-errno: YES 
+Compiler for C supports arguments -fno-trapping-math: YES 
+Compiler for C supports arguments -Qunused-arguments: YES 
+Compiler for C supports arguments -fno-common: YES 
+Compiler for C supports arguments -Wno-unknown-pragmas: YES 
+Compiler for C supports arguments -Wno-microsoft-enum-value: YES 
+Compiler for C supports arguments -Wno-unused-function: YES 
+Compiler for C supports arguments -Werror=format: YES 
+Compiler for C supports arguments -Wformat-security: YES 
+Compiler for C supports arguments -Werror=thread-safety: YES 
+Compiler for C supports arguments -ffunction-sections: YES 
+Compiler for C supports arguments -fdata-sections: YES 
+Compiler for C supports arguments -Wno-unused-variable: YES 
+Compiler for C supports arguments -Wno-unused-but-set-variable: YES 
+Compiler for C supports arguments /wd4189: NO 
+Compiler for C++ supports arguments -Werror=return-type: YES 
+Compiler for C++ supports arguments -Werror=empty-body: YES 
+Compiler for C++ supports arguments -Wmisleading-indentation: YES 
+Compiler for C++ supports arguments -Wno-error=maybe-uninitialized: NO 
+Compiler for C++ supports arguments -Wno-non-virtual-dtor: YES 
+Compiler for C++ supports arguments -Wno-missing-field-initializers: YES 
+Compiler for C++ supports arguments -Wno-format-truncation: YES 
+Compiler for C++ supports arguments -fno-math-errno: YES 
+Compiler for C++ supports arguments -fno-trapping-math: YES 
+Compiler for C++ supports arguments -Qunused-arguments: YES 
+Compiler for C++ supports arguments -flifetime-dse=1: NO 
+Compiler for C++ supports arguments -Wno-unknown-pragmas: YES 
+Compiler for C++ supports arguments -Wno-microsoft-enum-value: YES 
+Compiler for C++ supports arguments -Werror=format: YES 
+Compiler for C++ supports arguments -Wformat-security: YES 
+Compiler for C++ supports arguments -ffunction-sections: YES 
+Compiler for C++ supports arguments -fdata-sections: YES 
+Compiler for C++ supports arguments -Wno-unused-variable: YES 
+Compiler for C++ supports arguments -Wno-unused-but-set-variable: YES 
+Compiler for C++ supports arguments /wd4189: NO 
+Compiler for C supports arguments -Wno-override-init: YES 
+Compiler for C supports arguments -Wno-initializer-overrides: YES 
+Compiler for C supports arguments -Werror=pointer-arith: YES 
+Compiler for C supports arguments -Werror=vla: YES 
+Compiler for C supports arguments -Werror=gnu-empty-initializer: YES 
+Compiler for C supports arguments -Wgnu-pointer-arith: YES 
+Compiler for C++ supports arguments -Werror=pointer-arith: YES 
+Compiler for C++ supports arguments -Werror=vla: YES 
+Compiler for C++ supports arguments -Werror=gnu-empty-initializer: YES 
+Compiler for C++ supports arguments -Wgnu-pointer-arith: YES 
+Compiler for C supports arguments -Werror=date-time: YES 
+Compiler for C supports arguments -Werror=gnu-alignof-expression: YES 
+Compiler for C supports arguments -Werror=ignored-qualifiers: YES 
+Compiler for C supports arguments -Werror=implicit-fallthrough: YES 
+Compiler for C supports arguments -Werror=int-conversion: YES (cached)
+Compiler for C supports arguments -Werror=missing-prototypes: YES (cached)
+Compiler for C supports arguments -Werror=pragma-pack: YES 
+Compiler for C supports arguments -Werror=pragma-pack-suspicious-include: YES 
+Compiler for C supports arguments -Werror=sizeof-array-div: YES 
+Compiler for C supports arguments -Werror=string-plus-int: YES 
+Compiler for C supports arguments -Werror=unreachable-code-loop-increment: YES 
+Compiler for C++ supports arguments -D_LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS: YES 
+Compiler for C++ supports arguments -Werror=date-time: YES 
+Compiler for C++ supports arguments -Werror=gnu-alignof-expression: YES 
+Compiler for C++ supports arguments -Werror=ignored-qualifiers: YES 
+Compiler for C++ supports arguments -Werror=implicit-fallthrough: YES 
+Compiler for C++ supports arguments -Werror=pragma-pack: YES 
+Compiler for C++ supports arguments -Werror=pragma-pack-suspicious-include: YES 
+Compiler for C++ supports arguments -Werror=sizeof-array-div: YES 
+Compiler for C++ supports arguments -Werror=string-plus-int: YES 
+Compiler for C++ supports arguments -Werror=unreachable-code-loop-increment: YES 
+Compiler for C++ supports arguments -Werror=missing-prototypes: YES 
+Checking for function "__builtin_ia32_clflushopt" : NO 
+Checking if "GCC atomic builtins" compiles: YES 
+Checking if "GCC atomic builtins required -latomic" links: YES 
+Checking if "GCC 64bit atomics" with dependency  links: YES 
+Library ws2_32 found: NO
+Header "sys/sysmacros.h" has symbol "major" : YES 
+Header "sys/sysmacros.h" has symbol "minor" : YES 
+Header "sys/sysmacros.h" has symbol "makedev" : YES 
+Header "sys/mkdev.h" has symbol "major" : NO 
+Check usable header "sched.h" : YES 
+Checking for function "sched_getaffinity" : YES 
+Check usable header "sys/sysctl.h" : NO 
+Check usable header "xlocale.h" : YES 
+Check usable header "linux/futex.h" : YES 
+Check usable header "endian.h" : YES 
+Check usable header "dlfcn.h" : YES 
+Check usable header "sys/shm.h" : YES 
+Check usable header "cet.h" : YES 
+Check usable header "pthread_np.h" : NO 
+Check usable header "poll.h" : YES 
+Check usable header "sys/inotify.h" : YES 
+Check usable header "linux/udmabuf.h" : YES 
+Checking for function "strtof" : YES 
+Checking for function "mkostemp" : YES 
+Checking for function "memfd_create" : NO 
+Checking for function "random_r" : NO 
+Checking for function "flock" : YES 
+Checking for function "strtok_r" : YES 
+Checking for function "getrandom" : YES 
+Checking for function "qsort_s" : NO 
+Checking for function "posix_fallocate" : YES 
+Checking for function "secure_getenv" : NO 
+Checking for function "sysconf" : YES 
+Checking if "GNU qsort_r" links: NO 
+Checking if "BSD qsort_r" links: NO 
+Header "time.h" has symbol "struct timespec" : YES 
+Checking for function "thrd_create" : YES 
+Header "errno.h" has symbol "program_invocation_name" : NO 
+Header "math.h" has symbol "issignaling" : NO 
+Checking for function "posix_memalign" : YES 
+Checking whether type "struct dirent" has member "d_type" : YES 
+Checking if "strtod has locale support" links: YES 
+Checking if "Bsymbolic" links: YES 
+Checking if "version-script" links: YES 
+Checking if "dynamic-list" links: YES 
+Compiler for C supports link arguments -Wl,--build-id=sha1: YES 
+Checking for function "dlopen" : YES 
+Checking for function "dladdr" with dependency : YES 
+Checking for function "dl_iterate_phdr" : YES 
+Checking for function "clock_gettime" : YES 
+Found pkg-config: YES (/root/.cache/panvk-build/null-pkg-config) 0.29.2
+Found CMake: NO
+Run-time dependency zlib found: YES 1.3.0.1-motley
+Run-time dependency libzstd found: NO (tried pkgconfig and cmake)
+Run-time dependency threads found: YES
+Checking for function "pthread_setaffinity_np" with dependency threads: NO 
+Dependency expat skipped: feature expat disabled
+Library m found: YES
+Run-time dependency libdrm found: NO (tried pkgconfig)
+
+meson.build:1933:15: ERROR: Dependency "libdrm" not found, tried pkgconfig
+
+A full log can be found at /root/build-g720-bionic-20260825-202703/meson-logs/meson-log.txt
+
+============================================================
+ FINAL RESULT
+============================================================
+REAL_RC=40
+OVERALL_RESULT=FAIL
+MAIN_SOURCE_PATCHED=NO
+TESSELLATION_CHANGED=NO
+X11_BUILD_CHANGED=NO
+GPU_EXECUTED=NO
+
+============================================================
+ TERMUX WRAPPER
+============================================================
+PROOT_RESULT_CODE=40
+TERMUX_SESSION_REMAINS_OPEN=YES

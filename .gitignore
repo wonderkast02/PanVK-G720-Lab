@@ -1,0 +1,9 @@
+*.apk
+*.so
+*.tzst
+*.zip
+*.img
+*.bin
+build*/
+__pycache__/
+*.pyc

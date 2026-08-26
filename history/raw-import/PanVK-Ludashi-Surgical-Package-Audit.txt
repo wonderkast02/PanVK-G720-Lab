@@ -1,0 +1,85 @@
+===== PANVK LUDASHI SURGICAL APK =====
+date=2026-08-26T08:43:35-03:00
+
+===== 1. INPUT INTEGRITY =====
+base_sha256=f0b3278fa8d1a7607dd29080a6f63ed9e9c39db7ca2231c0d90f23ef28295c1d
+base_expected=f0b3278fa8d1a7607dd29080a6f63ed9e9c39db7ca2231c0d90f23ef28295c1d
+asset_sha256=670dd902f663983c7bdbcab64ddd33460ed2339a12a5b465e3f0ad1bfc67d785
+asset_expected=670dd902f663983c7bdbcab64ddd33460ed2339a12a5b465e3f0ad1bfc67d785
+INPUT_RESULT=PASS
+
+===== 2. TOOLS =====
+apktool=/data/data/com.termux/files/usr/bin/apktool
+unzip=/data/data/com.termux/files/usr/bin/unzip
+zip=/data/data/com.termux/files/usr/bin/zip
+zipalign=/data/data/com.termux/files/usr/bin/zipalign
+apksigner=/data/data/com.termux/files/usr/bin/apksigner
+python=/data/data/com.termux/files/usr/bin/python
+keytool=/data/data/com.termux/files/usr/bin/keytool
+
+===== 3. DECODE CODE ONLY =====
+APKTOOL_DECODE_RC=0
+
+===== 4. PATCH ADRENOTOOLS SMALI =====
+adrenotools_smali_matches=1
+/data/data/com.termux/files/home/.cache/panvk-ludashi-surgical/decoded/smali/com/winlator/cmod/contents/AdrenotoolsManager.smali
+smali_patch=PASS
+driver_occurrences= 2
+SMALI_PATCH_RC=0
+
+===== 5. BUILD PATCHED DEX ONLY =====
+APKTOOL_TEMP_BUILD_RC=0
+PATCHED_DEX_EXTRACT_RC=0
+patched_classes_dex_size=9253020
+panvk-g720-kbase-0521a325
+
+===== 6. SURGICAL APK UPDATE =====
+ZIP_UPDATE_RC=0
+ZIPALIGN_RC=0
+
+===== 7. SIGN =====
+KEYGEN_RC=0
+APKSIGNER_SIGN_RC=0
+
+===== 8. FINAL AUDIT =====
+SIGNATURE_VERIFY_RC=0
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Number of signers: 1
+V3.0 Signer: certificate SHA-256 digest: ca9ca66469be45b5252dd8b9c03822325410ab17fb5401c087fa9ef4a178b7e7
+ALIGN_16K_VERIFY_RC=0
+787969392 res/zr.png (OK)
+787970280 resources.arsc (OK)
+789010007 assets/graphics_driver/adrenotools-panvk-g720-kbase-0521a325.tzst (OK - compressed)
+Verification successful
+AAPT_FINAL_RC=0
+package: name='com.ludashi.benchmark' versionCode='20' versionName='1.1 Bionic' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'
+sdkVersion:'26'
+targetSdkVersion:'28'
+application-label:'Winlator Mali'
+base_manifest_sha256=d11b1200d8c7d6225f6a7b58561c5a7ac00c49807451a27d4eac892b4ee607a6
+final_manifest_sha256=d11b1200d8c7d6225f6a7b58561c5a7ac00c49807451a27d4eac892b4ee607a6
+manifest_byte_identical=YES
+base_resources_sha256=4a2b6626be2ed65aa105881248446f2a3b3d51d4862315af70e97149e44cbbc0
+final_resources_sha256=4a2b6626be2ed65aa105881248446f2a3b3d51d4862315af70e97149e44cbbc0
+resources_byte_identical=YES
+embedded_asset_sha256=670dd902f663983c7bdbcab64ddd33460ed2339a12a5b465e3f0ad1bfc67d785
+expected_asset_sha256=670dd902f663983c7bdbcab64ddd33460ed2339a12a5b465e3f0ad1bfc67d785
+driver_id_occurrences_in_final_dex=1
+final_apk_size=792009568
+final_apk_sha256=aa8b9486e59d93447e899ba9abd7a1d73ab96c94414f3bb855e053866acfc091
+
+===== 9. RESULT =====
+APKTOOL_USED_FOR_FINAL_RESOURCES=NO
+MANIFEST_REBUILT=NO
+RESOURCES_REBUILT=NO
+ADB_USED=NO
+ROOT_USED=NO
+GPU_EXECUTED=NO
+REAL_RC=55
+SURGICAL_PACKAGE_RESULT=FAIL
+FINAL_APK=/sdcard/Download/Winlator-Mali-1.1-Ludashi-PanVK-G720-0521a325.apk

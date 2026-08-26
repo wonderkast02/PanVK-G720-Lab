@@ -1,0 +1,53 @@
+PANVK_G720_TESS_FULLPATH_HW_REVALIDATE
+date=2026-08-26T15:34:26-03:00
+===PRECHECK===
+HEAD=0521a3257628e811cfead6b5a9753e9f705e2f31
+BRANCH=ci
+ M src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
+TEMP_FEATURE_TRUE=YES
+ninja: Entering directory `/root/mesa-funnymdzz/build-g720-kbase-x11'
+[1/17] Generating src/git_sha1.h with a custom command
+[2/14] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/panvk_vX_physical_device.c.o
+[3/14] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_physical_device.c.o
+[4/14] Linking static target src/panfrost/vulkan/libpanvk_v13.a
+[5/14] Linking static target src/panfrost/vulkan/libpanvk_v14.a
+[6/14] Compiling C object src/panfrost/vulkan/libpanvk_v12.a.p/panvk_vX_physical_device.c.o
+[7/14] Compiling C object src/panfrost/vulkan/libpanvk_v10.a.p/panvk_vX_physical_device.c.o
+[8/14] Linking static target src/panfrost/vulkan/libpanvk_v12.a
+[9/14] Linking static target src/panfrost/vulkan/libpanvk_v10.a
+[10/14] Compiling C object src/panfrost/vulkan/libpanvk_v7.a.p/panvk_vX_physical_device.c.o
+[11/14] Linking static target src/panfrost/vulkan/libpanvk_v7.a
+[12/14] Compiling C object src/panfrost/vulkan/libpanvk_v6.a.p/panvk_vX_physical_device.c.o
+[13/14] Linking static target src/panfrost/vulkan/libpanvk_v6.a
+[14/14] Linking target src/panfrost/vulkan/libvulkan_panfrost.so
+TEST_BUILD_RC=0
+ICD=/root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json
+HARNESS=/root/panvk-tess-smoke/draw
+SHADER_DIR=/root/panvk-tess-smoke
+===HARDWARE RUNTIME===
+FAIL: vkCreateInstance(&ici, NULL, &instance) -> VkResult -9
+RUNTIME_RC=1
+===RESTORE FEATURE FALSE===
+ninja: Entering directory `/root/mesa-funnymdzz/build-g720-kbase-x11'
+[1/17] Generating src/git_sha1.h with a custom command
+[2/14] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/panvk_vX_physical_device.c.o
+[3/14] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_physical_device.c.o
+[4/14] Linking static target src/panfrost/vulkan/libpanvk_v13.a
+[5/14] Linking static target src/panfrost/vulkan/libpanvk_v14.a
+[6/14] Compiling C object src/panfrost/vulkan/libpanvk_v12.a.p/panvk_vX_physical_device.c.o
+[7/14] Linking static target src/panfrost/vulkan/libpanvk_v12.a
+[8/14] Compiling C object src/panfrost/vulkan/libpanvk_v10.a.p/panvk_vX_physical_device.c.o
+[9/14] Linking static target src/panfrost/vulkan/libpanvk_v10.a
+[10/14] Compiling C object src/panfrost/vulkan/libpanvk_v7.a.p/panvk_vX_physical_device.c.o
+[11/14] Linking static target src/panfrost/vulkan/libpanvk_v7.a
+[12/14] Compiling C object src/panfrost/vulkan/libpanvk_v6.a.p/panvk_vX_physical_device.c.o
+[13/14] Linking static target src/panfrost/vulkan/libpanvk_v6.a
+[14/14] Linking target src/panfrost/vulkan/libvulkan_panfrost.so
+SAFE_REBUILD_RC=0
+FINAL_FEATURE_FALSE=1
+TRACKED_STATUS
+fatal: not a git repository (or any of the parent directories): .git
+GPU_EXECUTED=YES
+INNER_RC=101
+PROOT_RC=101
+OVERALL=FAIL

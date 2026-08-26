@@ -1,0 +1,55 @@
+===== 1. BASELINE =====
+branch=ci
+head=0521a3257628e811cfead6b5a9753e9f705e2f31
+tracked_dirty=NO
+===== 2. PREINSTALL CHECK =====
+ 0x000000000000001d (RUNPATH)            Library runpath: [$ORIGIN/../../android_stub]
+ 0x0000000000000001 (NEEDED)             Shared library: [libhardware.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblog.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libnativewindow.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsync.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so]
+ 0x000000000000000e (SONAME)             Library soname: [libvulkan_panfrost.so]
+PREINSTALL_STATIC_LIBDRM=PASS
+===== 3. MESON RUNTIME INSTALL =====
+INSTALL_RC=0
+RUNTIME_INSTALL_RESULT=PASS
+Installing src/panfrost/vulkan/libvulkan_panfrost.so to /root/panvk-bionic-runtime-stage/usr/lib
+Installing src/panfrost/vulkan/panfrost_icd.armv8.json to /root/panvk-bionic-runtime-stage/usr/share/vulkan/icd.d
+installed_driver=/root/panvk-bionic-runtime-stage/usr/lib/libvulkan_panfrost.so
+===== 4. FINAL ELF AUDIT =====
+  Class:                             ELF64
+  Type:                              DYN (Shared object file)
+  Machine:                           AArch64
+--- DYNAMIC ---
+ 0x0000000000000001 (NEEDED)             Shared library: [libhardware.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblog.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libnativewindow.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsync.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so]
+ 0x000000000000000e (SONAME)             Library soname: [libvulkan_panfrost.so]
+--- ANDROID SYSTEM DEPS ---
+ 0x0000000000000001 (NEEDED)             Shared library: [libhardware.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblog.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libnativewindow.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsync.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so]
+FINAL_ELF_RESULT=PASS
+===== 5. EXPORT =====
+EXPORT_RC=0
+4d1bf7958b7ddc899122bd382bc77eca7aca799d8bd74360e714ea63b9cc2263  /data/data/com.termux/files/home/PanVK-G720-Bionic-kbase-clean-0521a325.so
+size_bytes=21278520
+TERMUX_EXPORT=/data/data/com.termux/files/home/PanVK-G720-Bionic-kbase-clean-0521a325.so
+CLEAN_BIONIC_SO_RESULT=PASS
+===== 6. SOURCE INTEGRITY =====
+main_head_after=0521a3257628e811cfead6b5a9753e9f705e2f31
+main_dirty_after=NO
+MAIN_SOURCE_INTEGRITY=PASS
+REAL_RC=0
+OVERALL_RESULT=PASS

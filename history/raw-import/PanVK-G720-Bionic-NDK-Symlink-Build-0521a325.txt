@@ -1,0 +1,38 @@
+============================================================
+ PanVK G720 - NDK symlink fix + Bionic build
+============================================================
+date=2026-08-25T21:23:00-03:00
+
+===== 1. EXISTING NDK AUDIT =====
+archive=/data/data/com.termux/files/home/.cache/panvk/android-ndk-r29-aarch64.tar.xz
+-rw-------. 1 u0_a492 u0_a492 344M Aug 25 20:13 /data/data/com.termux/files/home/.cache/panvk/android-ndk-r29-aarch64.tar.xz
+archive_sha256=02e10e4ddfe8deaeb0bd0cf29d04c981ed5bc8a5d6b560ebb9e7661f472d684b
+expected_sha256=02e10e4ddfe8deaeb0bd0cf29d04c981ed5bc8a5d6b560ebb9e7661f472d684b
+initial_clang=/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+
+===== 2. ARCHIVE LAYOUT =====
+android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/clang-21
+
+===== 5. RESOLVED NDK =====
+clang=/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+clang_real=/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/clang-21
+bin=/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin
+lrwxrwxrwx. 1 u0_a492 u0_a492 8 Jul  2 07:22 /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/clang -> clang-21
+-rwx------. 1 u0_a492 u0_a492 201 Jan  8  2026 /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android28-clang
+
+===== 6. CLEAN NDK SMOKE =====
+Android (dev, +pgo, -bolt, +lto, -mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project)
+Target: aarch64-unknown-linux-android28
+Thread model: posix
+InstalledDir: /data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin
+bash: line 140: /tmp/panvk-ndk-smoke.c: Permission denied
+clang: error: no such file or directory: '/tmp/panvk-ndk-smoke.c'
+smoke_compile_rc=1
+readelf=/data/data/com.termux/files/home/.local/panvk-ndk/android-ndk-r29/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-readelf
+FAIL_STAGE=CLEAN_NDK_SMOKE_COMPILE
+
+NDK_RESULT=FAIL
+
+===== TERMUX CHILD COMPLETE =====
+TERMUX_PARENT_WILL_REMAIN_OPEN=YES

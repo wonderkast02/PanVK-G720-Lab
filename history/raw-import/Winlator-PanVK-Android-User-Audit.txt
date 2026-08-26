@@ -1,0 +1,53 @@
+===== WINLATOR PANVK ANDROID USER / PACKAGE AUDIT =====
+date=2026-08-26T08:16:55-03:00
+
+===== 1. CALLER =====
+uid=10492(u0_a492) gid=10492(u0_a492) groups=10492(u0_a492),1077(external_storage),3003(inet),9997(everybody),20492(u0_a492_cache),50492(all_a492),99909997 context=u:r:untrusted_app_27:s0:c236,c257,c512,c768
+numeric_uid=10492
+caller_android_user=0
+
+===== 2. ANDROID CURRENT USER =====
+AM_GET_CURRENT_USER_RC=0
+current_android_user=0
+
+===== 3. USER LIST =====
+
+Exception occurred while executing 'list':
+java.lang.SecurityException: You either need MANAGE_USERS or CREATE_USERS permission to: query users
+	at com.android.server.pm.UserManagerService.checkCreateUsersPermission(UserManagerService.java:4187)
+	at com.android.server.pm.UserManagerService.getUsers(UserManagerService.java:1561)
+	at com.android.server.pm.UserManagerServiceShellCommand.runList(UserManagerServiceShellCommand.java:186)
+	at com.android.server.pm.UserManagerServiceShellCommand.onCommand(UserManagerServiceShellCommand.java:138)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.UserManagerService.onShellCommand(UserManagerService.java:7560)
+	at android.os.Binder.shellCommand(Binder.java:1158)
+	at android.os.Binder.onTransact(Binder.java:960)
+	at android.os.IUserManager$Stub.onTransact(IUserManager.java:2016)
+	at android.os.Binder.execTransactInternal(Binder.java:1433)
+	at android.os.Binder.execTransact(Binder.java:1372)
+
+===== 4. PACKAGE QUERY - CALLER USER 0 =====
+LIST_CALLER_RC=0
+PATH_CALLER_RC=2
+cmd: Failure calling service package: Failed transaction (2147483646)
+PACKAGE_EXISTS_CALLER_USER=NO
+
+===== 5. EXPLICIT RESOLVE - CALLER USER =====
+RESOLVE_RC=0
+No activity found
+
+===== 6. CURRENT USER RELATION =====
+MULTIUSER_MISMATCH=NO
+
+===== 7. CURRENT-USER PACKAGE QUERY =====
+CURRENT_EQUALS_CALLER=YES
+
+===== 8. CLASSIFICATION =====
+SAME_PACKAGE_IN_TERMUX_USER=NO
+PACKAGE_STATE_FOREGROUND_USER_NOT_CROSS_USER_BLOCKED=YES
+APK_STRUCTURE_FAILURE_SUPPORTED=NO
+APK_MODIFIED=NO
+GPU_EXECUTED=NO
+REAL_RC=0
+ANDROID_USER_AUDIT=PASS
