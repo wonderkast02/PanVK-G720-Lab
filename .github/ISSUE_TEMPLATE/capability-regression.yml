@@ -1,0 +1,27 @@
+name: Capability regression
+description: Difference between two measured G720 capability snapshots
+title: "[CAP-REGRESSION] "
+labels: ["regression", "capabilities"]
+body:
+  - type: input
+    id: capability
+    attributes: {label: Extension / feature / property / limit / format}
+    validations: {required: true}
+  - type: input
+    id: baseline
+    attributes: {label: Baseline dump and PanVK commit}
+    validations: {required: true}
+  - type: input
+    id: candidate
+    attributes: {label: Candidate dump and PanVK commit}
+    validations: {required: true}
+  - type: textarea
+    id: diff
+    attributes: {label: Advertised → Implemented → Tested → Working/Broken evidence}
+    validations: {required: true}
+  - type: textarea
+    id: impact
+    attributes: {label: Vulkan / DXVK / application impact}
+  - type: textarea
+    id: links
+    attributes: {label: Related investigation / main-repo Issue / PR / commit}

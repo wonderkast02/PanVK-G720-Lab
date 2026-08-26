@@ -1,0 +1,31 @@
+name: Runtime bug
+description: Reproducible PanVK/G720 runtime failure backed by evidence
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes: {label: Problem observed}
+    validations: {required: true}
+  - type: input
+    id: device
+    attributes: {label: Device / GPU / kernel}
+    validations: {required: true}
+  - type: input
+    id: commit
+    attributes: {label: PanVK commit / build hash}
+    validations: {required: true}
+  - type: textarea
+    id: expected
+    attributes: {label: Expected behavior}
+  - type: textarea
+    id: reproduce
+    attributes: {label: Reproduction steps}
+    validations: {required: true}
+  - type: textarea
+    id: evidence
+    attributes: {label: Logs / tests / validation errors / Lab paths}
+    validations: {required: true}
+  - type: textarea
+    id: links
+    attributes: {label: Main-repo Issue / PR / commit links}
