@@ -1,0 +1,1337 @@
+PANVK_G720_LOADER_FULLPATH_INDIRECT_AUDIT
+date=2026-08-26T16:15:06-03:00
+===SOURCE===
+HEAD=0521a3257628e811cfead6b5a9753e9f705e2f31
+BRANCH=ci
+ M src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
+
+===LOADER/ICD AUDIT===
+ICD=/root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json
+{
+    "ICD": {
+        "api_version": "1.4.354",
+        "library_arch": "64",
+        "library_path": "/usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so"
+    },
+    "file_format_version": "1.0.1"
+}
+/root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/libvulkan_panfrost.so: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, BuildID[sha1]=25db48a514b8f55651403e8e50a627969042f248, with debug_info, not stripped
+/root/panvk-tess-smoke/draw:                                                         ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=076e6486cd5ce8e62a2e321612e16429189be945, for GNU/Linux 3.7.0, not stripped
+
+--- NEEDED/RUNPATH ---
+ 0x0000000000000001 (NEEDED)             Shared library: [libdrm.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libzstd.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libX11-xcb.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-dri3.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-present.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-xfixes.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-sync.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-randr.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-shm.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxshmfence.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libexpat.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-aarch64.so.1]
+ 0x000000000000000e (SONAME)             Library soname: [libvulkan_panfrost.so]
+--- LDD ---
+	libdrm.so.2 => /usr/lib/aarch64-linux-gnu/libdrm.so.2 (0x0000007df5e10000)
+	libm.so.6 => /usr/lib/aarch64-linux-gnu/libm.so.6 (0x0000007df5d40000)
+	libz.so.1 => /usr/lib/aarch64-linux-gnu/libz.so.1 (0x0000007df5d00000)
+	libzstd.so.1 => /usr/lib/aarch64-linux-gnu/libzstd.so.1 (0x0000007df5c40000)
+	libxcb.so.1 => /usr/lib/aarch64-linux-gnu/libxcb.so.1 (0x0000007df5bf0000)
+	libX11-xcb.so.1 => /usr/lib/aarch64-linux-gnu/libX11-xcb.so.1 (0x0000007df5bc0000)
+	libxcb-dri3.so.0 => /usr/lib/aarch64-linux-gnu/libxcb-dri3.so.0 (0x0000007df5b90000)
+	libxcb-present.so.0 => /usr/lib/aarch64-linux-gnu/libxcb-present.so.0 (0x0000007df5b60000)
+	libxcb-xfixes.so.0 => /usr/lib/aarch64-linux-gnu/libxcb-xfixes.so.0 (0x0000007df5b30000)
+	libxcb-sync.so.1 => /usr/lib/aarch64-linux-gnu/libxcb-sync.so.1 (0x0000007df5b00000)
+	libxcb-randr.so.0 => /usr/lib/aarch64-linux-gnu/libxcb-randr.so.0 (0x0000007df5ac0000)
+	libxcb-shm.so.0 => /usr/lib/aarch64-linux-gnu/libxcb-shm.so.0 (0x0000007df5a90000)
+	libxshmfence.so.1 => /usr/lib/aarch64-linux-gnu/libxshmfence.so.1 (0x0000007df5a60000)
+	libexpat.so.1 => /usr/lib/aarch64-linux-gnu/libexpat.so.1 (0x0000007df5a10000)
+	libstdc++.so.6 => /usr/lib/aarch64-linux-gnu/libstdc++.so.6 (0x0000007df5770000)
+	libgcc_s.so.1 => /usr/lib/aarch64-linux-gnu/libgcc_s.so.1 (0x0000007df5730000)
+	libc.so.6 => /usr/lib/aarch64-linux-gnu/libc.so.6 (0x0000007df5560000)
+	/lib/ld-linux-aarch64.so.1 (0x0000003000000000)
+	libXau.so.6 => /usr/lib/aarch64-linux-gnu/libXau.so.6 (0x0000007df5530000)
+	libXdmcp.so.6 => /usr/lib/aarch64-linux-gnu/libXdmcp.so.6 (0x0000007df5500000)
+--- LOADER ---
+/usr/bin/vulkaninfo
+
+vulkaninfo - Summarize Vulkan information in relation to the current environment.
+
+USAGE: 
+    vulkaninfo --summary
+    vulkaninfo -o <filename> | --output <filename>
+    vulkaninfo -j | -j=<gpu-number> | --json | --json=<gpu-number>
+    vulkaninfo --text
+    vulkaninfo --html
+    vulkaninfo --show-all
+    vulkaninfo --show-formats
+    vulkaninfo --show-tool-props
+    vulkaninfo --show-promoted-structs
+    vulkaninfo --show-video-props
+
+OPTIONS:
+[-h, --help]         Print this help.
+[--summary]          Show a summary of the instance and GPU's on a system.
+[-o <filename>, --output <filename>]
+                     Print output to a new file whose name is specified by filename.
+                     File will be written to the current working directory.
+[--text]             Produce a text version of vulkaninfo output to stdout. This is
+                     the default output.
+[--html]             Produce an html version of vulkaninfo output, saved as
+                     "vulkaninfo.html" in the directory in which the command
+                     is run.
+[-j, --json]         Produce a json version of vulkaninfo output conforming to the Vulkan
+                     Profiles schema, saved as 
+                     "VP_VULKANINFO_[DEVICE_NAME]_[DRIVER_VERSION].json"
+                     of the first gpu in the system.
+[-j=<gpu-number>, --json=<gpu-number>]
+                     For a multi-gpu system, a single gpu can be targeted by
+                     specifying the gpu-number associated with the gpu of 
+                     interest. This number can be determined by running
+                     vulkaninfo without any options specified.
+[--show-all]         Show everything (includes all the below options)
+[--show-tool-props]  Show the active VkPhysicalDeviceToolPropertiesEXT that vulkaninfo finds.
+[--show-formats]     Display the format properties of each physical device.
+                     Note: This only affects text output.
+[--show-promoted-structs] Include structs promoted to core in pNext Chains.
+[--show-video-props]
+                     Display the video profile info, video capabilities and
+                     video format properties of each video profile supported
+                     by each physical device.
+                     Note: This only affects text output which by default
+                     only contains the list of supported video profile names.
+
+--- ABS ICD ---
+{
+  "ICD": {
+    "api_version": "1.4.354",
+    "library_arch": "64",
+    "library_path": "/root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/libvulkan_panfrost.so"
+  },
+  "file_format_version": "1.0.1"
+}===PROBE:ORIGINAL===
+[Vulkan Loader] INFO:           Vulkan Loader Version 1.4.341
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] DRIVER:         Searching for driver manifest files
+[Vulkan Loader] DRIVER:            In following locations:
+[Vulkan Loader] DRIVER:               /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json
+[Vulkan Loader] DRIVER:            Found the following files:
+[Vulkan Loader] DRIVER:               /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json
+[Vulkan Loader] DRIVER:         Found ICD manifest file /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json, version 1.0.1
+[Vulkan Loader] DEBUG | DRIVER: Searching for ICD drivers named /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so
+[Vulkan Loader] ERROR:          /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so: cannot open shared object file: No such file or directory
+[Vulkan Loader] ERROR | DRIVER: loader_icd_scan: Failed loading library associated with ICD JSON /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so. Ignoring this JSON
+[Vulkan Loader] DRIVER:         Searching for driver manifest files
+[Vulkan Loader] DRIVER:            In following locations:
+[Vulkan Loader] DRIVER:               /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json
+[Vulkan Loader] DRIVER:            Found the following files:
+[Vulkan Loader] DRIVER:               /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json
+[Vulkan Loader] DRIVER:         Found ICD manifest file /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json, version 1.0.1
+[Vulkan Loader] DEBUG | DRIVER: Searching for ICD drivers named /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so
+[Vulkan Loader] ERROR:          /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so: cannot open shared object file: No such file or directory
+[Vulkan Loader] ERROR | DRIVER: loader_icd_scan: Failed loading library associated with ICD JSON /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so. Ignoring this JSON
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] INFO:           Portability enumeration bit was set, enumerating portability drivers.
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] DRIVER:         Searching for driver manifest files
+[Vulkan Loader] DRIVER:            In following locations:
+[Vulkan Loader] DRIVER:               /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json
+[Vulkan Loader] DRIVER:            Found the following files:
+[Vulkan Loader] DRIVER:               /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json
+[Vulkan Loader] DRIVER:         Found ICD manifest file /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/panfrost_icd.aarch64.json, version 1.0.1
+[Vulkan Loader] DEBUG | DRIVER: Searching for ICD drivers named /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so
+ERROR: [Loader Message] Code 0 : /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so: cannot open shared object file: No such file or directory
+[Vulkan Loader] ERROR:          /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so: cannot open shared object file: No such file or directory
+ERROR: [Loader Message] Code 0 : loader_icd_scan: Failed loading library associated with ICD JSON /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so. Ignoring this JSON
+[Vulkan Loader] ERROR | DRIVER: loader_icd_scan: Failed loading library associated with ICD JSON /usr/local/lib/aarch64-linux-gnu/libvulkan_panfrost.so. Ignoring this JSON
+ERROR: [Loader Message] Code 0 : vkCreateInstance: Found no drivers!
+[Vulkan Loader] ERROR | DRIVER: vkCreateInstance: Found no drivers!
+Cannot create Vulkan instance.
+This problem is often caused by a faulty installation of the Vulkan driver or attempting to use a GPU that does not support Vulkan.
+ERROR at ./vulkaninfo/./vulkaninfo.h:611:vkCreateInstance failed with ERROR_INCOMPATIBLE_DRIVER
+PROBE_ORIGINAL_RC=1
+===PROBE:ABSOLUTE===
+[Vulkan Loader] INFO:           Vulkan Loader Version 1.4.341
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] DRIVER:         Searching for driver manifest files
+[Vulkan Loader] DRIVER:            In following locations:
+[Vulkan Loader] DRIVER:               /tmp/panvk-abs-9803.json
+[Vulkan Loader] DRIVER:            Found the following files:
+[Vulkan Loader] DRIVER:               /tmp/panvk-abs-9803.json
+[Vulkan Loader] DRIVER:         Found ICD manifest file /tmp/panvk-abs-9803.json, version 1.0.1
+[Vulkan Loader] DEBUG | DRIVER: Searching for ICD drivers named /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/libvulkan_panfrost.so
+[Vulkan Loader] DRIVER:         Searching for driver manifest files
+[Vulkan Loader] DRIVER:            In following locations:
+[Vulkan Loader] DRIVER:               /tmp/panvk-abs-9803.json
+[Vulkan Loader] DRIVER:            Found the following files:
+[Vulkan Loader] DRIVER:               /tmp/panvk-abs-9803.json
+[Vulkan Loader] DRIVER:         Found ICD manifest file /tmp/panvk-abs-9803.json, version 1.0.1
+[Vulkan Loader] DEBUG | DRIVER: Searching for ICD drivers named /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/libvulkan_panfrost.so
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] INFO:           No valid vk_loader_settings.json file found, no loader settings will be active
+[Vulkan Loader] INFO:           Portability enumeration bit was set, enumerating portability drivers.
+[Vulkan Loader] LAYER:          Searching for implicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_anti_lag.json (file version 1.2.1)
+[Vulkan Loader] LAYER:          Searching for explicit layer manifest files
+[Vulkan Loader] LAYER:             In following locations:
+[Vulkan Loader] LAYER:                /root/.config/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/xdg/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /etc/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /root/.local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/local/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d
+[Vulkan Loader] LAYER:             Found the following files:
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json
+[Vulkan Loader] LAYER:                /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_overlay.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_MESA_screenshot.json (file version 1.0.0)
+[Vulkan Loader] INFO:           Found manifest file /usr/share/vulkan/explicit_layer.d/VkLayer_INTEL_nullhw.json (file version 1.0.0)
+[Vulkan Loader] DRIVER:         Searching for driver manifest files
+[Vulkan Loader] DRIVER:            In following locations:
+[Vulkan Loader] DRIVER:               /tmp/panvk-abs-9803.json
+[Vulkan Loader] DRIVER:            Found the following files:
+[Vulkan Loader] DRIVER:               /tmp/panvk-abs-9803.json
+[Vulkan Loader] DRIVER:         Found ICD manifest file /tmp/panvk-abs-9803.json, version 1.0.1
+[Vulkan Loader] DEBUG | DRIVER: Searching for ICD drivers named /root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/libvulkan_panfrost.so
+[Vulkan Loader] DEBUG | LAYER:  Loading layer library libVkLayer_MESA_device_select.so
+[Vulkan Loader] INFO | LAYER:   Insert instance layer "VK_LAYER_MESA_device_select" (/usr/lib/aarch64-linux-gnu/libVkLayer_MESA_device_select.so)
+[Vulkan Loader] LAYER:          vkCreateInstance layer callstack setup to:
+[Vulkan Loader] LAYER:             <Application>
+[Vulkan Loader] LAYER:               ||
+[Vulkan Loader] LAYER:             <Loader>
+[Vulkan Loader] LAYER:               ||
+[Vulkan Loader] LAYER:             VK_LAYER_MESA_device_select
+[Vulkan Loader] LAYER:                     Type: Implicit
+[Vulkan Loader] LAYER:                     Enabled By: Implicit Layer
+[Vulkan Loader] LAYER:                         Disable Env Var:  NODEVICE_SELECT
+[Vulkan Loader] LAYER:                     Manifest: /usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
+[Vulkan Loader] LAYER:                     Library:  /usr/lib/aarch64-linux-gnu/libVkLayer_MESA_device_select.so
+[Vulkan Loader] LAYER:               ||
+[Vulkan Loader] LAYER:             <Drivers>
+'DISPLAY' environment variable not set... skipping surface info
+error: XDG_RUNTIME_DIR is invalid or not set in the environment.
+WARNING: panvk is not a conformant Vulkan implementation, testing use only.
+[Vulkan Loader] INFO | DRIVER:  linux_read_sorted_physical_devices:
+[Vulkan Loader] INFO | DRIVER:       Original order:
+[Vulkan Loader] INFO | DRIVER:             [0] Mali-G720 MC8
+[Vulkan Loader] INFO | DRIVER:       Sorted order:
+[Vulkan Loader] INFO | DRIVER:             [0] Mali-G720 MC8  
+[Vulkan Loader] INFO | DRIVER:  linux_read_sorted_physical_devices:
+[Vulkan Loader] INFO | DRIVER:       Original order:
+[Vulkan Loader] INFO | DRIVER:             [0] Mali-G720 MC8
+[Vulkan Loader] INFO | DRIVER:       Sorted order:
+[Vulkan Loader] INFO | DRIVER:             [0] Mali-G720 MC8  
+[Vulkan Loader] DEBUG | DRIVER: Copying old device 0 into new device 0
+[Vulkan Loader] INFO | LAYER:   Failed to find vkGetDeviceProcAddr in layer "/usr/lib/aarch64-linux-gnu/libVkLayer_MESA_device_select.so"
+[Vulkan Loader] DRIVER:         vkCreateDevice layer callstack setup to:
+[Vulkan Loader] DRIVER:            <Application>
+[Vulkan Loader] DRIVER:              ||
+[Vulkan Loader] DRIVER:            <Loader>
+[Vulkan Loader] DRIVER:              ||
+[Vulkan Loader] DRIVER:            <Device>
+[Vulkan Loader] DRIVER:                Using "Mali-G720 MC8" with driver: "/root/mesa-funnymdzz/build-g720-kbase-x11/src/panfrost/vulkan/libvulkan_panfrost.so"
+MESA: info: kbase_queue_wait_current: wait completed successfully
+[Vulkan Loader] DEBUG | LAYER:  Unloading layer library /usr/lib/aarch64-linux-gnu/libVkLayer_MESA_device_select.so
+==========
+VULKANINFO
+==========
+
+Vulkan Instance Version: 1.4.341
+
+
+Instance Extensions: count = 23
+-------------------------------
+VK_EXT_acquire_drm_display             : extension revision 1
+VK_EXT_acquire_xlib_display            : extension revision 1
+VK_EXT_debug_report                    : extension revision 10
+VK_EXT_debug_utils                     : extension revision 2
+VK_EXT_direct_mode_display             : extension revision 1
+VK_EXT_display_surface_counter         : extension revision 1
+VK_EXT_headless_surface                : extension revision 1
+VK_EXT_layer_settings                  : extension revision 2
+VK_EXT_surface_maintenance1            : extension revision 1
+VK_KHR_device_group_creation           : extension revision 1
+VK_KHR_display                         : extension revision 23
+VK_KHR_external_fence_capabilities     : extension revision 1
+VK_KHR_external_memory_capabilities    : extension revision 1
+VK_KHR_external_semaphore_capabilities : extension revision 1
+VK_KHR_get_display_properties2         : extension revision 1
+VK_KHR_get_physical_device_properties2 : extension revision 2
+VK_KHR_get_surface_capabilities2       : extension revision 1
+VK_KHR_portability_enumeration         : extension revision 1
+VK_KHR_surface                         : extension revision 25
+VK_KHR_surface_maintenance1            : extension revision 1
+VK_KHR_xcb_surface                     : extension revision 6
+VK_KHR_xlib_surface                    : extension revision 6
+VK_LUNARG_direct_driver_loading        : extension revision 1
+
+Instance Layers: count = 5
+--------------------------
+VK_LAYER_INTEL_nullhw       INTEL NULL HW                                                1.1.73   version 1
+VK_LAYER_MESA_anti_lag      Open-source implementation of the VK_AMD_anti_lag extension. 1.4.303  version 1
+VK_LAYER_MESA_device_select Linux device selection layer                                 1.4.303  version 1
+VK_LAYER_MESA_overlay       Mesa Overlay layer                                           1.4.303  version 1
+VK_LAYER_MESA_screenshot    Mesa Screenshot layer                                        1.4.303  version 1
+
+Devices:
+========
+GPU0:
+	apiVersion         = 1.4.354
+	driverVersion      = 26.2.99
+	vendorID           = 0x13b5
+	deviceID           = 0xc8700010
+	deviceType         = PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU
+	deviceName         = Mali-G720 MC8
+	driverID           = DRIVER_ID_MESA_PANVK
+	driverName         = panvk
+	driverInfo         = Mesa 26.3.0-devel (git-0521a32576)
+	conformanceVersion = 0.0.0.0
+	deviceUUID         = b5130000-1000-70c8-0000-000000000000
+	driverUUID         = 25db48a5-14b8-f556-5140-3e8e50a62796
+PROBE_ABSOLUTE_RC=0
+ORIGINAL_PROBE_RC=1
+ABSOLUTE_PROBE_RC=0
+LOADER_GATE=PASS
+
+===TEMP TESS FEATURE===
+ninja: Entering directory `/root/mesa-funnymdzz/build-g720-kbase-x11'
+[1/17] Generating src/git_sha1.h with a custom command
+[2/14] Compiling C object src/panfrost/vulkan/libpanvk_v10.a.p/panvk_vX_physical_device.c.o
+[3/14] Compiling C object src/panfrost/vulkan/libpanvk_v12.a.p/panvk_vX_physical_device.c.o
+[4/14] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_physical_device.c.o
+[5/14] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/panvk_vX_physical_device.c.o
+[6/14] Compiling C object src/panfrost/vulkan/libpanvk_v7.a.p/panvk_vX_physical_device.c.o
+[7/14] Linking static target src/panfrost/vulkan/libpanvk_v13.a
+[8/14] Linking static target src/panfrost/vulkan/libpanvk_v14.a
+[9/14] Linking static target src/panfrost/vulkan/libpanvk_v10.a
+[10/14] Linking static target src/panfrost/vulkan/libpanvk_v7.a
+[11/14] Linking static target src/panfrost/vulkan/libpanvk_v12.a
+[12/14] Compiling C object src/panfrost/vulkan/libpanvk_v6.a.p/panvk_vX_physical_device.c.o
+[13/14] Linking static target src/panfrost/vulkan/libpanvk_v6.a
+[14/14] Linking target src/panfrost/vulkan/libvulkan_panfrost.so
+TEST_BUILD_RC=0
+===FULLPATH RUNTIME===
+WARNING: panvk is not a conformant Vulkan implementation, testing use only.
+MESA: info: TESSDBG PARAMS: vs_outputs=0x0000000100000001 slots=2 vs_size=96 tcs_vtx_outputs=0x0000000100000000 tcs_stride=72 tcs_size=72 blob_size=196 blob=0x0000005ff73f0010 vp=0x0000005ff73f00d8 tp=0x0000005ff73f0118 vs_out=0x0000005ff73f0010 tcs_buf=0x0000005ff73f0070 in_patch=3 out_patch=3 patches=1 ppi=1 stride_el=18
+MESA: info: TESSDBG TCS FAU: uses_vp=1 uses_tp=1 expected_vp=0x0000005ff73f00d8 packed_vp=0x0000005ff73f00d8 expected_tp=0x0000005ff73f0118 packed_tp=0x0000005ff73f0118 vp_off=0 tp_off=8 total=6 fau=0x0000005ff73f07b8 spd=0x0000005ffffa4700 srt=0x0000005ff73f0444 tsd=0x0000005ff73f0780
+MESA: info: TESSDBG TCS RAW FAU: total=6 q0=0x0000005ff73f00d8 q1=0x0000005ff73f0118 q1_lo=0xf73f0118 q1_hi=0x0000005f
+MESA: info: TESSDBG SWVS: expected_vp=0x0000005ff73f00d8 packed_vp=0x0000005ff73f00d8 fau=0x0000005ff73f07a0 off=0 total=3 spd=0x0000005ffffa46c0 srt=0x0000005ff73f03c4 tsd=0x0000005ff73f0780
+MESA: info: kbase_queue_wait_current: wait completed successfully
+PASS instance
+GPU: Mali-G720 MC8
+tessellationShader=1
+PASS device
+PASS shader module: smoke.vert.spv
+PASS shader module: smoke.tesc.spv
+PASS shader module: smoke.tese.spv
+PASS shader module: smoke.frag.spv
+PASS render pass
+PASS pipeline layout
+CALL vkCreateGraphicsPipelines...
+vkCreateGraphicsPipelines -> 0
+PASS TESSELLATION PIPELINE CREATED
+CALL vkCmdDraw(3, 1, 0, 0)...
+CALL vkQueueSubmit...
+WAIT GPU...
+PASS TESSELLATION DRAW COMPLETED
+RUNTIME_RC=0
+GPU_REACHED=1
+FULLPATH_PASS=1
+
+===RESTORE SAFE FEATURE===
+ninja: Entering directory `/root/mesa-funnymdzz/build-g720-kbase-x11'
+[1/17] Generating src/git_sha1.h with a custom command
+[2/14] Compiling C object src/panfrost/vulkan/libpanvk_v14.a.p/panvk_vX_physical_device.c.o
+[3/14] Linking static target src/panfrost/vulkan/libpanvk_v14.a
+[4/14] Compiling C object src/panfrost/vulkan/libpanvk_v13.a.p/panvk_vX_physical_device.c.o
+[5/14] Compiling C object src/panfrost/vulkan/libpanvk_v12.a.p/panvk_vX_physical_device.c.o
+[6/14] Linking static target src/panfrost/vulkan/libpanvk_v13.a
+[7/14] Linking static target src/panfrost/vulkan/libpanvk_v12.a
+[8/14] Compiling C object src/panfrost/vulkan/libpanvk_v10.a.p/panvk_vX_physical_device.c.o
+[9/14] Linking static target src/panfrost/vulkan/libpanvk_v10.a
+[10/14] Compiling C object src/panfrost/vulkan/libpanvk_v7.a.p/panvk_vX_physical_device.c.o
+[11/14] Linking static target src/panfrost/vulkan/libpanvk_v7.a
+[12/14] Compiling C object src/panfrost/vulkan/libpanvk_v6.a.p/panvk_vX_physical_device.c.o
+[13/14] Linking static target src/panfrost/vulkan/libpanvk_v6.a
+[14/14] Linking target src/panfrost/vulkan/libvulkan_panfrost.so
+SAFE_REBUILD_RC=0
+FINAL_FEATURE_FALSE=1
+
+===INDIRECT DESIGN AUDIT===
+420:   if (draw->indirect.buffer_dev_addr) {
+512:prepare_poly_heap(struct panvk_cmd_buffer *cmdbuf)
+514:   if (cmdbuf->poly_heap.bo)
+523:      VK_SYSTEM_ALLOCATION_SCOPE_OBJECT, &cmdbuf->poly_heap.bo);
+528:      panvk_cmd_alloc_dev_mem(cmdbuf, desc, sizeof(struct poly_heap), 16);
+530:      panvk_priv_bo_unref(cmdbuf->poly_heap.bo);
+531:      cmdbuf->poly_heap.bo = NULL;
+535:   *(struct poly_heap *)header.cpu = (struct poly_heap){
+536:      .base = cmdbuf->poly_heap.bo->addr.dev,
+541:   cmdbuf->poly_heap.header = header;
+558:   cs_store32(b, zero, heap_addr, offsetof(struct poly_heap, bottom));
+567: * Indirect tessellation needs a GPU setup kernel because the vertex and
+571:prepare_direct_tess_params(struct panvk_cmd_buffer *cmdbuf,
+574:   if (draw->indirect.buffer_dev_addr)
+723:      .heap = cmdbuf->poly_heap.header.gpu,
+729:      .patch_coord_buffer = cmdbuf->poly_heap.bo->addr.dev,
+732:      .out_draws = blob.gpu + draw_offs,
+771:   cmdbuf->state.gfx.tess.out_draws = tp->out_draws;
+2440:   if (draw->indirect.buffer_dev_addr) {
+3209:         .buffer_dev_addr = cmdbuf->poly_heap.bo->addr.dev,
+3224:         .buffer_dev_addr = gfx->tess.out_draws,
+3285:    * prepare_direct_tess_params() dirties TES_PUSH_UNIFORMS for every
+3386:         .cmd = draw->indirect.buffer_dev_addr,
+3419:   } else if (draw->indirect.buffer_dev_addr) {
+3427:         .cmd = draw->indirect.buffer_dev_addr,
+3471:   if (draw->indirect.buffer_dev_addr)
+3616:launch_tess_stages(struct panvk_cmd_buffer *cmdbuf,
+3836:launch_tessellator(struct panvk_cmd_buffer *cmdbuf,
+4027:   cs_move64_to(b, draw_params, draw->indirect.buffer_dev_addr);
+4142:   cs_move64_to(b, draw_params_addr, draw->indirect.buffer_dev_addr);
+4238:   if (draw.indirect.buffer_dev_addr)
+4258:   if (draw.indirect.buffer_dev_addr) {
+4264:      result = prepare_poly_heap(cmdbuf);
+4268:      result = prepare_direct_tess_params(cmdbuf, &draw);
+4300:      result = launch_tess_stages(cmdbuf, &draw);
+4304:      launch_tessellator(cmdbuf, &draw);
+4323:   if (draw.indirect.buffer_dev_addr)
+4336:   if (draw.indirect.buffer_dev_addr)
+4419:panvk_per_arch(CmdDrawIndirect)(VkCommandBuffer commandBuffer, VkBuffer _buffer,
+4430:      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+4440:panvk_per_arch(CmdDrawIndexedIndirect)(VkCommandBuffer commandBuffer,
+4452:      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+4462:panvk_per_arch(CmdDrawIndirectCount)(VkCommandBuffer commandBuffer,
+4478:      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+4490:panvk_per_arch(CmdDrawIndexedIndirectCount)(VkCommandBuffer commandBuffer,
+4507:      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+--- HISTORIC PANVK INDIRECT ---
+54:#include "poly/tessellator.h"
+395:    * prepare_draw() ensures that BASE_INSTANCE is always dirty for indirect
+419:   if (draw->indirect.buffer_dev_addr) {
+420:      /* BASE_INSTANCE is always dirty for indirect draws so it's safe to look
+425:         cmdbuf->state.gfx.vs.desc_repeat_count = draw->indirect.draw_count;
+454:    * With tessellation, TES is lowered to the physical hardware vertex
+458:      cmdbuf->state.gfx.tess.tes.shader
+459:         ? cmdbuf->state.gfx.tess.tes.shader
+511:prepare_poly_heap(struct panvk_cmd_buffer *cmdbuf)
+513:   if (cmdbuf->poly_heap.bo)
+522:      VK_SYSTEM_ALLOCATION_SCOPE_OBJECT, &cmdbuf->poly_heap.bo);
+527:      panvk_cmd_alloc_dev_mem(cmdbuf, desc, sizeof(struct poly_heap), 16);
+529:      panvk_priv_bo_unref(cmdbuf->poly_heap.bo);
+530:      cmdbuf->poly_heap.bo = NULL;
+534:   *(struct poly_heap *)header.cpu = (struct poly_heap){
+535:      .base = cmdbuf->poly_heap.bo->addr.dev,
+540:   cmdbuf->poly_heap.header = header;
+544:    * Reset the bump allocator on the GPU before its first tessellation use
+547:    * Simultaneous execution of the same tessellation command buffer still
+548:    * needs separate heap handling before tessellationShader can be exposed.
+557:   cs_store32(b, zero, heap_addr, offsetof(struct poly_heap, bottom));
+564: * Allocate and initialize the libpoly ABI for a direct tessellation draw.
+566: * Indirect tessellation needs a GPU setup kernel because the vertex and
+570:prepare_direct_tess_params(struct panvk_cmd_buffer *cmdbuf,
+573:   if (draw->indirect.buffer_dev_addr)
+577:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+578:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+590:   assert((tcs->tess.tcs_output_stride & 3) == 0);
+592:   if (!input_patch_size || (tcs->tess.tcs_output_stride & 3))
+595:   const uint64_t vs_outputs = vs->tess.vs_outputs;
+614:      tcs->tess.tcs_output_stride / sizeof(uint32_t);
+629:      nr_patches64 * tcs->tess.tcs_output_stride;
+675:   struct pan_ptr tess_params =
+677:                              sizeof(struct poly_tess_params), 8);
+679:   if (!blob.gpu || !vertex_params.gpu || !tess_params.gpu)
+710:    * TCS / tessellator / TES parameters
+712:   enum poly_tess_partitioning partitioning =
+713:      tes->tess.spacing == TESS_SPACING_EQUAL
+715:      : tes->tess.spacing == TESS_SPACING_FRACTIONAL_ODD
+719:   struct poly_tess_params *tp = tess_params.cpu;
+721:   *tp = (struct poly_tess_params) {
+722:      .heap = cmdbuf->poly_heap.header.gpu,
+728:      .patch_coord_buffer = cmdbuf->poly_heap.bo->addr.dev,
+731:      .out_draws = blob.gpu + draw_offs,
+735:      /* Filled later by panlib_prefix_sum_tess(). */
+741:      .tcs_per_vertex_outputs = tcs->tess.tcs_per_vertex_outputs,
+743:      .output_patch_size = tcs->tess.tcs_output_patch_size,
+744:      .tcs_patch_constants = tcs->tess.tcs_nr_patch_outputs,
+750:      .points_mode = tes->tess.points,
+751:      .isolines = tes->tess.mode == TESS_PRIMITIVE_ISOLINES,
+755:      tp->ccw = tes->tess.ccw;
+767:   cmdbuf->state.gfx.sysvals.poly.tess_param_buffer =
+768:      tess_params.gpu;
+770:   cmdbuf->state.gfx.tess.out_draws = tp->out_draws;
+773:    * These buffers are per draw, so every physical tess stage must get
+796:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+801:      &cmdbuf->state.gfx.tess.tcs.desc;
+840:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+845:      &cmdbuf->state.gfx.tess.tes.desc;
+905:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+907:      &cmdbuf->state.gfx.tess.tcs.desc;
+929:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+931:      &cmdbuf->state.gfx.tess.tes.desc;
+1029:   const struct panvk_shader *tcs = cmdbuf->state.gfx.tess.tcs.shader;
+1030:   const struct panvk_shader *tes = cmdbuf->state.gfx.tess.tes.shader;
+1221:      panvk_shader_only_variant(cmdbuf->state.gfx.tess.tcs.shader);
+1223:      panvk_shader_only_variant(cmdbuf->state.gfx.tess.tes.shader);
+2416:   if (draw->indirect.buffer_dev_addr) {
+2417:      /* For indirect draws, VS_PUSH_UNIFORMS are always dirty so it's safe to
+2423:         vs_repeat_count = draw->indirect.draw_count;
+3175:         .cmd_stride = draw->indirect.stride,
+3176:         .cmd = draw->indirect.buffer_dev_addr,
+3180:      struct panlib_precomp_grid grid;
+3181:      if (draw->indirect.count_buffer_dev_addr) {
+3186:            cs_move64_to(b, addr, draw->indirect.count_buffer_dev_addr);
+3192:            cs_move32_to(b, max_draw_count, draw->indirect.draw_count);
+3197:         grid = panlib_dynamic_csf();
+3199:         grid = panlib_1d(draw->indirect.draw_count);
+3203:       * draw counter updates with indirect draws. TODO: we could avoid that
+3204:       * by having separate direct/indirect counters and adding them on read */
+3206:         &precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT, args,
+3209:   } else if (draw->indirect.buffer_dev_addr) {
+3212:      struct panlib_update_prims_generated_query_indirect_args args = {
+3214:         .draw_count_buffer = draw->indirect.count_buffer_dev_addr,
+3215:         .max_draw_count = draw->indirect.draw_count,
+3216:         .cmd_stride = draw->indirect.stride,
+3217:         .cmd = draw->indirect.buffer_dev_addr,
+3222:       * draw counter updates with indirect draws. TODO: we could avoid that
+3223:       * by having separate direct/indirect counters and adding them on read */
+3224:      panlib_update_prims_generated_query_indirect_struct(
+3261:   if (draw->indirect.buffer_dev_addr)
+3397: * Execute the software vertex stage and tessellation control stage.
+3400: * compute dispatch machinery so tessellation does not grow a second CSF
+3403: * The tessellator and final TES draw are intentionally not launched here yet.
+3406:launch_tess_stages(struct panvk_cmd_buffer *cmdbuf,
+3413:      panvk_shader_only_variant(gfx->tess.tcs.shader);
+3420:          gfx->tess.tcs.shader->tess.tcs_output_patch_size);
+3433:   /* An incomplete input patch produces no tessellated primitives. */
+3454:   gfx->tess.tcs.push_uniforms = tcs_push.gpu;
+3492:   launch_gfx_cs(cmdbuf, tcs, &gfx->tess.tcs.desc,
+3499:dispatch_tess_topology(struct panvk_precomp_ctx *precomp_ctx,
+3502:                       enum poly_tess_mode mode,
+3503:                       uint64_t tess_params)
+3505:   struct panlib_precomp_grid grid = panlib_1d(nr_patches);
+3507:   switch (tes->tess.mode) {
+3509:      panlib_tess_isoline(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+3510:                          tess_params, mode);
+3514:      panlib_tess_tri(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+3515:                      tess_params, mode);
+3519:      panlib_tess_quad(precomp_ctx, grid, PANLIB_BARRIER_CSF_WAIT,
+3520:                       tess_params, mode);
+3524:      assert(!"Invalid tessellation primitive mode");
+3530: * Run the libpoly fixed-function tessellator.
+3534: * the final index buffer from the poly heap and emits the indexed-indirect
+3539:launch_tessellator(struct panvk_cmd_buffer *cmdbuf,
+3543:   const struct panvk_shader *tes = gfx->tess.tes.shader;
+3565:   const uint64_t tess_params = gfx->sysvals.poly.tess_param_buffer;
+3567:   assert(tess_params);
+3576:   dispatch_tess_topology(&precomp_ctx, tes, nr_patches,
+3577:                          POLY_TESS_MODE_COUNT, tess_params);
+3580:    * panlib_precomp_grid counts workgroups.  prefix_sum_tess itself has
+3583:   panlib_prefix_sum_tess(&precomp_ctx, panlib_1d(1),
+3584:                          PANLIB_BARRIER_CSF_WAIT, tess_params);
+3586:   dispatch_tess_topology(&precomp_ctx, tes, nr_patches,
+3587:                          POLY_TESS_MODE_WITH_COUNTS, tess_params);
+3591:    * executes on vertex/tiler.  Publish the tessellator outputs before the
+3592:    * graphics subqueue consumes the generated indirect command, index data
+3720:   if (draw->indirect.count_buffer_dev_addr) {
+3721:      cs_move32_to(b, max_draw_count, draw->indirect.draw_count);
+3722:      cs_move64_to(b, draw_params, draw->indirect.count_buffer_dev_addr);
+3726:      cs_move32_to(b, draw_count, draw->indirect.draw_count);
+3730:   cs_move64_to(b, draw_params, draw->indirect.buffer_dev_addr);
+3785:      cs_add_imm64(b, draw_params, draw_params, draw->indirect.stride);
+3791:launch_indirect_draw(struct panvk_cmd_buffer *cmdbuf,
+3801:   /* Layered indirect draw (VK_EXT_shader_viewport_index_layer) needs
+3804:    * we decide to support layared+indirect, we'll need to pass the
+3831:   if (draw->indirect.count_buffer_dev_addr) {
+3832:      cs_move32_to(b, max_draw_count, draw->indirect.draw_count);
+3833:      cs_move64_to(b, draw_params_addr, draw->indirect.count_buffer_dev_addr);
+3837:      cs_move32_to(b, draw_count, draw->indirect.draw_count);
+3843:   cs_move64_to(b, draw_params_addr, draw->indirect.buffer_dev_addr);
+3851:         /* Load SR33-37 from indirect buffer. */
+3892:                   draw->indirect.stride);
+3926:   if (draw.indirect.buffer_dev_addr)
+3927:      account_tiler_work(cmdbuf, (uint64_t)draw.indirect.draw_count * 256);
+3943:    * we're going to patch the descriptors and copy from the indirect buffer
+3946:   if (draw.indirect.buffer_dev_addr) {
+3951:   if (cmdbuf->state.gfx.tess.tes.shader) {
+3952:      result = prepare_poly_heap(cmdbuf);
+3956:      result = prepare_direct_tess_params(cmdbuf, &draw);
+3970:   if (cmdbuf->state.gfx.tess.tes.shader) {
+3988:      result = launch_tess_stages(cmdbuf, &draw);
+3992:      launch_tessellator(cmdbuf, &draw);
+3998:   /* For indirect draws, we need to patch the descriptors we just emitted */
+3999:   if (draw.indirect.buffer_dev_addr)
+4012:   if (draw.indirect.buffer_dev_addr)
+4013:      launch_indirect_draw(cmdbuf, &draw);
+4106:      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+4107:      .indirect.draw_count = drawCount,
+4108:      .indirect.stride = stride,
+4128:      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+4129:      .indirect.draw_count = drawCount,
+4130:      .indirect.stride = stride,
+4154:      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+4155:      .indirect.count_buffer_dev_addr =
+4157:      .indirect.draw_count = maxDrawCount,
+4158:      .indirect.stride = stride,
+4183:      .indirect.buffer_dev_addr = panvk_buffer_gpu_ptr(buffer, offset),
+4184:      .indirect.count_buffer_dev_addr =
+4186:      .indirect.draw_count = maxDrawCount,
+4187:      .indirect.stride = stride,
+4585:      cs_vt_end(b, cs_defer_indirect());
+4591:                          cs_defer_indirect());
+4657:setup_tiler_oom_ctx(struct panvk_cmd_buffer *cmdbuf)
+4840:   setup_tiler_oom_ctx(cmdbuf);
+4981:      const struct cs_async_op async = cs_defer_indirect();
+5027:          * indirect mode */
+--- HONEYKRISP ---
+1003:   struct poly_heap *map = agx_bo_map(dev->rodata.bo) + off;
+1005:   *map = (struct poly_heap){
+1024:      hk_queue_write(cmd, addr + offsetof(struct poly_heap, bottom), 0,
+1314:      /* Allocate 3x indirect global+local grids for VS/TCS/tess */
+1316:      gfx->tess.grids = hk_pool_alloc(cmd, grid_stride * 3, 4).gpu;
+1483:   /* Setup grids */
+1607:   /* Setup grids */
+1611:      struct libagx_tess_setup_indirect_args args = {
+1613:         .grids = gfx->tess.grids,
+1628:      libagx_tess_setup_indirect_struct(cmd, agx_1d(1),
+1632:      grid_vs = agx_grid_indirect_local(gfx->tess.grids + 0 * grid_stride);
+1633:      grid_tcs = agx_grid_indirect_local(gfx->tess.grids + 1 * grid_stride);
+1634:      grid_tess = agx_grid_indirect_local(gfx->tess.grids + 2 * grid_stride);
+1673:   return agx_draw_indexed_indirect(gfx->tess.out_draws, dev->heap->va->addr,
+3090:       * planning to do a massive rework of indirect geom/tess so I'm trying not
+--- KOSMICKRISP ---
+src/kosmickrisp/libkk/kk_geometry.cl:14:libkk_prefix_sum_tess(global struct poly_tess_params *p)
+src/kosmickrisp/libkk/kk_geometry.cl:37:   global uint32_t *desc = p->out_draws;
+src/kosmickrisp/libkk/kk_tessellation.cl:12:libkk_tess_setup_indirect(
+src/kosmickrisp/libkk/kk_tessellation.cl:13:   global struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellator.cl:10:libkk_tess_isoline(constant struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellator.cl:18:libkk_tess_tri(constant struct poly_tess_params *p,
+src/kosmickrisp/libkk/kk_tessellator.cl:26:libkk_tess_quad(constant struct poly_tess_params *p,
+src/kosmickrisp/vulkan/kk_cmd_buffer.h:170:      uint64_t out_draws_addr;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1088:kk_upload_tess_params(struct kk_cmd_buffer *cmd, struct poly_tess_params *out,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1103:   struct poly_tess_params args = {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1148:      gfx->tess.out_draws_addr = ptr.gpu + draw_offs;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1154:      args.out_draws = addr + draw_offs;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1157:      /* Allocate 3x indirect global+local grids for VS/TCS/tess */
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1162:      gfx->tess.out_draws_addr = ptr.gpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1163:      args.out_draws = ptr.gpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1418:   struct kk_ptr out_draws = kk_pool_alloc(
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1420:   if (unlikely(!out_draws.gpu))
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1427:      .out_draw = out_draws.gpu,
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1452:   data->indirect_command.addr = out_draws.gpu;
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1723:         kk_pool_alloc(cmd, sizeof(struct poly_tess_params), 4);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1766:      struct libkk_tess_setup_indirect_args args = {
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1782:      libkk_tess_setup_indirect_struct(cmd, kk_grid_1d(1), true, args);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1785:      grid_vs = kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 0u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1787:         kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 1u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1789:         kk_grid_indirect(gfx->tess.indirect_ptr.gpu + 2u * grid_stride);
+src/kosmickrisp/vulkan/kk_cmd_draw.c:1831:   draw.grid = kk_grid_indirect(gfx->tess.out_draws_addr);
+--- LIBPOLY ---
+src/poly/cl/restart.h:135:poly_setup_unroll_for_draw(global struct poly_heap *heap,
+src/poly/cl/restart.h:153:   uint old_heap_bottom_B = poly_heap_alloc_offs(heap, alloc_size);
+src/poly/cl/restart.h:168:                     global struct poly_heap *heap,
+src/poly/cl/restart.h:250:                    global struct poly_heap *heap,
+src/poly/cl/tessellation.cl:10:poly_tcs_patch_vertices_in(constant struct poly_tess_params *p)
+src/poly/cl/tessellation.cl:16:poly_tes_patch_vertices_in(constant struct poly_tess_params *p)
+src/poly/cl/tessellation.cl:22:poly_tcs_unrolled_id(constant struct poly_tess_params *p, uint3 wg_id)
+src/poly/cl/tessellation.cl:38:poly_load_tes_index(constant struct poly_tess_params *p, uint32_t index)
+src/poly/cl/tessellation.cl:56:poly_tcs_out_address(constant struct poly_tess_params *p, uint patch_id,
+src/poly/cl/tessellation.cl:79:poly_tes_patch_id(constant struct poly_tess_params *p, uint raw_id)
+src/poly/cl/tessellation.cl:91:poly_load_tess_coord(constant struct poly_tess_params *p, uint raw_id)
+src/poly/cl/tessellation.cl:107:poly_tes_in_address(constant struct poly_tess_params *p, uint raw_id, uint vtx_id,
+src/poly/cl/tessellation.cl:118:poly_tess_level_outer_default(constant struct poly_tess_params *p)
+src/poly/cl/tessellation.cl:124:poly_tess_level_inner_default(constant struct poly_tess_params *p)
+src/poly/cl/tessellator.h:121:tess_factors(constant struct poly_tess_params *p, uint patch)
+src/poly/cl/tessellator.h:132:poly_draw(constant struct poly_tess_params *p, enum poly_tess_mode mode,
+src/poly/cl/tessellator.h:155:                 constant struct poly_tess_params *p, uint patch, uint count)
+src/poly/cl/tessellator.h:171:poly_draw_empty(constant struct poly_tess_params *p, enum poly_tess_mode mode,
+src/poly/cl/tessellator.h:184:poly_heap_alloc_points(constant struct poly_tess_params *p, uint patch,
+src/poly/cl/tessellator.h:196:   uint32_t alloc_B = poly_heap_alloc_offs(p->heap, elsize_B * count);
+src/poly/cl/tessellator.h:723:poly_tess_isoline_process(constant struct poly_tess_params *p, uint32_t patch,
+src/poly/cl/tessellator.h:779:         poly_heap_alloc_points(p, patch, num_points);
+src/poly/cl/tessellator.h:823:poly_tess_tri_process(constant struct poly_tess_params *p, uint32_t patch,
+src/poly/cl/tessellator.h:907:            poly_heap_alloc_points(p, patch, 3);
+src/poly/cl/tessellator.h:968:      ctx.Point = poly_heap_alloc_points(p, patch, NumPoints);
+src/poly/cl/tessellator.h:1149:poly_tess_quad_process(constant struct poly_tess_params *p, uint32_t patch,
+src/poly/cl/tessellator.h:1256:            poly_heap_alloc_points(p, patch, 4);
+src/poly/cl/tessellator.h:1305:      ctx.Point = poly_heap_alloc_points(p, patch, NumPoints);
+src/poly/geometry.h:111:struct poly_heap {
+src/poly/geometry.h:115:static_assert(sizeof(struct poly_heap) == 4 * 4,
+src/poly/geometry.h:116:              "struct poly_heap must be 4 words");
+src/poly/geometry.h:120:poly_heap_alloc_offs(global struct poly_heap *heap, uint size_B)
+src/poly/geometry.h:140:poly_heap_alloc(global struct poly_heap *heap, uint size_B)
+src/poly/geometry.h:142:   return heap->base + poly_heap_alloc_offs(heap, size_B);
+src/poly/geometry.h:603:poly_gs_setup_indirect(uint64_t index_buffer, constant uint *draw,
+src/poly/geometry.h:606:                       global struct poly_heap *heap,
+src/poly/geometry.h:640:      p->count_buffer = poly_heap_alloc(
+src/poly/geometry.h:644:   vp->output_buffer = (uintptr_t)poly_heap_alloc(heap, vertex_buffer_size);
+src/poly/geometry.h:650:         poly_heap_alloc_offs(heap, p->draw.index_count * 4);
+src/poly/tessellator.h:31:struct poly_tess_params {
+src/poly/tessellator.h:33:   DEVICE(struct poly_heap) heap;
+src/poly/tessellator.h:47:   DEVICE(uint32_t) out_draws;
+src/poly/tessellator.h:104:static_assert(sizeof(struct poly_tess_params) == 34 * 4,
+src/poly/tessellator.h:105:              "struct poly_tess_params must be 34 words");
+src/panfrost/libpan/poly_tessellation.cl:18:panlib_prefix_sum_tess(global struct poly_tess_params *p)
+src/panfrost/libpan/poly_tessellation.cl:35:   const uint alloc_B = poly_heap_alloc_offs(p->heap, size_B);
+src/panfrost/libpan/poly_tessellation.cl:40:   global uint32_t *desc = p->out_draws;
+src/panfrost/libpan/poly_tessellation.cl:50:panlib_tess_isoline(constant struct poly_tess_params *p,
+src/panfrost/libpan/poly_tessellation.cl:58:panlib_tess_tri(constant struct poly_tess_params *p,
+src/panfrost/libpan/poly_tessellation.cl:66:panlib_tess_quad(constant struct poly_tess_params *p,
+src/asahi/libagx/draws.cl:125:libagx_draw_robust_index(global uint32_t *vdm, global struct poly_heap *heap,
+src/asahi/libagx/draws.cl:165:         padded = poly_heap_alloc(heap, out_size_B);
+src/asahi/libagx/draws.cl:174:       * of poly_heap_alloc_nonatomic.
+src/asahi/libagx/geometry.cl:89:libagx_unroll_restart(global struct poly_heap *heap, uint64_t index_buffer,
+src/asahi/libagx/geometry.cl:105:libagx_gs_setup_indirect(
+src/asahi/libagx/geometry.cl:109:   global struct poly_heap *heap,
+src/asahi/libagx/geometry.cl:116:   poly_gs_setup_indirect(index_buffer, draw, vp, p, heap,
+src/asahi/libagx/geometry.cl:130:libagx_prefix_sum_tess(global struct poly_tess_params *p, global uint *c_prims,
+src/asahi/libagx/geometry.cl:150:   uint alloc_B = poly_heap_alloc_offs(p->heap, size_B);
+src/asahi/libagx/geometry.cl:154:   global uint32_t *desc = p->out_draws;
+src/asahi/libagx/tessellation.cl:10:libagx_tess_setup_indirect(
+src/asahi/libagx/tessellation.cl:11:   global struct poly_tess_params *p,
+src/asahi/libagx/tessellation.cl:47:   global uchar *blob = poly_heap_alloc(p->heap, alloc);
+src/asahi/libagx/tessellator.cl:25:libagx_tess_isoline(constant struct poly_tess_params *p,
+src/asahi/libagx/tessellator.cl:33:libagx_tess_tri(constant struct poly_tess_params *p, enum poly_tess_mode mode__2)
+src/asahi/libagx/tessellator.cl:40:libagx_tess_quad(constant struct poly_tess_params *p, enum poly_tess_mode mode__2)
+
+===FINAL CLASSIFICATION===
+LOADER_DIAGNOSIS=ORIGINAL_ICD_PATH_OR_RESOLUTION
+DIRECT_FULL_PATH=PROVEN_CURRENT_STATE
+INDIRECT_TESSELLATION=OPEN
+FEATURE_ADVERTISEMENT=FALSE
+PATCH_APPLIED=NO
+INNER_RC=0
+===FINAL MAIN STATE===
+ M src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
+FINAL_HEAD=0521a3257628e811cfead6b5a9753e9f705e2f31
+REAL_RC=0
+PROOT_RC=0
+OVERALL=PASS
