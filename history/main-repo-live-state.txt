@@ -1,18 +1,16 @@
-time=2026-08-26T15:51:04-03:00
-head=0521a3257628e811cfead6b5a9753e9f705e2f31
-branch=ci
- M src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c
- src/panfrost/vulkan/csf/panvk_vX_cmd_draw.c | 19 -------------------
- 1 file changed, 19 deletions(-)
-0521a325762 panvk: validate direct libpoly tessellation path on G720
-b2f8cfa0d75 docs: sync G720 tessellation runtime status
-0a742fa22ec panvk/csf: stage direct tessellation VS and TCS
-85b972dd387 panvk/csf: add per-command-buffer poly heap
-cfba9cef269 panvk: add TCS and TES shader plumbing
-65aeaf80726 panfrost/libpan: scope tessellation kernels to CSF architectures
-78880712caa docs: restore upstream README after G720 project status
-3b6014d1348 docs: update G720 kbase project status and tessellation roadmap
-2aef87163bf panfrost/libpan: add poly tessellation precompiled kernels
-8edb5d94746 nir/panfrost: preserve pointer size for precompiled compute variants
-c095a8c6532 panvk/g720: checkpoint current kbase and poly tessellation work
-a6799dbeb02 panvk/kbase: use CSF-reported register count for G720
+PANVK_G720_PUBLIC_AUTHORITY
+date=2026-09-02
+repo=wonderkast02/panvk-g720-kbase-csf
+main=d9cbb91e5df720f0a62c4b5010d96c327aec315f
+ci=0521a3257628e811cfead6b5a9753e9f705e2f31
+candidate_branch=android-candidate-beta-1.9.4
+candidate_commit=3549264275c9663ed73e01d652f4c0d16f21df22
+tag=0.1.0-beta.1.9.4
+tag_target=3549264275c9663ed73e01d652f4c0d16f21df22
+release_id=380883245
+release_prerelease=true
+release_immutable=true
+zip_sha256=01c6304206c6e348cb069e3d04fb1c7b693195b543b4134ad7c108a33906d1fa
+license_model=MIXED_PER_FILE_AND_COMPONENT
+global_relicense=NO
+lab_role=PRIVATE_TECHNICAL_MEMORY_AND_EVIDENCE_REGISTRY
